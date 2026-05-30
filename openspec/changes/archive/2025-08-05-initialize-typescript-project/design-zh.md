@@ -3,7 +3,7 @@
 ## 技术选择
 
 ### TypeScript 配置
-- **严格模式**：启用所有严格类型检查以获得更好的 AI 理解
+- **严格 schema**：启用所有严格类型检查以获得更好的 AI 理解
 - **目标**：ES2022 以获得现代 JavaScript 特性
 - **模块**：ES2022 以获得现代 ESM 支持
 - **模块解析**：Node 以获得正确的包解析
@@ -16,15 +16,15 @@
 ### 包结构
 ```
 openspec
-├── bin/            # CLI 入口点
-├── dist/           # 编译后的 JavaScript
-├── src/            # TypeScript 源代码
-│   ├── cli/        # 命令实现
-│   ├── core/       # 核心 OpenSpec 逻辑
-│   └── utils/      # 共享工具
+├── bin/ # CLI 入口点
+├── dist/ # 编译后的 JavaScript
+├── src/ # TypeScript 源代码
+│ ├── cli/ # 命令实现
+│ ├── core/ # 核心 OpenSpec 逻辑
+│ └── utils/ # 共享工具
 ├── package.json
 ├── tsconfig.json
-└── build.js        # 构建脚本
+└── build.js # 构建脚本
 ```
 
 ### 依赖策略
@@ -39,10 +39,10 @@ openspec
 - 无需复杂的构建工具链
 - ESM 输出，导入中包含正确的 .js 扩展名
 
-### 开发工作流
+### 开发 workflow
 1. `pnpm install` - 安装依赖
 2. `pnpm run build` - 编译 TypeScript
-3. `pnpm run dev` - 开发模式
+3. `pnpm run dev` - 开发 schema
 4. `pnpm link` - 本地测试 CLI
 
 ### Node.js 要求
@@ -60,5 +60,5 @@ openspec
 - **所有代码使用 TypeScript**：src/ 中无 .js 文件，只有 .ts
 - **显式类型**：在能增加清晰度的地方优先使用显式类型而非推断
 - **接口优于类型**：对象形状使用接口，联合/别名使用类型
-- **无 any**：严格模式防止隐式 any，需要时使用 unknown
-- **Async/await**：全程使用现代异步模式
+- **无 any**：严格 schema 防止隐式 any，需要时使用 unknown
+- **Async/await**：全程使用现代异步 schema

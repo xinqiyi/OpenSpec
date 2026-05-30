@@ -1,4 +1,4 @@
-# schema-resolution 规范
+# schema-resolution spec
 
 ## 目的
 定义项目本地 schema 解析行为，包括优先级顺序（项目本地优先，然后是用户覆盖，最后是包内置）以及在未提供 `projectRoot` 时的向后兼容回退。
@@ -93,14 +93,14 @@
 
 ### 需求：使用配置 schema 作为新变更的默认值
 
-当创建新变更时，如果没有指定 `--schema` 标志且没有规划中心默认值适用，系统应使用 `openspec/config.yaml` 中的 schema 字段作为默认值。
+当创建新变更时，如果没有指定 `--schema` 标志且没有 planning 中心默认值适用，系统应使用 `openspec/config.yaml` 中的 schema 字段作为默认值。
 
 #### 场景：不带 --schema 标志且配置存在时创建变更
-- **WHEN** 用户运行 `openspec new change foo`，没有规划中心默认值适用，且配置包含 `schema: "tdd"`
+- **WHEN** 用户运行 `openspec new change foo`，没有 planning 中心默认值适用，且配置包含 `schema: "tdd"`
 - **THEN** 系统使用 schema "tdd" 创建变更
 
 #### 场景：不带 --schema 标志且无配置时创建变更
-- **WHEN** 用户运行 `openspec new change foo`，没有规划中心默认值适用，且没有配置文件存在
+- **WHEN** 用户运行 `openspec new change foo`，没有 planning 中心默认值适用，且没有配置文件存在
 - **THEN** 系统使用默认 schema "spec-driven" 创建变更
 
 #### 场景：带显式 --schema 标志创建变更
@@ -109,7 +109,7 @@
 
 ### 需求：按更新后的优先级顺序解析 schema
 
-系统应使用以下优先级顺序解析变更的 schema：CLI 标志、变更元数据、规划中心默认值、项目配置、硬编码默认值。
+系统应使用以下优先级顺序解析变更的 schema：CLI 标志、变更元数据、planning 中心默认值、项目配置、硬编码默认值。
 
 #### 场景：提供了 CLI 标志
 - **WHEN** 用户运行命令时使用 `--schema custom`
@@ -119,16 +119,16 @@
 - **WHEN** 变更的 `.openspec.yaml` 包含 `schema: bound` 且配置包含 `schema: tdd`
 - **THEN** 系统使用变更元数据中的 "bound"
 
-#### 场景：规划中心默认值覆盖项目配置
-- **WHEN** 没有 CLI 标志或变更元数据，规划中心提供默认 schema `workspace-planning`，且配置包含 `schema: tdd`
-- **THEN** 系统使用规划中心默认值中的 "workspace-planning"
+#### 场景：planning 中心默认值覆盖项目配置
+- **WHEN** 没有 CLI 标志或变更元数据，planning 中心提供默认 schema `workspace-planning`，且配置包含 `schema: tdd`
+- **THEN** 系统使用 planning 中心默认值中的 "workspace-planning"
 
 #### 场景：仅项目配置指定了 schema
-- **WHEN** 没有 CLI 标志、变更元数据或规划中心默认值，但配置包含 `schema: tdd`
+- **WHEN** 没有 CLI 标志、变更元数据或 planning 中心默认值，但配置包含 `schema: tdd`
 - **THEN** 系统使用项目配置中的 "tdd"
 
 #### 场景：任何地方都未指定 schema
-- **WHEN** 没有 CLI 标志、变更元数据、规划中心默认值或项目配置
+- **WHEN** 没有 CLI 标志、变更元数据、planning 中心默认值或项目配置
 - **THEN** 系统使用硬编码默认值 "spec-driven"
 
 ### 需求：支持配置中的项目本地 schema 名称
@@ -175,29 +175,29 @@
 - **WHEN** 配置文件被添加到包含现有变更的项目中
 - **THEN** 现有变更继续使用其来自 `.openspec.yaml` 的绑定 schema
 
-### 需求：工作区规划 schema 解析
+### 需求：workspace planning schema 解析
 
-Schema 解析应支持内置的工作区规划 schema。
+Schema 解析应支持内置的 workspace planning schema。
 
-#### 场景：列出工作区规划 schema
+#### 场景：列出 workspace planning schema
 - **WHEN** 用户运行 `openspec schemas`
 - **THEN** 输出应包含 `workspace-planning`
 - **AND** 除非被更高优先级的 schema 覆盖，否则应将其标识为包提供的 schema
 
-#### 场景：按名称解析工作区规划 schema
-- **WHEN** 工作流命令请求 schema `workspace-planning`
+#### 场景：按名称解析 workspace planning schema
+- **WHEN** workflow 命令请求 schema `workspace-planning`
 - **THEN** schema 解析应使用正常的项目、用户、然后包的优先级顺序进行解析
 
-#### 场景：新变更的工作区默认 schema
-- **GIVEN** 命令在工作区规划中心创建一个变更
+#### 场景：新变更的 workspace 默认 schema
+- **GIVEN** 命令在 workspace planning 中心创建一个变更
 - **AND** 用户未传递显式的 `--schema`
 - **AND** 没有变更元数据 schema 适用于新变更
 - **WHEN** OpenSpec 为新变更解析 schema
-- **THEN** 它应使用规划中心默认 schema `workspace-planning`
-- **AND** 它应在任何项目或全局配置 schema 值之前使用该规划中心默认值
+- **THEN** 它应使用 planning 中心默认 schema `workspace-planning`
+- **AND** 它应在任何项目或全局配置 schema 值之前使用该 planning 中心默认值
 
-#### 场景：工作区变更的显式 schema 覆盖
-- **GIVEN** 命令在工作区规划中心创建一个变更
+#### 场景：workspace 变更的显式 schema 覆盖
+- **GIVEN** 命令在 workspace planning 中心创建一个变更
 - **WHEN** 用户传递显式的 `--schema <name>`
 - **THEN** OpenSpec 应使用显式请求的 schema
 - **AND** 它应使用正常的 schema 解析验证该 schema

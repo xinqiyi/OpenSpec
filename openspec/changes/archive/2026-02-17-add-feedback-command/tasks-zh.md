@@ -13,10 +13,10 @@
 - [x] 2.1 将 `feedback` 命令添加到命令注册表
 - [x] 2.2 为所有 shell 重新生成补全脚本
 
-## 3. 反馈技能
+## 3. 反馈 skill
 
-- [x] 3.1 在 `skill-templates.ts` 中创建反馈技能模板
-- [x] 3.2 记录上下文收集工作流
+- [x] 3.1 在 `skill-templates.ts` 中创建反馈 skill template
+- [x] 3.2 记录上下文收集 workflow
 - [x] 3.3 记录匿名化规则
 - [x] 3.4 记录用户确认流程
 

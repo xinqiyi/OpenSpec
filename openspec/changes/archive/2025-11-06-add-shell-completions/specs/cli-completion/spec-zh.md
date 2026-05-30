@@ -1,14 +1,14 @@
-# CLI 补全规范
+# CLI 补全 spec
 
 ## 目的
 
-`openspec completion` 命令应为所有 OpenSpec CLI 命令、标志和动态值（变更 ID、规范 ID）提供 shell 补全功能，支持 Zsh（包括 Oh My Zsh），并具有可扩展的架构，为未来的 shell（bash、fish、PowerShell）做好准备。补全系统应与 Zsh 的原生补全行为集成，而不是尝试自定义用户体验。
+`openspec completion` 命令应为所有 OpenSpec CLI 命令、标志和动态值（变更 ID、spec ID）提供 shell 补全功能，支持 Zsh（包括 Oh My Zsh），并具有可扩展的架构，为未来的 shell（bash、fish、PowerShell）做好准备。补全系统应与 Zsh 的原生补全行为集成，而不是尝试自定义用户体验。
 
 ## ADDED Requirements
 
 ### Requirement: 原生 Shell 行为集成
 
-补全系统应尊重并与 Zsh 的原生补全模式和用户交互模型集成。
+补全系统应尊重并与 Zsh 的原生补全 schema 和用户交互模型集成。
 
 #### Scenario: Zsh 原生补全
 
@@ -18,24 +18,24 @@
 - **AND** 显示为交互式菜单，用户通过 TAB/方向键导航
 - **AND** 自动支持 Oh My Zsh 的增强菜单样式
 
-#### Scenario: 无自定义 UX 模式
+#### Scenario: 无自定义 UX schema
 
 - **WHEN** 实现 Zsh 补全时
 - **THEN** 不要尝试自定义补全触发行为
-- **AND** 不要覆盖 Zsh 特定的导航模式
+- **AND** 不要覆盖 Zsh 特定的导航 schema
 - **AND** 确保补全对有经验的 Zsh 用户感觉原生
 
 ### Requirement: 命令结构
 
-补全命令应遵循子命令模式，用于生成和管理补全脚本。
+补全命令应遵循子命令 schema，用于生成和管理补全脚本。
 
 #### Scenario: 可用子命令
 
 - **WHEN** 用户执行 `openspec completion --help`
 - **THEN** 显示可用的子命令：
-  - `zsh` - 生成 Zsh 补全脚本
-  - `install [shell]` - 为 Zsh 安装补全（自动检测或需要显式指定 shell）
-  - `uninstall [shell]` - 移除 Zsh 补全（自动检测或需要显式指定 shell）
+ - `zsh` - 生成 Zsh 补全脚本
+ - `install [shell]` - 为 Zsh 安装补全（自动检测或需要显式指定 shell）
+ - `uninstall [shell]` - 移除 Zsh 补全（自动检测或需要显式指定 shell）
 
 ### Requirement: Shell 检测
 
@@ -65,7 +65,7 @@
 - **AND** 包含所有命令的补全：init、list、show、validate、archive、view、update、change、spec、completion
 - **AND** 包含所有命令特定的标志和选项
 - **AND** 使用 Zsh 的 `_arguments` 和 `_describe` 内置函数
-- **AND** 支持变更和规范 ID 的动态补全
+- **AND** 支持变更和 spec ID 的动态补全
 
 ### Requirement: 动态补全
 
@@ -75,28 +75,28 @@
 
 - **WHEN** 补全接受变更名称的命令（show、validate、archive）的参数时
 - **THEN** 从 `openspec/changes/` 目录发现活跃变更
-- **AND** 排除 `openspec/changes/archive/` 中的已归档变更
+- **AND** 排除 `openspec/changes/archive/` 中的已 archive 变更
 - **AND** 返回变更 ID 作为补全建议
 - **AND** 仅在 OpenSpec 启用的项目内提供建议
 
-#### Scenario: 补全规范 ID
+#### Scenario: 补全 spec ID
 
-- **WHEN** 补全接受规范名称的命令（show、validate）的参数时
-- **THEN** 从 `openspec/specs/` 目录发现规范
-- **AND** 返回规范 ID 作为补全建议
+- **WHEN** 补全接受 spec 名称的命令（show、validate）的参数时
+- **THEN** 从 `openspec/specs/` 目录发现 spec
+- **AND** 返回 spec ID 作为补全建议
 - **AND** 仅在 OpenSpec 启用的项目内提供建议
 
 #### Scenario: 补全缓存
 
 - **WHEN** 请求动态补全时
-- **THEN** 将发现的变更和规范 ID 缓存 2 秒
+- **THEN** 将发现的变更和 spec ID 缓存 2 秒
 - **AND** 在缓存窗口内对后续请求重用缓存值
 - **AND** 过期后自动刷新缓存
 
 #### Scenario: 项目检测
 
 - **WHEN** 用户在 OpenSpec 项目外请求补全时
-- **THEN** 跳过动态变更/规范 ID 补全
+- **THEN** 跳过动态变更/spec ID 补全
 - **AND** 仅建议静态命令和标志
 
 ### Requirement: 安装自动化
@@ -160,7 +160,7 @@
 - **THEN** 显示消息表示补全未安装
 - **AND** 以退出码 0 退出
 
-### Requirement: 架构模式
+### Requirement: 架构 schema
 
 补全实现应遵循清洁架构原则和 TypeScript 最佳实践。
 
@@ -169,9 +169,9 @@
 - **WHEN** 实现补全生成器时
 - **THEN** 为 Zsh 创建 `ZshCompletionGenerator` 类
 - **AND** 实现公共 `CompletionGenerator` 接口，包含方法：
-  - `generate(): string` - 返回完整的 shell 脚本
-  - `getInstallPath(): string` - 返回目标安装路径
-  - `getConfigFile(): string` - 返回 shell 配置文件路径
+ - `generate(): string` - 返回完整的 shell 脚本
+ - `getInstallPath(): string` - 返回目标安装路径
+ - `getConfigFile(): string` - 返回 shell 配置文件路径
 - **AND** 将接口设计为可扩展，以支持未来的 shell（bash、fish、powershell）
 
 #### Scenario: 动态补全提供者
@@ -179,21 +179,21 @@
 - **WHEN** 实现动态补全时
 - **THEN** 创建封装项目发现逻辑的 `CompletionProvider` 类
 - **AND** 实现方法：
-  - `getChangeIds(): Promise<string[]>` - 发现活跃变更 ID
-  - `getSpecIds(): Promise<string[]>` - 发现规范 ID
-  - `isOpenSpecProject(): boolean` - 检查当前目录是否启用了 OpenSpec
+ - `getChangeIds(): Promise<string[]>` - 发现活跃变更 ID
+ - `getSpecIds(): Promise<string[]>` - 发现 spec ID
+ - `isOpenSpecProject(): boolean` - 检查当前目录是否启用了 OpenSpec
 - **AND** 使用类属性实现 2 秒 TTL 的缓存
 
 #### Scenario: 命令注册表
 
 - **WHEN** 定义可补全的命令时
 - **THEN** 创建集中的 `CommandDefinition` 类型，包含属性：
-  - `name: string` - 命令名称
-  - `description: string` - 帮助文本
-  - `flags: FlagDefinition[]` - 可用标志
-  - `acceptsChangeId: boolean` - 命令是否接受变更 ID 参数
-  - `acceptsSpecId: boolean` - 命令是否接受规范 ID 参数
-  - `subcommands?: CommandDefinition[]` - 嵌套子命令
+ - `name: string` - 命令名称
+ - `description: string` - 帮助文本
+ - `flags: FlagDefinition[]` - 可用标志
+ - `acceptsChangeId: boolean` - 命令是否接受变更 ID 参数
+ - `acceptsSpecId: boolean` - 命令是否接受 spec ID 参数
+ - `subcommands?: CommandDefinition[]` - 嵌套子命令
 - **AND** 导出包含所有命令定义的 `COMMAND_REGISTRY` 常量
 - **AND** 生成器使用此注册表以确保一致性
 
@@ -247,19 +247,19 @@
 
 - **WHEN** 安装成功完成时
 - **THEN** 显示格式化的成功消息，包含：
-  - 勾选标记指示符
-  - 安装位置
-  - 后续步骤（shell 重载说明）
+ - 勾选标记指示符
+ - 安装位置
+ - 后续步骤（shell 重载说明）
 - **AND** 在终端支持时使用颜色（除非设置了 `--no-color`）
 
 #### Scenario: 详细安装输出
 
 - **WHEN** 用户在安装期间提供 `--verbose` 标志
 - **THEN** 显示详细步骤：
-  - Shell 检测结果
-  - 目标文件路径
-  - 配置修改
-  - 文件创建确认
+ - Shell 检测结果
+ - 目标文件路径
+ - 配置修改
+ - 文件创建确认
 
 ### Requirement: 测试支持
 
@@ -274,7 +274,7 @@
 #### Scenario: 生成器输出验证
 
 - **WHEN** 测试补全生成器时
-- **THEN** 验证生成的脚本包含预期模式
+- **THEN** 验证生成的脚本包含预期 schema
 - **AND** 测试命令注册表是否被正确消费
 - **AND** 确保动态补全占位符存在
 
@@ -287,7 +287,7 @@
 
 ## 不在范围内
 
-以下 shell 在此提案中**在架构上已记录但未实现**。它们将在未来的提案中添加：
+以下 shell 在此 proposal 中**在架构上已记录但未实现**。它们将在未来的 proposal 中添加：
 
 - **Bash 补全** - 将使用 bash-completion 框架，包含 `_init_completion`、`compgen` 和 `COMPREPLY`
 - **Fish 补全** - 将使用 Fish 的声明式 `complete -c` 语法

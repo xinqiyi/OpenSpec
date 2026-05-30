@@ -2,46 +2,46 @@
 
 ## 摘要
 - 使 OpenSpec 能够为受支持的编码 Agent（Claude Code 和 Cursor）生成和更新自定义斜杠命令。
-- 提供与 OpenSpec 工作流对齐的三个斜杠命令：proposal（启动变更提案）、apply（实施）和 archive（归档）。
-- 在 Agent 之间共享斜杠命令模板，使未来扩展更简单。
+- 提供与 OpenSpec workflow 对齐的三个斜杠命令：proposal（启动变更 proposal）、apply（实施）和 archive（archive）。
+- 在 Agent 之间共享斜杠命令 template，使未来扩展更简单。
 
 ## 动机
-开发者使用不同的编码 Agent 和编辑器。在工具之间为 OpenSpec 工作流提供一致的斜杠命令可减少摩擦，并确保触发工作流的标准方式。现在同时支持 Claude Code 和 Cursor，为未来引入斜杠命令功能的 Agent 奠定基础。
+开发者使用不同的编码 Agent 和编辑器。在工具之间为 OpenSpec workflow 提供一致的斜杠命令可减少摩擦，并确保触发 workflow 的标准方式。现在同时支持 Claude Code 和 Cursor，为未来引入斜杠命令功能的 Agent 奠定基础。
 
-## 提案
-1. 在 `openspec init` 期间，当用户选择支持的工具时，为三个 OpenSpec 工作流阶段生成斜杠命令配置：
-   - Claude（命名空间化）：`/openspec/proposal`、`/openspec/apply`、`/openspec/archive`。
-   - Cursor（扁平化，带前缀）：`/openspec-proposal`、`/openspec-apply`、`/openspec-archive`。
-   - 语义：
-     - Create – 搭建变更框架（ID、`proposal.md`、`tasks.md`、delta 规范）；严格验证。
-     - Apply – 实施已批准的变更；完成任务；严格验证。
-     - Archive – 部署后归档；必要时更新规范。
-   - 每个命令文件必须嵌入来自 `openspec/README.md` 的简洁、逐步说明（参见模板内容部分）。
+## proposal
+1. 在 `openspec init` 期间，当用户选择支持的工具时，为三个 OpenSpec workflow 阶段生成斜杠命令配置：
+ - Claude（命名空间化）：`/openspec/proposal`、`/openspec/apply`、`/openspec/archive`。
+ - Cursor（扁平化，带前缀）：`/openspec-proposal`、`/openspec-apply`、`/openspec-archive`。
+ - 语义：
+ - Create – 搭建变更框架（ID、`proposal.md`、`tasks.md`、delta spec）；严格验证。
+ - Apply – 实施已批准的变更；完成任务；严格验证。
+ - Archive – 部署后 archive；必要时更新 spec。
+ - 每个命令文件必须嵌入来自 `openspec/README.md` 的简洁、逐步说明（参见 template 内容部分）。
 2. 按工具存储斜杠命令文件：
-   - Claude Code：`.claude/commands/openspec/{proposal,apply,archive}.md`
-   - Cursor：`.cursor/commands/{openspec-proposal,openspec-apply,openspec-archive}.md`
-   - 确保创建嵌套目录。
+ - Claude Code：`.claude/commands/openspec/{proposal,apply,archive}.md`
+ - Cursor：`.cursor/commands/{openspec-proposal,openspec-apply,openspec-archive}.md`
+ - 确保创建嵌套目录。
 3. 命令文件格式和元数据：
-   - 使用 Markdown，可选 YAML frontmatter 用于工具元数据（name/title、description、category/tags），当工具支持时。
-   - OpenSpec 标记仅包裹正文，从不放在 frontmatter 内部。
-   - 保持可见的斜杠名称、文件名和任何 frontmatter `name`/`id` 一致对齐（例如 `proposal`、`openspec-proposal`）。
-   - 命名空间：将这些归类在"OpenSpec"下，优先使用唯一 ID（例如 `openspec-proposal`）以避免冲突。
-4. 集中模板：定义命令正文一次并在工具间重用；应用最小的工具特定包装器（frontmatter、类别、文件名）。
+ - 使用 Markdown，可选 YAML frontmatter 用于工具元数据（name/title、description、category/tags），当工具支持时。
+ - OpenSpec 标记仅包裹正文，从不放在 frontmatter 内部。
+ - 保持可见的斜杠名称、文件名和任何 frontmatter `name`/`id` 一致对齐（例如 `proposal`、`openspec-proposal`）。
+ - 命名空间：将这些归类在"OpenSpec"下，优先使用唯一 ID（例如 `openspec-proposal`）以避免冲突。
+4. 集中 template：定义命令正文一次并在工具间重用；应用最小的工具特定包装器（frontmatter、类别、文件名）。
 5. 在 `openspec update` 期间，仅刷新标记内的现有斜杠命令文件（按文件处理）；不创建缺失的文件或新工具。
 
 ## 设计思路
 - 引入 `SlashCommandConfigurator` 来管理每个工具的多个文件。
-  - 暴露多个目标而不是单个 `configFileName`（例如 `getTargets(): Array<{ path: string; kind: 'slash'; id: string }>`）。
-  - 为 init 提供 `generateAll(projectPath, openspecDir)`，为 update 提供 `updateExisting(projectPath, openspecDir)`。
-- 每个工具的适配器仅添加 frontmatter 和路径；正文来自共享模板。
-- 模板存在于 `TemplateManager` 中，带有从 `openspec/README.md` 提取简洁、权威片段的助手。
+ - 暴露多个目标而不是单个 `configFileName`（例如 `getTargets(): Array<{ path: string; kind: 'slash'; id: string }>`）。
+ - 为 init 提供 `generateAll(projectPath, openspecDir)`，为 update 提供 `updateExisting(projectPath, openspecDir)`。
+- 每个工具的适配器仅添加 frontmatter 和路径；正文来自共享 template。
+- template 存在于 `TemplateManager` 中，带有从 `openspec/README.md` 提取简洁、权威片段的助手。
 - 更新流程记录每个文件的结果，使用户确切看到哪些斜杠文件被刷新。
 
 ### 标记放置
 - 标记必须仅包裹 Markdown 正文内容：
-  - Frontmatter（如果存在）放在首位。
-  - 然后是 `<!-- OPENSPEC:START -->` … 正文 … `<!-- OPENSPEC:END -->`。
-  - 避免将标记插入 YAML 块以防止解析错误。
+ - Frontmatter（如果存在）放在首位。
+ - 然后是 `<!-- OPENSPEC:START -->` … 正文 … `<!-- OPENSPEC:END -->`。
+ - 避免将标记插入 YAML 块以防止解析错误。
 
 ### 幂等性和创建规则
 - `init`：为所选工具一次性创建所有三个文件；后续 `init` 运行对现有文件是无操作的。
@@ -85,7 +85,7 @@ category: OpenSpec
 tags: [openspec, change]
 ---
 <!-- OPENSPEC:START -->
-...来自共享模板的命令正文...
+...来自共享 template 的命令正文...
 <!-- OPENSPEC:END -->
 ```
 
@@ -100,16 +100,16 @@ category: OpenSpec
 description: 搭建新的 OpenSpec 变更并严格验证。
 ---
 <!-- OPENSPEC:START -->
-...来自共享模板的命令正文...
+...来自共享 template 的命令正文...
 <!-- OPENSPEC:END -->
 ```
 
 斜杠调用：`/openspec-proposal`（扁平化，带前缀）
 
-## 模板内容
-模板应简洁、可操作，并源自 `openspec/README.md` 以避免重复。每个命令正文包括：
+## template 内容
+template 应简洁、可操作，并源自 `openspec/README.md` 以避免重复。每个命令正文包括：
 - 护栏：如果需要，提出 1-2 个澄清问题；遵循最小复杂性规则；对 Node 项目使用 `pnpm`。
-- 针对工作流阶段（proposal、apply、archive）定制的步骤列表，包括严格验证命令。
+- 针对 workflow 阶段（proposal、apply、archive）定制的步骤列表，包括严格验证命令。
 - 指向 `openspec show`、`openspec list` 的指针，以及验证失败时的故障排除提示。
 
 ## 测试策略

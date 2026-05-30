@@ -6,10 +6,10 @@
 
 ### 阶段 1：基础
 **1. add-zod-validation**（无依赖）
-- 创建所有核心模式（RequirementSchema、ScenarioSchema、SpecSchema、ChangeSchema、DeltaSchema）
+- 创建所有核心 schema（RequirementSchema、ScenarioSchema、SpecSchema、ChangeSchema、DeltaSchema）
 - 实现 Markdown 解析器工具
 - 实现验证基础设施和规则
-- 建立所有命令使用的验证模式
+- 建立所有命令使用的验证 schema
 - 必须首先完成
 
 ### 阶段 2：变更命令
@@ -18,29 +18,29 @@
 - 重用 Markdown 解析工具
 - 使用内置验证实现变更命令
 - 使用验证基础设施进行变更验证子命令
-- 在模式和验证存在之前无法开始
+- 在 schema 和验证存在之前无法开始
 
-### 阶段 3：规范命令
+### 阶段 3：spec 命令
 **3. add-spec-commands**（依赖：add-zod-validation、add-change-commands）
 - 从 zod 验证导入 RequirementSchema、ScenarioSchema、SpecSchema
 - 重用 Markdown 解析工具
-- 使用内置验证实现规范命令
-- 使用验证基础设施进行规范验证子命令
-- 建立在变更命令建立的模式之上
+- 使用内置验证实现 spec 命令
+- 使用验证基础设施进行 spec 验证子命令
+- 建立在变更命令建立的 schema 之上
 
 ## 依赖图谱
 ```
 add-zod-validation
-    ↓
+ ↓
 add-change-commands
-    ↓
+ ↓
 add-spec-commands
 ```
 
 ## 关键依赖关系
 
 ### 共享代码依赖
-1. **模式**：所有模式在 add-zod-validation 中创建，被两个命令实现使用
+1. **schema**：所有 schema 在 add-zod-validation 中创建，被两个命令实现使用
 2. **验证**：基础设施在 add-zod-validation 中创建，集成到两个命令中
 3. **解析器**：Markdown 解析工具在 add-zod-validation 中创建，被两个命令使用
 
@@ -63,6 +63,6 @@ add-spec-commands
 
 ### 并行工作机会
 在每个阶段内，以下工作可以并行进行：
-- **阶段 1**：模式设计、验证规则和解析器实现
+- **阶段 1**：schema 设计、验证规则和解析器实现
 - **阶段 2**：变更命令特性和旧版兼容性工作
-- **阶段 3**：规范命令特性和最终集成
+- **阶段 3**：spec 命令特性和最终集成

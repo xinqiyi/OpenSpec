@@ -1,6 +1,6 @@
 ## 为什么
 
-当 `openspec status` 在不带 `--change` 且不存在变更的情况下被调用时（例如，在新初始化项目的上手期间），CLI 抛出致命错误：`未找到变更。使用以下命令创建一个：openspec new change <name>`。这破坏了上手流程，因为 AI 代理可能在创建任何变更之前调用 `openspec status`，导致代理停止或报告失败。修复 [#714](https://github.com/Fission-AI/OpenSpec/issues/714)。
+当 `openspec status` 在不带 `--change` 且不存在变更的情况下被调用时（例如，在新初始化项目的上手期间），CLI 抛出致命错误：`未找到变更。使用以下命令创建一个：openspec new change <name>`。这破坏了上手流程，因为 AI agent 可能在创建任何变更之前调用 `openspec status`，导致 agent 停止或报告失败。修复 [#714](https://github.com/Fission-AI/OpenSpec/issues/714)。
 
 ## 变更内容
 
@@ -12,7 +12,7 @@
 
 ### 新能力
 
-- `graceful-status-empty`：当不存在变更时对 `openspec status` 的优雅处理，涵盖文本和 JSON 输出模式
+- `graceful-status-empty`：当不存在变更时对 `openspec status` 的优雅处理，涵盖文本和 JSON 输出 schema
 
 ### 修改的能力
 

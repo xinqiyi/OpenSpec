@@ -1,6 +1,6 @@
 ## 为什么
 
-目前，内置 schema 作为 TypeScript 对象嵌入在 `builtin-schemas.ts` 中。这对 schema 本身可行，但不支持同位置模板。为了实现自包含的 schema 包（schema + 模板一起），我们需要将 schema 重构为目录结构。
+目前，内置 schema 作为 TypeScript 对象嵌入在 `builtin-schemas.ts` 中。这对 schema 本身可行，但不支持同位置 template。为了实现自包含的 schema 包（schema + template 一起），我们需要将 schema 重构为目录结构。
 
 ## 变更内容
 
@@ -12,9 +12,9 @@
 
 ## 影响
 
-- 受影响的规范：`artifact-graph`（schema 解析变更）
+- 受影响的 spec：`artifact-graph`（schema 解析变更）
 - 受影响的代码：
-  - 移除 `src/core/artifact-graph/builtin-schemas.ts`
-  - 更新 `src/core/artifact-graph/resolver.ts`
-  - 在包根目录添加 `schemas/` 目录
+ - 移除 `src/core/artifact-graph/builtin-schemas.ts`
+ - 更新 `src/core/artifact-graph/resolver.ts`
+ - 在包根目录添加 `schemas/` 目录
 - 无外部 API 变更（解析仍返回 `SchemaYaml`）

@@ -1,4 +1,4 @@
-# 提案：统一变更状态模型
+# proposal：统一变更状态模型
 
 ## 问题陈述
 
@@ -9,18 +9,18 @@
 ```typescript
 // view.ts 第 90 行
 if (progress.total === 0 || progress.completed === progress.total) {
-  completed.push({ name: entry.name });  // 错误：total === 0 ≠ 已完成
+ completed.push({ name: entry.name }); // 错误：total === 0 ≠ 已完成
 }
 ```
 
 结果：`openspec new change foo && openspec view` 将 `foo` 显示为"已完成"，而它实际上没有内容。
 
-### 缺陷 2：制品工作流命令找不到脚手架变更
+### 缺陷 2：制品 workflow 命令找不到脚手架变更
 
 ```typescript
 // item-discovery.ts - getActiveChangeIds()
 const proposalPath = path.join(changesPath, entry.name, 'proposal.md');
-await fs.access(proposalPath);  // 仅返回包含 proposal.md 的变更
+await fs.access(proposalPath); // 仅返回包含 proposal.md 的变更
 ```
 
 结果：`openspec status --change foo` 报"未找到"，即使目录存在。
@@ -31,7 +31,7 @@ await fs.access(proposalPath);  // 仅返回包含 proposal.md 的变更
 
 | 概念 | 问题 | 权威来源 |
 |---------|----------|-----------------|
-| **规划进度** | 所有规范文档是否已创建？ | 文件存在性（ArtifactGraph） |
+| **planning 进度** | 所有 spec 文档是否已创建？ | 文件存在性（ArtifactGraph） |
 | **实施进度** | 编码工作是否完成？ | 任务复选框（tasks.md） |
 
 ## 建议的解决方案
@@ -42,13 +42,13 @@ await fs.access(proposalPath);  // 仅返回包含 proposal.md 的变更
 
 | 状态 | 条件 | 含义 |
 |-------|----------|---------|
-| **草稿** | 无 tasks.md 或 `tasks.total === 0` | 仍在规划中 |
+| **草稿** | 无 tasks.md 或 `tasks.total === 0` | 仍在 planning 中 |
 | **活跃** | `tasks.total > 0` 且 `completed < total` | 实施中 |
 | **已完成** | `tasks.total > 0` 且 `completed === total` | 完成 |
 
-### 修复 2：制品工作流使用目录存在性
+### 修复 2：制品 workflow 使用目录存在性
 
-更新 `validateChangeExists()` 以检查目录是否存在，而非检查 `proposal.md` 是否存在。这允许制品工作流引导用户创建他们的第一个制品。
+更新 `validateChangeExists()` 以检查目录是否存在，而非检查 `proposal.md` 是否存在。这允许制品 workflow 引导用户创建他们的第一个制品。
 
 ### 保留现有的发现函数
 
@@ -73,14 +73,14 @@ await fs.access(proposalPath);  // 仅返回包含 proposal.md 的变更
 - 活跃/已完成语义不变（仍然基于任务）
 - `getActiveChangeIds()` 不变
 - `openspec validate` 不变
-- 已归档变更不受影响
+- 已 archive 变更不受影响
 
 ## 不在范围内
 
 - 合并基于任务和基于制品的进度（它们服务于不同目的）
 - 更改"已完成"的含义（它保持 = 所有任务已完成）
 - 向 view 命令添加制品进度（单独的增强）
-- Shell 标签补全用于制品工作流命令（尚未注册）
+- Shell 标签补全用于制品 workflow 命令（尚未注册）
 
 ## 相关命令分析
 

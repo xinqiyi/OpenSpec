@@ -2,11 +2,11 @@
 
 ## 研究摘要
 
-现有的 OpenSpec 模式指向一个小的显式基础：
+现有的 OpenSpec schema 指向一个小的显式基础：
 
 - 全局数据使用来自 `getGlobalDataDir()` 的 XDG/平台位置。
-- 工作区注册表是全局数据下的机器本地便捷索引。
-- 工作区可移植状态使用版本化 YAML 和严格的 Zod 验证。
+- workspace 注册表是全局数据下的机器本地便捷索引。
+- workspace 可移植状态使用版本化 YAML 和严格的 Zod 验证。
 - 现有的读/写助手在写入前验证状态，并使用 `FileSystemUtils.writeFile()` 创建父目录。
 - Schema/后端风格代码倾向于小型显式适配器和注册表，而不是重型框架抽象。
 

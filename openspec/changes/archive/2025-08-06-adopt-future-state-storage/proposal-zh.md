@@ -2,7 +2,7 @@
 
 ## 为什么
 
-当前以差异文件（`.spec.md.diff`）存储规范变更的方式给人类和 AI 都带来了障碍。带有 `+` 和 `-` 前缀的差异语法使规范难以阅读，AI 工具在理解未来状态时也难以处理这种格式，而且 GitHub 无法在不同文件夹中显示当前和提议规范之间的良好对比。
+当前以差异文件（`.spec.md.diff`）存储 spec 变更的方式给人类和 AI 都带来了障碍。带有 `+` 和 `-` 前缀的差异语法使 spec 难以阅读，AI 工具在理解未来状态时也难以处理这种格式，而且 GitHub 无法在不同文件夹中显示当前和提议 spec 之间的良好对比。
 
 ## 变更内容
 
@@ -13,9 +13,9 @@
 
 ## 影响
 
-- 受影响的规范：新的 `openspec-conventions` 能力
+- 受影响的 spec：新的 `openspec-conventions` 能力
 - 受影响的代码：
-  - openspec/README.md（第 85-108 行）
-  - docs/PRD.md（第 376-382 行，第 778-783 行）
-  - docs/openspec-walkthrough.md（第 58-62 行，第 112-126 行）
-  - openspec/changes/add-init-command/（需要迁移）
+ - openspec/README.md（第 85-108 行）
+ - docs/PRD.md（第 376-382 行，第 778-783 行）
+ - docs/openspec-walkthrough.md（第 58-62 行，第 112-126 行）
+ - openspec/changes/add-init-command/（需要迁移）

@@ -1,4 +1,4 @@
-# Update 命令规范
+# Update 命令 spec
 
 ## 目的
 
@@ -8,14 +8,14 @@
 
 ### 更新行为
 
-update 命令应将 OpenSpec 指令文件更新到最新模板。
+update 命令应将 OpenSpec 指令文件更新到最新 template。
 
 当用户运行 `openspec update` 时，命令应：
 - 检查 `openspec` 目录是否存在
-- 将 `openspec/README.md` 替换为最新模板（完全替换）
+- 将 `openspec/README.md` 替换为最新 template（完全替换）
 - 使用标记更新 `CLAUDE.md` 中 OpenSpec 管理的块
-  - 保留标记外的用户内容
-  - 如果 `CLAUDE.md` 缺失则创建它
+ - 保留标记外的用户内容
+ - 如果 `CLAUDE.md` 缺失则创建它
 - 显示 ASCII 安全成功消息："已更新 OpenSpec 指令"
 
 ### 先决条件
@@ -30,7 +30,7 @@ update 命令应将 OpenSpec 指令文件更新到最新模板。
 ### 文件处理
 
 update 命令应：
-- 完全替换 `openspec/README.md` 为最新模板
+- 完全替换 `openspec/README.md` 为最新 template
 - 仅使用标记更新 `CLAUDE.md` 中 OpenSpec 管理的块
 - 使用默认目录名 `openspec`
 - 是幂等的（重复运行没有额外效果）
@@ -41,7 +41,7 @@ update 命令应：
 如果文件写入失败，则让错误自然冒泡并包含文件路径。
 
 ### CLAUDE.md 缺失
-如果 CLAUDE.md 不存在，则使用模板内容创建它。
+如果 CLAUDE.md 不存在，则使用 template 内容创建它。
 
 ### 自定义目录名
 此变更中不支持。应使用默认目录名 `openspec`。

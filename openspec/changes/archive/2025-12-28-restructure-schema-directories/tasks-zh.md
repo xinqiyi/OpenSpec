@@ -2,9 +2,9 @@
 
 - [ ] 1.1 在包根目录创建 `schemas/` 目录
 - [ ] 1.2 从 `SPEC_DRIVEN_SCHEMA` 创建 `schemas/spec-driven/schema.yaml`
-- [ ] 1.3 创建 `schemas/spec-driven/templates/` 并放置占位模板
+- [ ] 1.3 创建 `schemas/spec-driven/templates/` 并放置占位 template
 - [ ] 1.4 从 `TDD_SCHEMA` 创建 `schemas/tdd/schema.yaml`
-- [ ] 1.5 创建 `schemas/tdd/templates/` 并放置占位模板
+- [ ] 1.5 创建 `schemas/tdd/templates/` 并放置占位 template
 
 ## 2. 更新 Schema 解析
 
@@ -26,7 +26,7 @@
 - [ ] 4.1 在 `package.json` 的 `files` 数组中添加 `schemas/`
 - [ ] 4.2 验证构建后的包中包含 schema
 
-## 5. 修复模板路径
+## 5. 修复 template 路径
 
 - [ ] 5.1 更新 schema.yaml 文件中的 `template` 字段（移除 `templates/` 前缀）
-- [ ] 5.2 确保模板路径相对于 schema 的 templates 目录
+- [ ] 5.2 确保 template 路径相对于 schema 的 templates 目录

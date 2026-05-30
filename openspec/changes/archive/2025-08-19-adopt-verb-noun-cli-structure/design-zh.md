@@ -14,4 +14,4 @@
 所有基于名词的命令继续可用，附带清晰的弃用警告，引导用户使用动词优先的替代命令。
 
 ## 不在此范围
-跨模式的 `openspec list` JSON 输出对等以及 `show --specs/--changes` 发现功能是后续工作。
+跨 schema 的 `openspec list` JSON 输出对等以及 `show --specs/--changes` 发现功能是后续工作。

@@ -2,7 +2,7 @@
 
 OpenSpec 是一个使用 pnpm 进行依赖管理的 TypeScript CLI 工具。该项目需要 Node.js >=20.19.0。Nix 使用自己的构建系统，需要了解如何获取依赖并可重现地构建项目。
 
-Nix 生态系统有特定的模式来打包 Node.js/pnpm 项目，这与传统的 npm 生态系统不同。
+Nix 生态系统有特定的 schema 来打包 Node.js/pnpm 项目，这与传统的 npm 生态系统不同。
 
 ## 目标
 
@@ -13,7 +13,7 @@ Nix 生态系统有特定的模式来打包 Node.js/pnpm 项目，这与传统�
 
 ## 非目标
 
-- 替换现有的 npm/pnpm 发布工作流
+- 替换现有的 npm/pnpm 发布 workflow
 - 发布到 nixpkgs（可以在以后作为单独的工作进行）
 - 支持 Windows（Nix 不在 Windows 上原生运行）
 
@@ -25,7 +25,7 @@ Nix 生态系统有特定的模式来打包 Node.js/pnpm 项目，这与传统�
 
 **理由**：nixpkgs 中的 zigbee2mqtt 包展示了当前 pnpm 项目的最佳实践。使用带 pnpm 的 `buildNpmPackage` 需要复杂的配置，而使用正确 hooks 的 `mkDerivation` 更直接且支持更好。
 
-**考虑的替代方案**：使用带 `npmConfigHook = pkgs.pnpmConfigHook` 的 `buildNpmPackage` - 这是较旧的模式，会导致依赖获取问题。
+**考虑的替代方案**：使用带 `npmConfigHook = pkgs.pnpmConfigHook` 的 `buildNpmPackage` - 这是较旧的 schema，会导致依赖获取问题。
 
 ### 使用 fetchPnpmDeps 和显式 pnpm 版本
 
@@ -40,7 +40,7 @@ Nix 生态系统有特定的模式来打包 Node.js/pnpm 项目，这与传统�
 
 **决策**：使用纯 Nix 配合 `nixpkgs.lib.genAttrs` 实现多平台支持。
 
-**理由**：根据用户要求，避免额外依赖。`genAttrs` 模式在 Nix 社区中简单且广为人知。
+**理由**：根据用户要求，避免额外依赖。`genAttrs` schema 在 Nix 社区中简单且广为人知。
 
 ### 使用 Node.js 20 而非最新版本
 
@@ -52,13 +52,13 @@ Nix 生态系统有特定的模式来打包 Node.js/pnpm 项目，这与传统�
 
 ### 依赖哈希管理
 
-`pnpmDeps.hash` 字段必须在依赖变更时更新。工作流：
+`pnpmDeps.hash` 字段必须在依赖变更时更新。workflow：
 1. 将哈希设置为假值（全零）
 2. 运行 `nix build`
 3. Nix 失败并显示实际哈希
 4. 使用正确的哈希更新 flake.nix
 
-这是固定输出派生值的标准 Nix 工作流。
+这是固定输出派生值的标准 Nix workflow。
 
 ### 构建输入
 
@@ -80,7 +80,7 @@ Nix 生态系统有特定的模式来打包 Node.js/pnpm 项目，这与传统�
 
 ## 迁移计划
 
-1. 向仓库添加 flake.nix
+1. 向 repository 添加 flake.nix
 2. 在多个平台上测试构建（可以使用带 Nix 的 GitHub Actions）
 3. 使用 Nix 安装说明更新 README
 4. 可选地添加到 CI 管道以尽早捕获哈希不匹配

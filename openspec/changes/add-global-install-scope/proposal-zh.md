@@ -2,7 +2,7 @@
 
 OpenSpec 安装路径目前不一致：
 
-- 大多数技能和命令写入项目本地目录。
+- 大多数 skill 和命令写入项目本地目录。
 - Codex 命令已经是全局的（`$CODEX_HOME/prompts` 或 `~/.codex/prompts`）。
 - 用户无法跨工具选择一致的安装范围策略。
 
@@ -12,7 +12,7 @@ OpenSpec 安装路径目前不一致：
 
 ### 1. 添加带有遗留安全默认值的安装范围偏好
 
-引入一个全局安装范围设置，有两种模式：
+引入一个全局安装范围设置，有两种 schema：
 
 - `global`（新创建配置的默认值）
 - `project`
@@ -20,7 +20,7 @@ OpenSpec 安装路径目前不一致：
 该设置存储在全局配置中，并可在每次命令运行时覆盖。
 对于架构演进而 `installScope` 缺失的旧配置，有效默认值保持为 `project`，直到用户选择加入全局范围。
 
-### 2. 为技能和命令添加能感知范围的路径解析
+### 2. 为 skill 和命令添加能感知范围的路径解析
 
 重构路径解析，使 `init` 和 `update` 都从以下内容计算安装目标：
 
@@ -32,7 +32,7 @@ OpenSpec 安装路径目前不一致：
 
 扩展工具元数据，为每个界面显式声明范围支持：
 
-- 技能范围支持
+- skill 范围支持
 - 命令范围支持
 
 当首选范围对于某个工具/界面不受支持时，系统使用确定性的回退规则，并在输出中报告有效范围。
@@ -44,14 +44,14 @@ OpenSpec 安装路径目前不一致：
 ### 5. 更新 init/update UX 和行为
 
 - `openspec init`：
-  - 接受范围覆盖标志
-  - 使用配置的范围或迁移感知默认值（新配置默认全局；旧配置在迁移前保留 project）
-  - 应用能感知范围的生成和清理规划
+ - 接受范围覆盖标志
+ - 使用配置的范围或迁移感知默认值（新配置默认全局；旧配置在迁移前保留 project）
+ - 应用能感知范围的生成和清理 planning
 - `openspec update`：
-  - 应用当前范围偏好
-  - 在有效范围内按工具/界面同步构件
-  - 跟踪每个工具/界面上次成功的有效范围，用于确定性的范围漂移检测
-  - 清晰报告有效范围决策
+ - 应用当前范围偏好
+ - 在有效范围内按工具/界面同步构件
+ - 跟踪每个工具/界面上次成功的有效范围，用于确定性的范围漂移检测
+ - 清晰报告有效范围决策
 
 ### 6. 扩展配置 UX 和文档
 
@@ -62,13 +62,13 @@ OpenSpec 安装路径目前不一致：
 
 ### 7. 与命令界面能力交付规则协调
 
-`cli-init` 和 `cli-update` 规划应组合：
+`cli-init` 和 `cli-update` planning 应组合：
 
 - 安装范围（`global | project`）
-- 交付模式（`both | skills | commands`）
+- 交付 schema（`both | skills | commands`）
 - 命令界面能力（`adapter | skills-invocable | none`）
 
-此提案仍然专注于范围解析，但实施和测试覆盖应包括混合工具案例，以避免与 `add-tool-command-surface-capabilities` 结合时出现回归。
+此 proposal 仍然专注于范围解析，但实施和测试覆盖应包括混合工具案例，以避免与 `add-tool-command-surface-capabilities` 结合时出现回归。
 
 ## 能力
 
@@ -82,9 +82,9 @@ OpenSpec 安装路径目前不一致：
 - `cli-config`：配置和检查安装范围偏好。
 - `ai-tool-paths`：添加工具级范围支持元数据和路径策略。
 - `command-generation`：通过安装上下文实现能感知范围的适配器路径解析。
-- `cli-init`：能感知范围的初始化规划和输出。
+- `cli-init`：能感知范围的初始化 planning 和输出。
 - `cli-update`：能感知范围的更新同步、漂移检测和输出。
-- `migration`：能感知范围的迁移扫描，带有安装范围感知的工作流查找。
+- `migration`：能感知范围的迁移扫描，带有安装范围感知的 workflow 查找。
 
 ## 影响
 
@@ -94,8 +94,8 @@ OpenSpec 安装路径目前不一致：
 - `src/core/config.ts` - 工具范围能力元数据
 - `src/core/available-tools.ts` 和 `src/core/shared/tool-detection.ts` - 能感知范围的已配置检测
 - `src/core/command-generation/types.ts` 和适配器实现 - 能感知上下文的文件路径解析
-- `src/core/init.ts` - 能感知范围的生成/移除规划
-- `src/core/update.ts` - 能感知范围的同步/移除/漂移规划
-- `src/core/migration.ts` - 能感知范围的工作流扫描支持
+- `src/core/init.ts` - 能感知范围的生成/移除 planning
+- `src/core/update.ts` - 能感知范围的同步/移除/漂移 planning
+- `src/core/migration.ts` - 能感知范围的 workflow 扫描支持
 - `docs/supported-tools.md` 和 `docs/cli.md` - 安装范围行为文档
 - `test/core/init.test.ts`、`test/core/update.test.ts`、适配器测试、配置测试 - 范围覆盖

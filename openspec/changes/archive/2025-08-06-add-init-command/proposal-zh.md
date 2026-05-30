@@ -7,7 +7,7 @@
 ## 变更内容
 
 - 添加 `openspec init` CLI 命令，创建完整的 OpenSpec 目录结构
-- 生成模板文件（包含 AI 指令的 README.md、project.md 模板）
+- 生成 template 文件（包含 AI 指令的 README.md、project.md template）
 - 交互式提示选择要配置哪些 AI 工具（初始为 Claude Code，其他标记为"即将推出"）
 - 支持多个 AI 编程助手，具有可扩展的插件架构
 - 使用内容标记进行智能文件更新，以保留现有配置
@@ -21,10 +21,10 @@
 
 ## 影响
 
-- 受影响的规范：无（新功能）
+- 受影响的 spec：无（新功能）
 - 受影响的代码：
-  - src/cli/index.ts（添加 init 命令）
-  - src/core/init.ts（新建——初始化逻辑）
-  - src/core/templates/（新建——模板文件）
-  - src/core/configurators/（新建——AI 工具插件）
-  - src/utils/file-system.ts（新建——文件操作）
+ - src/cli/index.ts（添加 init 命令）
+ - src/core/init.ts（新建——初始化逻辑）
+ - src/core/templates/（新建——template 文件）
+ - src/core/configurators/（新建——AI 工具插件）
+ - src/utils/file-system.ts（新建——文件操作）

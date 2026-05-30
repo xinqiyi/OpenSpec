@@ -15,7 +15,7 @@
 
 ### 验证规则层级
 
-#### 规范验证规则
+#### spec 验证规则
 ```
 ERROR 级别：
 - 缺少 ## Overview 或 ## Requirements 部分
@@ -49,45 +49,45 @@ INFO 级别：
 - 单个变更中差异过多（超过 10 个）
 ```
 
-### 严格模式
+### 严格 schema
 - **默认**：显示所有级别，仅在 ERROR 上失败
 - **--strict 标志**：在 ERROR 和 WARNING 上都失败
 - **用例**：CI/CD 管道中的逐步质量改进
 
 ### Archive 命令安全性
-**问题：** 无效的规范可能被归档，污染归档库。
+**问题：** 无效的 spec 可能被 archive，污染 archive 库。
 
 **解决方案：**
-1. 归档前验证（默认行为）
+1. archive 前验证（默认行为）
 2. --no-validate 标志带安全措施：
-   - 交互式确认提示
-   - 显著警告消息
-   - 带时间戳的控制台日志记录
-   - 不推荐用于 CI/CD 使用
+ - 交互式确认提示
+ - 显著警告消息
+ - 带时间戳的控制台日志记录
+ - 不推荐用于 CI/CD 使用
 
 **理由：**
-- 默认保护归档完整性
+- 默认保护 archive 完整性
 - 允许带问责的紧急覆盖
 - 清晰的验证绕过审计跟踪
 
 ### 验证报告格式
 ```json
 {
-  "valid": boolean,
-  "issues": [
-    {
-      "level": "ERROR" | "WARNING" | "INFO",
-      "path": "requirements[0].scenarios",
-      "message": "Requirement must have at least one scenario",
-      "line": 15,
-      "column": 0
-    }
-  ],
-  "summary": {
-    "errors": 2,
-    "warnings": 5,
-    "info": 3
-  }
+ "valid": boolean,
+ "issues": [
+ {
+ "level": "ERROR" | "WARNING" | "INFO",
+ "path": "requirements[0].scenarios",
+ "message": "Requirement must have at least one scenario",
+ "line": 15,
+ "column": 0
+ }
+ ],
+ "summary": {
+ "errors": 2,
+ "warnings": 5,
+ "info": 3
+ }
 }
 ```
 

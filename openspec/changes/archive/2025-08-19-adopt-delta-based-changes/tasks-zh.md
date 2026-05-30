@@ -1,7 +1,7 @@
 # 实施任务
 
 ## 1. 更新约定
-- [x] 1.1 使用基于 delta 的方法更新 openspec-conventions 规范
+- [x] 1.1 使用基于 delta 的方法更新 openspec-conventions spec
 - [x] 1.2 添加基于标题的需求标识
 - [x] 1.3 定义 ADDED/MODIFIED/REMOVED/RENAMED 部分
 - [x] 1.4 记录标准输出符号（+ ~ - →）
@@ -9,47 +9,47 @@
 - [x] 1.6 更新示例以使用 delta 格式
 
 ## 2. 更新 Diff 命令
-- [ ] 2.1 使用需求级别比较更新 cli-diff 规范
-- [ ] 2.2 将规范解析为需求级别结构
+- [ ] 2.1 使用需求级别比较更新 cli-diff spec
+- [ ] 2.2 将 spec 解析为需求级别结构
 - [ ] 2.3 应用 delta 生成未来状态
 - [ ] 2.4 实现并排比较视图（仅变更）
 - [ ] 2.5 为需求级别比较添加测试
 - [ ] 2.6 为并排视图格式化添加测试
 
-## 3. 更新归档命令
-- [x] 3.1 使用 delta 处理行为更新 cli-archive 规范
+## 3. 更新 archive 命令
+- [x] 3.1 使用 delta 处理行为更新 cli-archive spec
 - [x] 3.2 实现需求块提取器，保留精确标题（`### Requirement: [Name]`）并捕获完整内容（包括场景）
-- [x] 3.3 实现规范化标题匹配（仅修剪，大小写敏感）
+- [x] 3.3 实现 spec 化标题匹配（仅修剪，大小写敏感）
 - [x] 3.4 解析 delta 部分（ADDED/MODIFIED/REMOVED/RENAMED）
-- [x] 3.5 当目标规范不存在时创建新规范
-  - [x] 3.5.1 自动生成最小骨架：`# [规范名称] 规范`、`## 目的` 占位符、`## 需求`
-  - [x] 3.5.2 仅允许对不存在的规范进行 ADDED 操作；如果存在 MODIFIED/REMOVED/RENAMED 则中止
+- [x] 3.5 当目标 spec 不存在时创建新 spec
+ - [x] 3.5.1 自动生成最小骨架：`# [spec 名称] spec`、`## 目的` 占位符、`## 需求`
+ - [x] 3.5.2 仅允许对不存在的 spec 进行 ADDED 操作；如果存在 MODIFIED/REMOVED/RENAMED 则中止
 - [x] 3.6 按顺序应用变更：RENAMED → REMOVED → MODIFIED → ADDED
 - [x] 3.7 验证和冲突检查
-  - [x] 3.7.1 MODIFIED/REMOVED 的需求存在（在应用重命名映射后）
-  - [x] 3.7.2 ADDED 的需求不存在（考虑重命名后的状态）
-  - [x] 3.7.3 RENAMED 的 FROM 标题存在；TO 标题不存在（包括与 ADDED 的冲突）
-  - [x] 3.7.4 所有操作后规范内无重复标题
-  - [x] 3.7.5 检测跨部分冲突（例如，同一需求同时出现在 MODIFIED 和 REMOVED 中）
-  - [x] 3.7.6 当存在重命名时，要求 MODIFIED 引用新标题
+ - [x] 3.7.1 MODIFIED/REMOVED 的需求存在（在应用重命名映射后）
+ - [x] 3.7.2 ADDED 的需求不存在（考虑重命名后的状态）
+ - [x] 3.7.3 RENAMED 的 FROM 标题存在；TO 标题不存在（包括与 ADDED 的冲突）
+ - [x] 3.7.4 所有操作后 spec 内无重复标题
+ - [x] 3.7.5 检测跨部分冲突（例如，同一需求同时出现在 MODIFIED 和 REMOVED 中）
+ - [x] 3.7.6 当存在重命名时，要求 MODIFIED 引用新标题
 - [x] 3.8 原子更新
-  - [x] 3.8.1 首先验证所有 delta；在内存中按规范暂存更新
-  - [x] 3.8.2 每个规范单次写入；任何验证失败则中止整个归档（无部分写入）
+ - [x] 3.8.1 首先验证所有 delta；在内存中按 spec 暂存更新
+ - [x] 3.8.2 每个 spec 单次写入；任何验证失败则中止整个 archive（无部分写入）
 - [x] 3.9 输出和错误消息
-  - [x] 3.9.1 使用符号显示每个规范的操作计数：`+` 添加、`~` 修改、`-` 移除、`→` 重命名
-  - [x] 3.9.2 可选地显示所有规范的汇总总计行
-  - [x] 3.9.3 标准化错误消息格式：`[spec] [operation] failed for header "### Requirement: X" — reason`；失败时以 `Aborted. No files were changed.` 结束
+ - [x] 3.9.1 使用符号显示每个 spec 的操作计数：`+` 添加、`~` 修改、`-` 移除、`→` 重命名
+ - [x] 3.9.2 可选地显示所有 spec 的汇总总计行
+ - [x] 3.9.3 标准化错误消息格式：`[spec] [operation] failed for header "### Requirement: X" — reason`；失败时以 `Aborted. No files were changed.` 结束
 - [x] 3.10 幂等性行为（v1）：前提条件失败时中止（例如，ADDED 已存在）；不实现无操作检测
 - [x] 3.11 测试
-  - [x] 3.11.1 标题规范化（仅修剪）匹配
-  - [x] 3.11.2 按正确顺序应用（RENAMED → REMOVED → MODIFIED → ADDED）
-  - [x] 3.11.3 验证边界情况（缺失标题、重复、重命名冲突、冲突部分）
-  - [x] 3.11.4 重命名 + 修改的交互（MODIFIED 使用新标题）
-  - [x] 3.11.5 通过骨架创建新规范
-  - [x] 3.11.6 多规范混合操作，独立验证和写入
+ - [x] 3.11.1 标题 spec 化（仅修剪）匹配
+ - [x] 3.11.2 按正确顺序应用（RENAMED → REMOVED → MODIFIED → ADDED）
+ - [x] 3.11.3 验证边界情况（缺失标题、重复、重命名冲突、冲突部分）
+ - [x] 3.11.4 重命名 + 修改的交互（MODIFIED 使用新标题）
+ - [x] 3.11.5 通过骨架创建新 spec
+ - [x] 3.11.6 多 spec 混合操作，独立验证和写入
 
 ## 备注
-- 归档命令是关键路径 - 必须可靠工作
+- archive 命令是关键路径 - 必须可靠工作
 - 所有新变更必须使用 delta 格式
-- 标题规范化：normalize(header) = trim(header)
+- 标题 spec 化：normalize(header) = trim(header)
 - Diff 命令在并排比较中仅显示已变更的需求

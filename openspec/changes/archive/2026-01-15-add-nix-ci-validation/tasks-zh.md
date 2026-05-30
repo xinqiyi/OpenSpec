@@ -16,7 +16,7 @@
 
 ## 3. 添加更新脚本验证
 
-- [x] 3.1 添加任务步骤，以 dry-run 或测试模式运行 scripts/update-flake.sh
+- [x] 3.1 添加任务步骤，以 dry-run 或测试 schema 运行 scripts/update-flake.sh
 - [x] 3.2 验证脚本无错误执行
 - [x] 3.3 添加验证，确保从 package.json 正确提取版本号
 - [x] 3.4 验证 flake.nix 以正确格式（版本和哈希）更新
@@ -32,7 +32,7 @@
 
 - [x] 5.1 如果尚未安装，在本地安装 act
 - [x] 5.2 使用 `act pull_request` 测试 Nix 验证任务
-- [x] 5.3 验证 act 能够运行安装了 Nix 的工作流
+- [x] 5.3 验证 act 能够运行安装了 Nix 的 workflow
 - [x] 5.4 在 .actrc 或 README 中记录所需的 act 特定配置
 
 ## 6. 文档和收尾
@@ -42,8 +42,8 @@
 - [ ] 6.3 如有需要，更新 CI 徽章或状态指示器
 - [ ] 6.4 通过创建测试 PR 进行端到端测试
 
-## 7. 归档变更
+## 7. archive 变更
 
-- [x] 7.1 合并并验证后，在 openspec/specs/ci-nix-validation/spec.md 创建新的规范文件
+- [x] 7.1 合并并验证后，在 openspec/specs/ci-nix-validation/spec.md 创建新的 spec 文件
 - [x] 7.2 将变更目录移动到 openspec/changes/archive/[date]-add-nix-ci-validation/
-- [x] 7.3 运行 `openspec validate --strict` 确认归档的变更通过验证
+- [x] 7.3 运行 `openspec validate --strict` 确认 archive 的变更通过验证

@@ -5,7 +5,7 @@
 此变更修复了两个缺陷，对现有系统的干扰最小：
 
 1. **视图缺陷**：空变更被错误地显示为"已完成"
-2. **制品工作流缺陷**：命令在脚手架变更上失败
+2. **制品 workflow 缺陷**：命令在脚手架变更上失败
 
 ## 关键设计决策：两个系统，两个目的
 
@@ -14,7 +14,7 @@
 | 系统 | 目的 | 使用者 |
 |--------|---------|---------|
 | **任务进度** | 跟踪实施工作 | `openspec view`、`openspec list` |
-| **制品进度** | 跟踪规划/规范工作 | `openspec status`、`openspec next` |
+| **制品进度** | 跟踪 planning/spec 工作 | `openspec status`、`openspec next` |
 
 我们不合并这些系统。相反，我们修复每个系统以在其领域内正确工作。
 
@@ -25,7 +25,7 @@
 ```typescript
 // view.ts 第 90 行
 if (progress.total === 0 || progress.completed === progress.total) {
-  completed.push({ name: entry.name });
+ completed.push({ name: entry.name });
 }
 ```
 
@@ -35,11 +35,11 @@ if (progress.total === 0 || progress.completed === progress.total) {
 
 ```typescript
 if (progress.total === 0) {
-  draft.push({ name: entry.name });
+ draft.push({ name: entry.name });
 } else if (progress.completed === progress.total) {
-  completed.push({ name: entry.name });
+ completed.push({ name: entry.name });
 } else {
-  active.push({ name: entry.name, progress });
+ active.push({ name: entry.name, progress });
 }
 ```
 
@@ -49,26 +49,26 @@ if (progress.total === 0) {
 ```
 已完成的变更
 ─────────────────
-  ✓ add-feature        （所有任务已完成 - 正确）
-  ✓ test-workflow      （无任务 - 错误）
+ ✓ add-feature （所有任务已完成 - 正确）
+ ✓ test-workflow （无任务 - 错误）
 ```
 
 **之后：**
 ```
 草稿变更
 ─────────────────
-  ○ test-workflow      （尚无任务）
+ ○ test-workflow （尚无任务）
 
 活跃变更
 ─────────────────
-  ◉ add-scaffold       [████░░░░] 3/7 任务
+ ◉ add-scaffold [████░░░░] 3/7 任务
 
 已完成的变更
 ─────────────────
-  ✓ add-feature        （所有任务已完成）
+ ✓ add-feature （所有任务已完成）
 ```
 
-## 变更 2：修复制品工作流发现
+## 变更 2：修复制品 workflow 发现
 
 ### 当前逻辑（有缺陷）
 
@@ -76,36 +76,36 @@ if (progress.total === 0) {
 // artifact-workflow.ts - validateChangeExists()
 const activeChanges = await getActiveChangeIds(projectRoot);
 if (!activeChanges.includes(changeName)) {
-  throw new Error(`变更 '${changeName}' 未找到...`);
+ throw new Error(`变更 '${changeName}' 未找到...`);
 }
 ```
 
-问题：`getActiveChangeIds()` 需要 `proposal.md`，但制品工作流应在空目录上工作以帮助创建第一个制品。
+问题：`getActiveChangeIds()` 需要 `proposal.md`，但制品 workflow 应在空目录上工作以帮助创建第一个制品。
 
 ### 新逻辑
 
 ```typescript
 async function validateChangeExists(changeName: string, projectRoot: string): Promise<string> {
-  const changePath = path.join(projectRoot, 'openspec', 'changes', changeName);
+ const changePath = path.join(projectRoot, 'openspec', 'changes', changeName);
 
-  // 直接检查目录是否存在，而非检查 proposal.md
-  if (!fs.existsSync(changePath) || !fs.statSync(changePath).isDirectory()) {
-    // 列出可用变更以提供有用的错误消息
-    const entries = await fs.promises.readdir(
-      path.join(projectRoot, 'openspec', 'changes'),
-      { withFileTypes: true }
-    );
-    const available = entries
-      .filter(e => e.isDirectory() && e.name !== 'archive' && !e.name.startsWith('.'))
-      .map(e => e.name);
+ // 直接检查目录是否存在，而非检查 proposal.md
+ if (!fs.existsSync(changePath) || !fs.statSync(changePath).isDirectory()) {
+ // 列出可用变更以提供有用的错误消息
+ const entries = await fs.promises.readdir(
+ path.join(projectRoot, 'openspec', 'changes'),
+ { withFileTypes: true }
+ );
+ const available = entries
+ .filter(e => e.isDirectory() && e.name !== 'archive' && !e.name.startsWith('.'))
+ .map(e => e.name);
 
-    if (available.length === 0) {
-      throw new Error('未找到变更。使用以下命令创建：openspec new change <name>');
-    }
-    throw new Error(`变更 '${changeName}' 未找到。可用的：\n  ${available.join('\n  ')}`);
-  }
+ if (available.length === 0) {
+ throw new Error('未找到变更。使用以下命令创建：openspec new change <name>');
+ }
+ throw new Error(`变更 '${changeName}' 未找到。可用的：\n ${available.join('\n ')}`);
+ }
 
-  return changeName;
+ return changeName;
 }
 ```
 
@@ -148,4 +148,4 @@ $ openspec status --change foo
 
 1. **单元测试**：使用脚手架变更测试 `validateChangeExists()`
 2. **视图测试**：验证三个类别正确渲染
-3. **手动测试**：从 `new change` → `status` → `view` 的完整工作流
+3. **手动测试**：从 `new change` → `status` → `view` 的完整 workflow

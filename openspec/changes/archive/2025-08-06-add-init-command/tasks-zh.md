@@ -2,11 +2,11 @@
 
 ## 1. 核心基础设施
 - [x] 1.1 创建具有目录/文件创建工具的 src/utils/file-system.ts
-- [x] 1.2 创建用于模板管理的 src/core/templates/index.ts
+- [x] 1.2 创建用于 template 管理的 src/core/templates/index.ts
 - [x] 1.3 创建包含主要初始化逻辑的 src/core/init.ts
 - [x] 1.4 创建用于配置管理的 src/core/config.ts
 
-## 2. 模板文件
+## 2. template 文件
 - [x] 2.1 创建包含 OpenSpec README 内容的 src/core/templates/readme-template.ts
 - [x] 2.2 创建包含可定制 project.md 的 src/core/templates/project-template.ts
 - [x] 2.3 创建包含标记的 CLAUDE.md 内容的 src/core/templates/claude-template.ts
@@ -22,7 +22,7 @@
 - [x] 4.2 使用多选提示实现 AI 工具选择（Claude Code 可用，其他"即将推出"）——至少需要选择一个
 - [x] 4.3 为现有 OpenSpec 目录添加带帮助性错误消息的验证
 - [x] 4.4 实现目录结构创建
-- [x] 4.5 使用模板和标记实现文件生成
+- [x] 4.5 使用 template 和标记实现文件生成
 
 ## 5. 用户体验
 - [x] 5.1 添加彩色控制台输出以改善用户体验

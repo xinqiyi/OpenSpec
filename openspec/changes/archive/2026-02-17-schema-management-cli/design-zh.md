@@ -1,8 +1,8 @@
 ## 上下文
 
-OpenSpec 使用工作流架构来定义变更提案的工件序列。目前，架构从三个位置解析（项目 → 用户 → 包），但管理自定义架构需要手动创建文件，没有工具支持。解析器基础设施存在（`src/core/artifact-graph/resolver.ts`），但没有用于架构管理操作的 CLI 暴露。
+OpenSpec 使用 workflow 架构来定义变更 proposal 的 artifact 序列。目前，架构从三个位置解析（项目 → 用户 → 包），但管理自定义架构需要手动创建文件，没有工具支持。解析器基础设施存在（`src/core/artifact-graph/resolver.ts`），但没有用于架构管理操作的 CLI 暴露。
 
-想要自定义工作流的用户必须：
+想要自定义 workflow 的用户必须：
 1. 在 `openspec/schemas/<name>/` 下手动创建目录结构
 2. 复制并修改 `schema.yaml` 文件，没有验证
 3. 通过直接检查文件系统来调试解析问题
@@ -22,16 +22,16 @@ OpenSpec 使用工作流架构来定义变更提案的工件序列。目前，�
 - 架构编辑（用户直接编辑 YAML 或通过 `$EDITOR`）
 - 架构发布或共享机制
 - 架构版本控制或迁移工具
-- 验证模板文件内容（仅检查存在性）
+- 验证 template 文件内容（仅检查存在性）
 - 超出简单派生的架构继承或组合
 
 ## 决策
 
 ### 1. 命令结构：`openspec schema <subcommand>`
 
-添加一个新的命令组，遵循 `openspec config` 和 `openspec completion` 使用的现有模式。
+添加一个新的命令组，遵循 `openspec config` 和 `openspec completion` 使用的现有 schema。
 
-**理由：** 将相关命令分组到名词（schema）下符合已建立的 CLI 模式，并为未来的架构操作提供自然的命名空间。
+**理由：** 将相关命令分组到名词（schema）下符合已建立的 CLI schema，并为未来的架构操作提供自然的命名空间。
 
 **考虑的替代方案：**
 - 扁平命令（`openspec schema-init`、`openspec schema-fork`）：已拒绝，因为它污染了顶层命名空间且不易扩展。
@@ -41,27 +41,27 @@ OpenSpec 使用工作流架构来定义变更提案的工件序列。目前，�
 
 新文件 `src/commands/schema.ts`，包含一个 `registerSchemaCommand(program: Command)` 函数，用于注册 `schema` 命令组和所有子命令。
 
-**理由：** 遵循 `config.ts` 建立的模式，匹配其他命令组的组织方式。
+**理由：** 遵循 `config.ts` 建立的 schema，匹配其他命令组的组织方式。
 
 ### 3. 架构验证方法
 
 验证检查：
 1. `schema.yaml` 存在且是有效的 YAML
 2. 成功针对 `types.ts` 中的 Zod 架构解析
-3. 所有引用的模板文件在架构目录中存在
-4. 工件依赖图无循环（使用现有拓扑排序）
+3. 所有引用的 template 文件在架构目录中存在
+4. artifact 依赖图无循环（使用现有拓扑排序）
 
-**理由：** 重用现有验证基础设施（`schema.ts` 中的 `parseSchema`）并扩展模板存在性检查。这能捕获最常见的错误，而无需重复验证逻辑。
+**理由：** 重用现有验证基础设施（`schema.ts` 中的 `parseSchema`）并扩展 template 存在性检查。这能捕获最常见的错误，而无需重复验证逻辑。
 
 **考虑的替代方案：**
-- 深度模板验证（检查 frontmatter、语法）：已拒绝，属于过度设计。模板内容是自由格式的 markdown。
+- 深度 template 验证（检查 frontmatter、语法）：已拒绝，属于过度设计。template 内容是自由格式的 markdown。
 
 ### 4. `schema init` 的交互式提示
 
 使用 `@inquirer/prompts`（已经是依赖项）：
 - 架构名称输入，带 kebab-case 验证
 - 架构描述输入
-- 用于工件选择的多选，带有描述
+- 用于 artifact 选择的多选，带有描述
 - 可选：设置为项目默认
 
 **理由：** 匹配 `openspec init` 和 `openspec config reset` 建立的用户体验。在保持向导轻量级的同时提供引导式体验。
@@ -100,14 +100,14 @@ OpenSpec 使用工作流架构来定义变更提案的工件序列。目前，�
 
 ## 风险 / 权衡
 
-**[模板脚手架可能过时]** → `schema init` 命令将脚手架的默认工件集（proposal、specs、design、tasks）。如果内置架构模式演变，这些模板可能不反映最佳实践。
-- *缓解措施*：记录 `init` 创建的是最小的起点。用户可以 `fork` 内置架构以获取最新模式。
+**[template 脚手架可能过时]** → `schema init` 命令将脚手架的默认 artifact 集（proposal、specs、design、tasks）。如果内置架构 schema 演变，这些 template 可能不反映最佳实践。
+- *缓解措施*：记录 `init` 创建的是最小的起点。用户可以 `fork` 内置架构以获取最新 schema。
 
 **[CI 环境中的交互式提示]** → 带有提示的 `schema init` 可能在非交互式环境中挂起。
 - *缓解措施*：支持 `--name`、`--description` 和 `--artifacts` 标志用于非交互式使用。检测 TTY，并在提示可能挂起时显示有用的错误。
 
-**[验证不能捕获所有错误]** → 架构验证检查结构，但无法验证语义正确性（例如，与其工件目的不匹配的模板）。
-- *缓解措施*：这是可以接受的。完整的语义验证需要理解模板意图，这超出了范围。
+**[验证不能捕获所有错误]** → 架构验证检查结构，但无法验证语义正确性（例如，与其 artifact 目的不匹配的 template）。
+- *缓解措施*：这是可以接受的。完整的语义验证需要理解 template 意图，这超出了范围。
 
 **[派生覆盖而不警告]** → 如果目标架构已存在，`fork` 可能覆盖它。
 - *缓解措施*：检查现有架构，并在覆盖前需要 `--force` 标志或交互式确认。

@@ -1,15 +1,15 @@
 ## 背景
 
-OpenSpec 需要一个标准的用户级别配置位置，能够跨平台工作并遵循既定惯例。这将作为设置、功能标志以及未来产物（如工作流或模板）的基础。
+OpenSpec 需要一个标准的用户级别配置位置，能够跨平台工作并遵循既定惯例。这将作为设置、功能标志以及未来产物（如 workflow 或 template）的基础。
 
 ## 目标 / 非目标
 
 **目标：**
 - 为全局配置提供单一的、定义良好的位置
-- 遵循 XDG 基础目录规范（被 CLI 工具广泛采用）
+- 遵循 XDG 基础目录 spec（被 CLI 工具广泛采用）
 - 支持跨平台使用（Unix、macOS、Windows）
 - 保持实现最小化 - 仅为基础功能
-- 支持未来扩展（缓存、状态、工作流）
+- 支持未来扩展（缓存、状态、workflow）
 
 **非目标：**
 - 项目本地配置覆盖（不在范围内）
@@ -21,11 +21,11 @@ OpenSpec 需要一个标准的用户级别配置位置，能够跨平台工作�
 
 ### 路径解析策略
 
-**决策：** 使用 XDG 基础目录规范并带有平台回退。
+**决策：** 使用 XDG 基础目录 spec 并带有平台回退。
 
 ```
 Unix/macOS：$XDG_CONFIG_HOME/openspec/ 或 ~/.config/openspec/
-Windows：    %APPDATA%/openspec/
+Windows： %APPDATA%/openspec/
 ```
 
 **理由：**
@@ -52,13 +52,13 @@ Windows：    %APPDATA%/openspec/
 - TOML - 在 Node.js 生态中不太常见
 - 仅环境变量 - 对于结构化设置来说过于有限
 
-### 配置模式
+### 配置 schema
 
 **决策：** 扁平结构，带类型化字段，从最小化开始。
 
 ```typescript
 interface GlobalConfig {
-  featureFlags?: Record<string, boolean>;
+ featureFlags?: Record<string, boolean>;
 }
 ```
 
@@ -73,7 +73,7 @@ interface GlobalConfig {
 
 ```typescript
 export function getGlobalConfig(): GlobalConfig {
-  return loadConfigFromDisk();
+ return loadConfigFromDisk();
 }
 ```
 
@@ -98,8 +98,8 @@ export function getGlobalConfig(): GlobalConfig {
 |------|----------|
 | 配置文件损坏 | 解析错误时返回默认值，记录警告 |
 | 权限问题 | 保存前检查写权限，清晰的错误消息 |
-| 未来模式变更 | 使用可选字段，如有需要后续添加版本字段 |
+| 未来 schema 变更 | 使用可选字段，如有需要后续添加版本字段 |
 
 ## 开放问题
 
-无 - 此提案有意保持最小化。
+无 - 此 proposal 有意保持最小化。

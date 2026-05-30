@@ -9,5 +9,5 @@ OpenSpec 目前缺乏复杂性管理指导，导致在简单方案就足够的�
 - 增强 CLAUDE.md 中的 AI 助手指令，使其倾向于简洁
 
 ## 影响范围
-- 受影响的规范：无（仅文档）
+- 受影响的 spec：无（仅文档）
 - 受影响的代码：openspec/README.md、CLAUDE.md

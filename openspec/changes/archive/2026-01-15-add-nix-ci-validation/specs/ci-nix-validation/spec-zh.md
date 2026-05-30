@@ -1,4 +1,4 @@
-# CI Nix 验证规范
+# CI Nix 验证 spec
 
 ## 新增需求
 
@@ -8,20 +8,20 @@ CI 系统应在每次拉取请求和推送到 main 时验证 Nix flake 构建成
 
 #### 场景：成功的 flake 构建
 
-- **当** 提交拉取请求或推送到 main 时
-- **则** CI 应执行 `nix build` 并验证它以退出码 0 完成
-- **并且** 构建输出应包含 openspec 二进制文件
+- **WHEN** 提交拉取请求或推送到 main 时
+- **THEN** CI 应执行 `nix build` 并验证它以退出码 0 完成
+- **AND** 构建输出应包含 openspec 二进制文件
 
 #### 场景：Flake 构建失败
 
-- **当** Nix flake 配置损坏时
-- **则** CI 作业应以非零退出码失败
-- **并且** CI 应阻止合并该拉取请求
+- **WHEN** Nix flake 配置损坏时
+- **THEN** CI 作业应以非零退出码失败
+- **AND** CI 应阻止合并该拉取请求
 
 #### 场景：多平台支持检查
 
-- **当** flake 声明支持多个系统时
-- **则** CI 应验证 flake 至少在 Linux（x86_64-linux）上构建
+- **WHEN** flake 声明支持多个系统时
+- **THEN** CI 应验证 flake 至少在 Linux（x86_64-linux）上构建
 
 ### 需求：更新脚本验证
 
@@ -29,47 +29,47 @@ CI 系统应验证 update-flake.sh 脚本成功执行并产生有效输出。
 
 #### 场景：更新脚本执行
 
-- **当** CI 运行更新脚本验证时
-- **则** 脚本应无错误执行
-- **并且** 脚本应正确从 package.json 提取版本
-- **并且** 脚本应使用正确的版本更新 flake.nix
+- **WHEN** CI 运行更新脚本验证时
+- **THEN** 脚本应无错误执行
+- **AND** 脚本应正确从 package.json 提取版本
+- **AND** 脚本应使用正确的版本更新 flake.nix
 
 #### 场景：带模拟哈希的更新脚本
 
-- **当** 在 CI 中验证更新脚本时
-- **则** 脚本应能够检测并提取正确的 pnpm 依赖哈希
-- **并且** flake.nix 应使用有效的 sha256 哈希更新
+- **WHEN** 在 CI 中验证更新脚本时
+- **THEN** 脚本应能够检测并提取正确的 pnpm 依赖哈希
+- **AND** flake.nix 应使用有效的 sha256 哈希更新
 
 ### 需求：CI 作业集成
 
-Nix 验证作业应集成到现有的 GitHub Actions 工作流中，并作为合并的必要条件。
+Nix 验证作业应集成到现有的 GitHub Actions workflow 中，并作为合并的必要条件。
 
 #### 场景：PR 合并要求
 
-- **当** 创建拉取请求时
-- **则** Nix 验证作业应包含在必要检查中
-- **并且** 在 Nix 验证通过之前，PR 不应可合并
+- **WHEN** 创建拉取请求时
+- **THEN** Nix 验证作业应包含在必要检查中
+- **AND** 在 Nix 验证通过之前，PR 不应可合并
 
 #### 场景：作业执行触发
 
-- **当** 代码推送到拉取请求或推送到 main 或手动触发时
-- **则** Nix 验证作业应自动执行
+- **WHEN** 代码推送到拉取请求或推送到 main 或手动触发时
+- **THEN** Nix 验证作业应自动执行
 
 ### 需求：本地测试支持
 
-CI 工作流应可使用 `act` 工具在本地进行测试，以实现快速迭代。
+CI workflow 应可使用 `act` 工具在本地进行测试，以实现快速迭代。
 
 #### 场景：使用 act 本地执行 CI
 
-- **当** 开发者使用 Nix 验证工作流运行 `act`
-- **则** 工作流应在本地 Docker 环境中执行
-- **并且** 开发者应无需推送到 GitHub 即可收到关于 Nix 构建状态的反馈
+- **WHEN** 开发者使用 Nix 验证 workflow 运行 `act`
+- **THEN** workflow 应在本地 Docker 环境中执行
+- **AND** 开发者应无需推送到 GitHub 即可收到关于 Nix 构建状态的反馈
 
 #### 场景：Act 配置兼容性
 
-- **当** 设计工作流时
-- **则** 应使用与 `act` 兼容的标准 GitHub Actions 语法
-- **并且** 任何 Nix 特定的设置应在 act Docker 环境中正常工作
+- **WHEN** 设计 workflow 时
+- **THEN** 应使用与 `act` 兼容的标准 GitHub Actions 语法
+- **AND** 任何 Nix 特定的设置应在 act Docker 环境中正常工作
 
 ### 需求：CI 中的 Nix 安装
 
@@ -77,15 +77,15 @@ CI 环境在运行验证之前应正确安装和配置 Nix。
 
 #### 场景：Nix 安装步骤
 
-- **当** Nix 验证作业启动时
-- **则** 应使用官方 Nix 安装程序或 determinatesystems/nix-installer-action 安装 Nix
-- **并且** 应缓存 Nix 安装以提高后续运行的性能
+- **WHEN** Nix 验证作业启动时
+- **THEN** 应使用官方 Nix 安装程序或 determinatesystems/nix-installer-action 安装 Nix
+- **AND** 应缓存 Nix 安装以提高后续运行的性能
 
 #### 场景：CI 的 Nix 配置
 
-- **当** Nix 在 CI 中安装时
-- **则** 应配置为在 GitHub Actions 环境中工作
-- **并且** 应启用实验性功能（flakes、nix-command）
+- **WHEN** Nix 在 CI 中安装时
+- **THEN** 应配置为在 GitHub Actions 环境中工作
+- **AND** 应启用实验性功能（flakes、nix-command）
 
 ### 需求：CI 性能优化
 
@@ -93,12 +93,12 @@ Nix 验证应进行优化，以最小化对 CI 运行时间的影响。
 
 #### 场景：可接受的运行时间
 
-- **当** Nix 验证作业运行时
-- **则** 全新运行应在 5 分钟内完成
-- **并且** 使用缓存后，后续运行应在 3 分钟内完成
+- **WHEN** Nix 验证作业运行时
+- **THEN** 全新运行应在 5 分钟内完成
+- **AND** 使用缓存后，后续运行应在 3 分钟内完成
 
 #### 场景：并行执行
 
-- **当** 多个 CI 作业同时运行时
-- **则** Nix 验证作业应与其他验证作业（测试、lint）并行运行
-- **并且** 不应阻塞其他独立检查
+- **WHEN** 多个 CI 作业同时运行时
+- **THEN** Nix 验证作业应与其他验证作业（测试、lint）并行运行
+- **AND** 不应阻塞其他独立检查

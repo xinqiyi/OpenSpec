@@ -6,19 +6,19 @@
 - 无版本跟踪 - 始终在命令执行时更新
 - 仅对 OpenSpec 管理的文件进行完全替换（例如 `openspec/README.md`）
 - 对用户拥有的文件进行基于标记的更新（例如 `CLAUDE.md`）
-- 模板与包捆绑 - 无需网络
+- template 与包捆绑 - 无需网络
 - 最小化错误处理 - 仅检查前提条件
 
-### 模板策略
-- 使用现有模板工具
-  - 来自 `src/core/templates/readme-template.ts` 的 `readmeTemplate` 用于 `openspec/README.md`
-  - `TemplateManager.getClaudeTemplate()` 用于 `CLAUDE.md`
+### template 策略
+- 使用现有 template 工具
+ - 来自 `src/core/templates/readme-template.ts` 的 `readmeTemplate` 用于 `openspec/README.md`
+ - `TemplateManager.getClaudeTemplate()` 用于 `CLAUDE.md`
 - 目录名称固定为 `openspec`（来自 `OPENSPEC_DIR_NAME`）
 
 ### 文件操作
 - 使用异步工具以保持一致性
-  - `FileSystemUtils.writeFile` 用于 `openspec/README.md`
-  - `FileSystemUtils.updateFileWithMarkers` 用于 `CLAUDE.md`
+ - `FileSystemUtils.writeFile` 用于 `openspec/README.md`
+ - `FileSystemUtils.updateFileWithMarkers` 用于 `CLAUDE.md`
 - 不需要原子操作 - 用户有 git
 - 在继续之前检查目录是否存在
 
@@ -27,32 +27,32 @@
 ### 更新命令（`src/core/update.ts`）
 ```typescript
 export class UpdateCommand {
-  async execute(projectPath: string): Promise<void> {
-    const openspecDirName = OPENSPEC_DIR_NAME;
-    const openspecPath = path.join(projectPath, openspecDirName);
+ async execute(projectPath: string): Promise<void> {
+ const openspecDirName = OPENSPEC_DIR_NAME;
+ const openspecPath = path.join(projectPath, openspecDirName);
 
-    // 1. 检查 openspec 目录是否存在
-    if (!await FileSystemUtils.directoryExists(openspecPath)) {
-      throw new Error(`未找到 OpenSpec 目录。请先运行 'openspec init'。`);
-    }
+ // 1. 检查 openspec 目录是否存在
+ if (!await FileSystemUtils.directoryExists(openspecPath)) {
+ throw new Error(`未找到 OpenSpec 目录。请先运行 'openspec init'。`);
+ }
 
-    // 2. 更新 README.md（完全替换）
-    const readmePath = path.join(openspecPath, 'README.md');
-    await FileSystemUtils.writeFile(readmePath, readmeTemplate);
+ // 2. 更新 README.md（完全替换）
+ const readmePath = path.join(openspecPath, 'README.md');
+ await FileSystemUtils.writeFile(readmePath, readmeTemplate);
 
-    // 3. 更新 CLAUDE.md（基于标记）
-    const claudePath = path.join(projectPath, 'CLAUDE.md');
-    const claudeContent = TemplateManager.getClaudeTemplate();
-    await FileSystemUtils.updateFileWithMarkers(
-      claudePath,
-      claudeContent,
-      OPENSPEC_MARKERS.start,
-      OPENSPEC_MARKERS.end
-    );
+ // 3. 更新 CLAUDE.md（基于标记）
+ const claudePath = path.join(projectPath, 'CLAUDE.md');
+ const claudeContent = TemplateManager.getClaudeTemplate();
+ await FileSystemUtils.updateFileWithMarkers(
+ claudePath,
+ claudeContent,
+ OPENSPEC_MARKERS.start,
+ OPENSPEC_MARKERS.end
+ );
 
-    // 4. 成功消息（ASCII 安全，勾选标记可选，取决于终端）
-    console.log('已更新 OpenSpec 指令');
-  }
+ // 4. 成功消息（ASCII 安全，勾选标记可选，取决于终端）
+ console.log('已更新 OpenSpec 指令');
+ }
 }
 ```
 

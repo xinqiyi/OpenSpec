@@ -1,4 +1,4 @@
-# CLI Init 规范
+# CLI Init spec
 
 ## 目的
 
@@ -26,14 +26,14 @@ openspec/
 ├── README.md
 ├── specs/
 └── changes/
-    └── archive/
+ └── archive/
 ```
 
 ### 文件生成
 
 该命令应生成：
 - `README.md`，包含给 AI 助手的完整 OpenSpec 说明
-- `project.md`，包含项目上下文模板
+- `project.md`，包含项目上下文 template
 
 ### AI 工具配置
 
@@ -54,9 +54,9 @@ openspec/
 <!-- OPENSPEC:START -->
 # OpenSpec 项目
 
-本文档为 AI 编码助手提供如何使用 OpenSpec 约定进行规范驱动开发的说明。在使用 OpenSpec 启用的项目时，请精确遵循这些规则。
+本文档为 AI 编码助手提供如何使用 OpenSpec 约定进行 spec 驱动开发的说明。在使用 OpenSpec 启用的项目时，请精确遵循这些规则。
 
-本项目使用 OpenSpec 进行规范驱动开发。规范是事实来源。
+本项目使用 OpenSpec 进行 spec 驱动开发。spec 是事实来源。
 
 参见 @openspec/README.md 了解详细的约定和指南。
 <!-- OPENSPEC:END -->
@@ -78,7 +78,7 @@ openspec/
 - OpenSpec 可以在未来版本中更新其指令
 - OpenSpec 管理和用户管理内容之间有清晰的边界
 
-### 交互模式
+### 交互 schema
 
 当运行时
 那么提示用户："您使用哪个 AI 工具？"
@@ -106,7 +106,7 @@ openspec/
 ### 成功输出
 
 当初始化成功完成时
-那么显示面向 AI 驱动工作流的可操作提示：
+那么显示面向 AI 驱动 workflow 的可操作提示：
 ```
 ✔ OpenSpec 初始化成功！
 
@@ -114,22 +114,22 @@ openspec/
 
 ────────────────────────────────────────────────────────────
 1. 填写您的项目上下文：
-   "请阅读 openspec/project.md 并帮助我填写
-    我的项目、技术栈和约定的详细信息"
+ "请阅读 openspec/project.md 并帮助我填写
+ 我的项目、技术栈和约定的详细信息"
 
-2. 创建您的第一个变更提案：
-   "我想添加 [您的功能名称]。请为此功能创建一个
-    OpenSpec 变更提案"
+2. 创建您的第一个变更 proposal：
+ "我想添加 [您的功能名称]。请为此功能创建一个
+ OpenSpec 变更 proposal"
 
-3. 学习 OpenSpec 工作流：
-   "请解释 openspec/README.md 中的 OpenSpec 工作流，
-    以及我应如何在 这个项目中与您协作"
+3. 学习 OpenSpec workflow：
+ "请解释 openspec/README.md 中的 OpenSpec workflow，
+ 以及我应如何在 这个项目中与您协作"
 ────────────────────────────────────────────────────────────
 ```
 
 这些提示应：
 - 可复制粘贴以便立即与 AI 工具使用
-- 引导用户完成 AI 驱动的工作流
+- 引导用户完成 AI 驱动的 workflow
 - 替换占位文本（[您的功能名称]）为实际功能
 
 ### 退出码

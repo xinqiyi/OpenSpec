@@ -1,6 +1,6 @@
 ## 原因
 
-创建和管理项目本地架构目前需要手动创建目录、复制文件，并希望结构正确。用户只有在运行时命令失败时才会发现结构错误。这种摩擦阻碍了架构自定义，并使定制 OpenSpec 工作流以满足特定项目需求变得更加困难。
+创建和管理项目本地架构目前需要手动创建目录、复制文件，并希望结构正确。用户只有在运行时命令失败时才会发现结构错误。这种摩擦阻碍了架构自定义，并使定制 OpenSpec workflow 以满足特定项目需求变得更加困难。
 
 关键痛点：
 - **手动脚手架**：用户必须手动以正确的结构创建 `openspec/schemas/<name>/`
@@ -15,26 +15,26 @@
 ### 命令
 
 1. **`openspec schema init <name>`** - 引导式向导，用于脚手架新的项目架构
-   - 提示输入架构描述
-   - 提示选择要包含的工件（附带说明）
-   - 使用 `schema.yaml` 和模板文件创建有效的目录结构
-   - 可选地设置为 `openspec/config.yaml` 中的项目默认值
+ - 提示输入架构描述
+ - 提示选择要包含的 artifact（附带说明）
+ - 使用 `schema.yaml` 和 template 文件创建有效的目录结构
+ - 可选地设置为 `openspec/config.yaml` 中的项目默认值
 
 2. **`openspec schema fork <source> [name]`** - 复制现有架构作为起点
-   - 从用户覆盖或包内置复制
-   - 允许重命名（默认为 `<source>-custom`）
-   - 保留所有模板和配置
+ - 从用户覆盖或包内置复制
+ - 允许重命名（默认为 `<source>-custom`）
+ - 保留所有 template 和配置
 
-3. **`openspec schema validate [name]`** - 验证架构结构和模板
-   - 检查 `schema.yaml` 是否有效
-   - 验证所有引用的模板是否存在
-   - 报告缺失或格式错误的文件
-   - 不带名称运行时验证所有项目架构
+3. **`openspec schema validate [name]`** - 验证架构结构和 template
+ - 检查 `schema.yaml` 是否有效
+ - 验证所有引用的 template 是否存在
+ - 报告缺失或格式错误的文件
+ - 不带名称运行时验证所有项目架构
 
 4. **`openspec schema which <name>`** - 显示架构解析路径
-   - 显示架构从哪个位置解析（project/user/package）
-   - 显示架构目录的完整路径
-   - 用于调试遮蔽问题
+ - 显示架构从哪个位置解析（project/user/package）
+ - 显示架构目录的完整路径
+ - 用于调试遮蔽问题
 
 ## 能力
 

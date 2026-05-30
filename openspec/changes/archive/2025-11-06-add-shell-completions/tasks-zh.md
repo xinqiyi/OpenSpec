@@ -12,7 +12,7 @@
 ## 第二阶段：Zsh 补全（Oh My Zsh 优先）
 
 - [x] 创建 `src/core/completions/generators/zsh-generator.ts`，实现 `CompletionGenerator` 接口
-- [x] 使用 `_arguments` 和 `_describe` 模式实现 Zsh 脚本生成
+- [x] 使用 `_arguments` 和 `_describe` schema 实现 Zsh 脚本生成
 - [x] 使用 completion provider 为变更/spec ID 添加动态补全逻辑
 - [x] 测试 Zsh 生成器输出（`test/core/completions/generators/zsh-generator.test.ts`）
 - [x] 创建 `src/core/completions/installers/zsh-installer.ts`，支持 Oh My Zsh 和标准 Zsh
@@ -34,7 +34,7 @@
 
 ## 第四阶段：集成与完善
 
-- [x] 在 `src/core/completions/factory.ts` 中创建工厂模式，用于实例化 Zsh 生成器/安装器（可扩展以支持未来的 shell）
+- [x] 在 `src/core/completions/factory.ts` 中创建工厂 schema，用于实例化 Zsh 生成器/安装器（可扩展以支持未来的 shell）
 - [x] 将 `completion` 命令添加到命令注册表中，以实现自引用补全
 - [x] 在 Zsh 生成器中实现动态补全辅助函数（`_openspec_complete_changes`、`_openspec_complete_specs`、`_openspec_complete_items`）
 - [x] 为补全命令参数添加 `shell` 位置类型
@@ -72,10 +72,10 @@
 - 第四阶段依赖第三阶段（集成需要 CLI + Zsh 实现）
 - 第五阶段依赖第四阶段（核心功能完成后进行边界情况测试）
 
-## 未来工作（不在本提案范围内）
+## 未来工作（不在本 proposal 范围内）
 
-- **Bash 补全** - 在后续提案中创建 bash-generator.ts 和 bash-installer.ts
-- **Fish 补全** - 在后续提案中创建 fish-generator.ts 和 fish-installer.ts
-- **PowerShell 补全** - 在后续提案中创建 powershell-generator.ts 和 powershell-installer.ts
+- **Bash 补全** - 在后续 proposal 中创建 bash-generator.ts 和 bash-installer.ts
+- **Fish 补全** - 在后续 proposal 中创建 fish-generator.ts 和 fish-installer.ts
+- **PowerShell 补全** - 在后续 proposal 中创建 powershell-generator.ts 和 powershell-installer.ts
 
 该架构设计使得通过实现 `CompletionGenerator` 接口即可轻松添加这些 shell 的支持。

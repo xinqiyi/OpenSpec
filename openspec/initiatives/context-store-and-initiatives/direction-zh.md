@@ -1,24 +1,24 @@
 # 上下文存储与计划方案方向
 
-本文档记录了工作空间/计划方案讨论中提出的建议方向。主要的转变是"工作空间"不应再作为持久的共享规划对象。持久的共享对象是同步的上下文存储，而计划方案是其中的一个定制集合。
+本文档记录了工作空间/计划方案讨论中提出的建议方向。主要的转变是"工作空间"不应再作为持久的共享 planning 对象。持久的共享对象是同步的上下文存储，而计划方案是其中的一个定制集合。
 
 ## 核心模型
 
 ```text
 Context Store
-  = synced shared content container
+ = synced shared content container
 
 Collection
-  = mounted content system inside a store
+ = mounted content system inside a store
 
 Initiatives
-  = first major collection for cross-team implementation context
+ = first major collection for cross-team implementation context
 
 Workspace
-  = local working view over context stores and repos
+ = local working view over context stores and repos
 
 Change
-  = repo/team-owned implementation plan
+ = repo/team-owned implementation plan
 ```
 
 清晰规则：
@@ -35,40 +35,40 @@ Changes implement repo-owned slices.
 
 工作空间到计划方案的转变现已成为未来协调工作的产品边界：
 
-- 工作空间是可重新生成的、本机本地的工作视图。它映射上下文存储、计划方案、项目、仓库和文件夹到当前用户可以打开的路径。
+- 工作空间是可重新生成的、本机本地的工作视图。它映射上下文存储、计划方案、项目、repository 和文件夹到当前用户可以打开的路径。
 - 上下文存储是共享文件的持久同步容器。
-- 计划方案是跨团队或跨仓库实现上下文的持久协调对象。
-- 仓库本地变更仍然是执行工作的仓库或团队拥有的实现计划。
+- 计划方案是跨团队或跨 repository 实现上下文的持久协调对象。
+- repository 本地变更仍然是执行工作的 repository 或团队拥有的实现计划。
 
-这取代了旧模型中工作空间级别的 `changes/` 树拥有跨仓库工作的规范共享计划。现有的工作空间规划行为可以作为 Beta 或遗留基础设施保留，但不应指导新的生命周期设计。
+这取代了旧模型中工作空间级别的 `changes/` 树拥有跨 repository 工作的 spec 共享计划。现有的工作空间 planning 行为可以作为 Beta 或遗留基础设施保留，但不应指导新的生命周期设计。
 
 工作空间路线图处理：
 
 - 保留 setup、link、relink、list、open、update 和 doctor。
-- 保留链接的仓库和文件夹可见，以便在变更存在之前进行探索。
-- 保留工作空间本地代理指南作为本地视图设置，由 `workspace update` 刷新。
-- 推迟工作空间的 apply、verify 和 archive，直到计划方案可以链接到仓库拥有的 OpenSpec 变更。
-- 推迟分支/工作树编排、多仓库 apply、强跨仓库验证和依赖图强制执行。
+- 保留链接的 repository 和文件夹可见，以便在变更存在之前进行探索。
+- 保留工作空间本地 agent 指南作为本地视图设置，由 `workspace update` 刷新。
+- 推迟工作空间的 apply、verify 和 archive，直到计划方案可以链接到 repository 拥有的 OpenSpec 变更。
+- 推迟分支/工作树编排、多 repository apply、强跨 repository 验证和依赖图强制执行。
 
-## 代理优先用户体验
+## agent 优先用户体验
 
-计划方案的主要用户体验预计是代理驱动的：
+计划方案的主要用户体验预计是 agent 驱动的：
 
 ```text
 Using initiative billing-launch, explore the API work and create a proposal.
 ```
 
-用户不需要知道每个命令。OpenSpec 应暴露小的、结构化的 CLI 原语，供代理用于：
+用户不需要知道每个命令。OpenSpec 应暴露小的、结构化的 CLI 原语，供 agent 用于：
 
 - 在已注册的上下文存储中找到目标计划方案
-- 从上下文存储读取规范的计划方案文件
-- 创建或链接仓库本地的 OpenSpec 变更
-- 使用工作空间状态获取本地仓库和文件夹视图
+- 从上下文存储读取 spec 的计划方案文件
+- 创建或链接 repository 本地的 OpenSpec 变更
+- 使用工作空间状态获取本地 repository 和文件夹视图
 - 尊重编辑边界，而不是将每个打开的文件夹视为可编辑
 
-因此，CLI 是代理的工具界面，而不是完整的用户工作流。作为第一个切片，优先选择显式的、机器可读的命令，如 `initiative show --json`、`new change --initiative ...` 和工作空间本地视图命令，而非宽泛的交互式流程。
+因此，CLI 是 agent 的工具界面，而不是完整的用户 workflow。作为第一个切片，优先选择显式的、机器可读的命令，如 `initiative show --json`、`new change --initiative ...` 和工作空间本地视图命令，而非宽泛的交互式流程。
 
-规范的计划方案上下文应保留在上下文存储中。仓库本地变更应引用计划方案，而不是检入计划方案内容的复制快照。如果代理需要紧凑的上下文包，OpenSpec 可以从实时计划方案上下文中生成作为命令输出的内容。
+spec 的计划方案上下文应保留在上下文存储中。repository 本地变更应引用计划方案，而不是检入计划方案内容的复制快照。如果 agent 需要紧凑的上下文包，OpenSpec 可以从实时计划方案上下文中生成作为命令输出的内容。
 
 ## 上下文存储
 
@@ -78,20 +78,20 @@ Using initiative billing-launch, explore the API work and create a proposal.
 
 ```text
 acme-context/
-  initiatives/
-  decisions/
-  api-catalog/
-  playbooks/
+ initiatives/
+ decisions/
+ api-catalog/
+ playbooks/
 ```
 
 第一个后端应为 Git：
 
 ```text
 create/update/delete files
-  -> commit
-  -> push
-  -> other users pull
-  -> local views update
+ -> commit
+ -> push
+ -> other users pull
+ -> local views update
 ```
 
 但应用程序应通过存储抽象与后端交互，而不是直接与 Git 交互，以便后端以后可以演变为云数据库。
@@ -127,18 +127,18 @@ watch
 
 - 文件夹命名空间
 - 内容模型
-- 模板
+- template
 - 验证/规则
-- 可选的代理指南
+- 可选的 agent 指南
 - 可选的 UI 视图
 
 示例：
 
 ```text
 context-store/
-  initiatives/      # Initiative collection
-  decisions/        # Decision collection
-  api-catalog/      # API catalog collection
+ initiatives/ # Initiative collection
+ decisions/ # Decision collection
+ api-catalog/ # API catalog collection
 ```
 
 核心应强制集合只能在其挂载内写入。
@@ -147,20 +147,20 @@ context-store/
 
 计划方案集合是第一个面向企业的集合。
 
-计划方案是共享的、代理可消费的实现上下文，用于协调的成果。它可以跨越团队、仓库、服务、API、合约和能力。
+计划方案是共享的、agent 可消费的实现上下文，用于协调的成果。它可以跨越团队、repository、服务、API、合约和能力。
 
 默认结构：
 
 ```text
 initiatives/
-  launch-billing-flow/
-    initiative.yaml
-    requirements.md
-    design.md
-    contracts/
-    decisions.md
-    questions.md
-    tasks.md
+ launch-billing-flow/
+ initiative.yaml
+ requirements.md
+ design.md
+ contracts/
+ decisions.md
+ questions.md
+ tasks.md
 ```
 
 这描述了上下文存储中运行时计划方案集合的结构。此路线图文件夹可能仍然包含旧的 `.initiative.yaml` 进度元数据，而计划方案本身正被用于管理迁移；该旧追踪器不是新的上下文存储计划方案应复制的模型。
@@ -175,10 +175,10 @@ initiatives/
 - 已采纳的需求
 - 高级技术协调
 - 能力和所有权映射
-- API/事件/模式合约
+- API/事件/schema 合约
 - 依赖假设
 - 决策和开放问题
-- 工作空间可读的上下文，用于仓库本地实现工作
+- 工作空间可读的上下文，用于 repository 本地实现工作
 
 计划方案不应试图成为 Jira 或 Confluence 的全部替代。聚焦定位是：
 
@@ -195,114 +195,114 @@ GitHub/GitLab 存储代码。
 
 这些变更可以位于：
 
-- 与计划方案相同的仓库中
-- 不同的仓库中
+- 与计划方案相同的 repository 中
+- 不同的 repository 中
 - 以后在多个上下文存储或 OpenSpec 根目录中
 
-计划方案存储共享的协调上下文。工作空间视图可以将该上下文与本地仓库和仓库拥有的变更关联起来，而无需将计划方案存储与本机检出链接关联。
+计划方案存储共享的协调上下文。工作空间视图可以将该上下文与本地 repository 和 repository 拥有的变更关联起来，而无需将计划方案存储与本机检出链接关联。
 
 这使得分组与存储分离：
 
 ```text
 Initiative = shared grouping/context
-Change     = execution artifact
-Workspace  = local opened view of initiative + repos
+Change = execution artifact
+Workspace = local opened view of initiative + repos
 ```
 
 ## 工作空间
 
 工作空间是本地工作视图，不是真相来源。
 
-它可以映射上下文存储和项目标识符到本地路径，配置开启器，并启动编码代理，使其能够看到正确的文件夹。
+它可以映射上下文存储和项目标识符到本地路径，配置开启器，并启动编码 agent，使其能够看到正确的文件夹。
 
 工作空间可以通过解析以下内容来打开一个计划方案：
 
 - 计划方案的上下文存储
-- 本地选择的仓库本地变更
-- 参与仓库的本地检出路径
+- 本地选择的 repository 本地变更
+- 参与 repository 的本地检出路径
 
-持久的工作空间记录应保持小巧和私有。它记录本次运行时的本地视图选择，而不是生成的代理文件或共享的计划方案内容。
+持久的工作空间记录应保持小巧和私有。它记录本次运行时的本地视图选择，而不是生成的 agent 文件或共享的计划方案内容。
 
 ```text
 getGlobalDataDir()/workspaces/<workspace-name>/
-  workspace.yaml
+ workspace.yaml
 ```
 
 工作空间名称是本地标识。工作空间记录可以选择性地存储选定的上下文存储和计划方案，以及到本地路径和开启器偏好的稳定链接名称。计划方案引用是记录内的数据，而不是路径段。
 
-打开工作空间会在管理工作空间根目录下物化开启器特定的运行时文件。这些文件可以包含生成的代理指南、技能和编辑器工作空间文件。机器可读的上下文通过 JSON 命令输出返回。这些是重新生成的本地支持，不是真相来源。
+打开工作空间会在管理工作空间根目录下物化开启器特定的运行时文件。这些文件可以包含生成的 agent 指南、skill 和编辑器工作空间文件。机器可读的上下文通过 JSON 命令输出返回。这些是重新生成的本地支持，不是真相来源。
 
 ```text
 private local view record
-  -> generated runtime files
-  -> opener-specific launch
-  -> initiative context + selected local repos/folders
+ -> generated runtime files
+ -> opener-specific launch
+ -> initiative context + selected local repos/folders
 ```
 
-工作空间应可重新生成且特定于运行时。它们不应是计划方案内容、检入的协作状态、分支、工作树、克隆或实现进度的规范归属。
+工作空间应可重新生成且特定于运行时。它们不应是计划方案内容、检入的协作状态、分支、工作树、克隆或实现进度的 spec 归属。
 
-## 仓库变更
+## repository 变更
 
-仓库本地变更仍然是团队拥有的实现计划。
+repository 本地变更仍然是团队拥有的实现计划。
 
-工程团队应能够将相关的计划方案上下文拉入仓库并创建链接的 OpenSpec 变更。
+工程团队应能够将相关的计划方案上下文拉入 repository 并创建链接的 OpenSpec 变更。
 
 示例：
 
 ```text
 repo/
-  openspec/
-    changes/
-      add-billing-api/
-        .openspec.yaml
-        proposal.md
-        design.md
-        specs/
-        tasks.md
+ openspec/
+ changes/
+ add-billing-api/
+ .openspec.yaml
+ proposal.md
+ design.md
+ specs/
+ tasks.md
 ```
 
 本地变更应在元数据中引用计划方案，例如：
 
 ```yaml
 initiative:
-  store: platform
-  id: billing-launch
+ store: platform
+ id: billing-launch
 ```
 
-此元数据是持久的仓库上下文，应被检入。它不应包含机器本地路径。当代理需要共享上下文时，应从已注册的上下文存储中读取计划方案的规范文件。
+此元数据是持久的 repository 上下文，应被检入。它不应包含机器本地路径。当 agent 需要共享上下文时，应从已注册的上下文存储中读取计划方案的 spec 文件。
 
 ## 概念间的关系
 
 ```text
 Context Store
-  contains Collections
+ contains Collections
 
 Collection
-  defines structure/rules for a mounted folder
+ defines structure/rules for a mounted folder
 
 Initiative Collection
-  defines initiatives/
+ defines initiatives/
 
 Initiative
-  coordinates one shared outcome
+ coordinates one shared outcome
 
 Workspace
-  opens local views of context stores and repos
+ opens local views of context stores and repos
 
 Repo Change
-  implements one team's/repo's part of an initiative
+ implements one team's/repo's part of an initiative
 ```
 
 端到端流程：
 
 ```text
 Product/program/architect creates initiative
-  -> initiative syncs through context store
-  -> engineers open local workspace
-  -> repo team pulls relevant initiative context
-  -> repo team creates linked OpenSpec change
-  -> repo team implements locally
-  -> workspace view surfaces local progress alongside initiative context
+ -> initiative syncs through context store
+ -> engineers open local workspace
+ -> repo team pulls relevant initiative context
+ -> repo team creates linked OpenSpec change
+ -> repo team implements locally
+ -> workspace view surfaces local progress alongside initiative context
 ```
 
 ## 本地 API 方向
@@ -311,15 +311,15 @@ Product/program/architect creates initiative
 
 ```ts
 const store = createStore({
-  id: "acme-context",
-  backend: gitBackend({
-    remote: "git@github.com:acme/context.git",
-    localPath: "~/.openspec/stores/acme-context",
-    autoSync: true,
-  }),
-  collections: [
-    initiativeCollection({ mount: "initiatives" }),
-  ],
+ id: "acme-context",
+ backend: gitBackend({
+ remote: "git@github.com:acme/context.git",
+ localPath: "~/.openspec/stores/acme-context",
+ autoSync: true,
+ }),
+ collections: [
+ initiativeCollection({ mount: "initiatives" }),
+ ],
 });
 ```
 
@@ -358,7 +358,7 @@ UI 在核心层应与内容无关：
 - 计划方案状态视图
 - 合约表格
 - 所有者/依赖图
-- 链接的仓库变更视图
+- 链接的 repository 变更视图
 
 UI 应无论挂载了哪些集合都能正常工作。
 
@@ -369,20 +369,20 @@ UI 应无论挂载了哪些集合都能正常工作。
 - 企业上下文存储默认应位于何处：客户 GitHub、OpenSpec 管理的 Git，还是以后托管的云？
 - 非技术用户如何编辑 Git 后端内容而不感受到 Git？
 - 在冲突处理变得棘手之前，最小的自动同步行为是什么？
-- 计划方案合约如何升级为规范的拥有者仓库合约？
-- 链接的仓库变更如何向计划方案报告状态而不变成 Jira？
-- monorepo 应该如何映射能力、文件夹和仓库本地变更？
-- 第一个仓库变更链接命令应该叫什么？
+- 计划方案合约如何升级为 spec 的拥有者 repository 合约？
+- 链接的 repository 变更如何向计划方案报告状态而不变成 Jira？
+- monorepo 应该如何映射能力、文件夹和 repository 本地变更？
+- 第一个 repository 变更链接命令应该叫什么？
 - 链接变更存在后，哪些计划方案进度/状态信号是有用的？
 
 ## 建议的下一步方向
 
 在初始存储、集合和计划方案创建/列出基础工作之后，按此顺序构建后续切片：
 
-1. 围绕创建/列出、验证、模板以及显式推迟 read/update/delete 策略，协调计划方案 MVP。
+1. 围绕创建/列出、验证、template 以及显式推迟 read/update/delete 策略，协调计划方案 MVP。
 2. 添加最小上下文存储用户体验，用于 setup、registration、listing 和 doctoring。
-3. 添加代理优先的计划方案发现，使用 `initiative show --json` 和已注册存储查找。
-4. 添加仓库本地变更元数据和代理友好的 `--initiative` 创建/链接流程。
+3. 添加 agent 优先的计划方案发现，使用 `initiative show --json` 和已注册存储查找。
+4. 添加 repository 本地变更元数据和 agent 友好的 `--initiative` 创建/链接流程。
 5. 拒绝独立的 `initiative resolve`；本地路径映射属于工作空间，不属于计划方案命令。
 6. 一旦 show/link 语义存在，让工作空间可以打开计划方案感知的本地视图。
 7. 添加本地到计划方案的上用户体验。

@@ -1,4 +1,4 @@
-# 添加以代理为先的倡议发现
+# 添加以 agent 为先的倡议发现
 
 ## 状态
 
@@ -8,33 +8,33 @@
 
 从 `../../direction.md` 开始。
 
-此项目之所以存在，是因为预期的工作流是以代理为先的：
+此项目之所以存在，是因为预期的 workflow 是以 agent 为先的：
 
 ```text
-使用倡议 billing-launch，探索 API 工作并创建提案。
+使用倡议 billing-launch，探索 API 工作并创建 proposal。
 ```
 
-在仓库本地链接、本地解析或工作区打开可以工作之前，代理需要一个能够回答以下问题的小型命令：
+在 repository 本地链接、本地解析或 workspace 打开可以工作之前，agent 需要一个能够回答以下问题的小型命令：
 
 - 用户指的是哪个倡议？
 - 哪个上下文存储包含权威倡议？
-- 倡议元数据在哪里，代理应检查哪个根目录？
+- 倡议元数据在哪里，agent 应检查哪个根目录？
 
 ## 目标
 
-添加以代理为先的倡议发现，而不将 `show` 变成阅读器、进度仪表板、仓库解析器或工作区启动器。
+添加以 agent 为先的倡议发现，而不将 `show` 变成阅读器、进度仪表板、repository 解析器或 workspace 启动器。
 
 ## 已锁定的方向
 
 - `initiative show <id>` 是一个定位/发现命令。
 - 它应返回身份、上下文存储位置、倡议位置和倡议元数据路径。
-- 它不应拼接 markdown、总结文件内容、计算进度、解析仓库、列出关联变更或打开工作区。
+- 它不应拼接 markdown、总结文件内容、计算进度、解析 repository、列出关联变更或打开 workspace。
 - 默认查找搜索所有本地注册的上下文存储。
 - `--store <id>` 过滤到某个已注册的存储。
 - `--store-path <path>` 保留为显式本地路径的应急出口。
 - 跨存储的重复倡议 ID 是歧义的。命令不应自动选择一个匹配项。
 - 在默认全存储查找中，不可读的存储使查找不完整。命令应失败，而不是静默返回可能错误的唯一匹配。
-- 显式 `--store` 和 `--store-path` 模式只考虑所选存储。
+- 显式 `--store` 和 `--store-path` schema 只考虑所选存储。
 
 ## 输出合约方向
 
@@ -44,21 +44,21 @@
 
 ```json
 {
-  "context_store": {
-    "id": "platform",
-    "root": "/path/to/platform-context"
-  },
-  "initiative": {
-    "version": 1,
-    "id": "billing-launch",
-    "title": "Billing Launch",
-    "summary": "协调计费启动工作。",
-    "created": "2026-05-21",
-    "root": "/path/to/platform-context/initiatives/billing-launch",
-    "store_path": "initiatives/billing-launch",
-    "metadata_path": "/path/to/platform-context/initiatives/billing-launch/initiative.yaml"
-  },
-  "status": []
+ "context_store": {
+ "id": "platform",
+ "root": "/path/to/platform-context"
+ },
+ "initiative": {
+ "version": 1,
+ "id": "billing-launch",
+ "title": "Billing Launch",
+ "summary": "协调计费启动工作。",
+ "created": "2026-05-21",
+ "root": "/path/to/platform-context/initiatives/billing-launch",
+ "store_path": "initiatives/billing-launch",
+ "metadata_path": "/path/to/platform-context/initiatives/billing-launch/initiative.yaml"
+ },
+ "status": []
 }
 ```
 
@@ -95,7 +95,7 @@ ID：billing-launch
 位置：/path/to/platform-context/initiatives/billing-launch
 
 文件：
-  元数据：/path/to/platform-context/initiatives/billing-launch/initiative.yaml
+ 元数据：/path/to/platform-context/initiatives/billing-launch/initiative.yaml
 ```
 
 错误输出应保持简洁：
@@ -108,7 +108,7 @@ ID：billing-launch
 
 `initiative show` 不应在 v1 中列出倡议文件夹内容。
 
-只有 `initiative.yaml` 是识别和验证倡议所必需的。所有其他文件都是模式/配置相关的，可能因团队而异。一旦命令解析了 `initiative.root`，代理可以使用常规文件系统工具检查文件夹。以后基于模式的视图可以暴露重要文件，而无需硬编码当前的默认模板文件名。
+只有 `initiative.yaml` 是识别和验证倡议所必需的。所有其他文件都是 schema/配置相关的，可能因团队而异。一旦命令解析了 `initiative.root`，agent 可以使用常规文件系统工具检查文件夹。以后基于 schema 的视图可以暴露重要文件，而无需硬编码当前的默认 template 文件名。
 
 ## 补全方向
 
@@ -137,7 +137,7 @@ initiative show <id> --store <id> --store-path <path> --json
 
 如果一个或多个可读存储包含该倡议，同时一个或多个其他存储无法读取，主要错误仍应为 `initiative_lookup_incomplete`，而非成功或歧义。在诊断细节中包含任何可读的部分匹配。
 
-显式 `--store` 和 `--store-path` 模式限定于所选存储，不检查不相关的已注册存储。
+显式 `--store` 和 `--store-path` schema 限定于所选存储，不检查不相关的已注册存储。
 
 无效的确切倡议文件夹是损坏的共享状态，而非"未找到"。
 
@@ -147,9 +147,9 @@ initiative show <id> --store <id> --store-path <path> --json
 
 - 顶级 `openspec show` 集成。
 - Markdown 内容包或生成的上下文包。
-- 仓库本地变更中检入的倡议快照。
-- 仓库本地变更链接。
-- 本地仓库/工作区解析。
-- 工作区打开。
-- Git 同步状态、脏状态、远程仓库、拉取、推送或冲突。
+- repository 本地变更中检入的倡议快照。
+- repository 本地变更链接。
+- 本地 repository/workspace 解析。
+- workspace 打开。
+- Git 同步状态、脏状态、远程 repository、拉取、推送或冲突。
 - 倡议进度或状态仪表板。

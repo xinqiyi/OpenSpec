@@ -2,13 +2,13 @@
 
 ### 需求：反馈命令
 
-系统应提供一个 `openspec feedback` 命令，使用 `gh` CLI 在 openspec 仓库中创建 GitHub Issue。系统应使用带参数数组的 `execFileSync` 以防止 shell 注入漏洞。
+系统应提供一个 `openspec feedback` 命令，使用 `gh` CLI 在 openspec repository 中创建 GitHub Issue。系统应使用带参数数组的 `execFileSync` 以防止 shell 注入漏洞。
 
 #### 场景：简单反馈提交
 
 - **WHEN** 用户执行 `openspec feedback "Great tool!"`
 - **THEN** 系统执行 `gh issue create`，标题为 "Feedback: Great tool!"
-- **AND** 在 openspec 仓库中创建 issue
+- **AND** 在 openspec repository 中创建 issue
 - **AND** issue 具有 `feedback` 标签
 - **AND** 系统显示创建的 issue URL
 
@@ -36,11 +36,11 @@
 - **AND** `gh` CLI 未安装（在 PATH 中未找到）
 - **THEN** 系统显示警告："GitHub CLI not found. Manual submission required."
 - **AND** 输出带有分隔符的结构化反馈内容：
-  - "--- FORMATTED FEEDBACK ---"
-  - 标题行
-  - 标签行
-  - 带元数据的正文内容
-  - "--- END FEEDBACK ---"
+ - "--- FORMATTED FEEDBACK ---"
+ - 标题行
+ - 标签行
+ - 带元数据的正文内容
+ - "--- END FEEDBACK ---"
 - **AND** 显示预填充的 GitHub issue URL 用于手动提交
 - **AND** 以零退出码退出（成功回退）
 
@@ -80,10 +80,10 @@
 
 - **WHEN** 为反馈创建 GitHub Issue
 - **THEN** issue 正文包含：
-  - OpenSpec CLI 版本
-  - 平台（darwin、linux、win32）
-  - 提交时间戳
-  - 分隔线："---\nSubmitted via OpenSpec CLI"
+ - OpenSpec CLI 版本
+ - 平台（darwin、linux、win32）
+ - 提交时间戳
+ - 分隔线："---\nSubmitted via OpenSpec CLI"
 
 #### 场景：Windows 平台元数据
 
@@ -95,10 +95,10 @@
 
 - **WHEN** 为反馈创建 GitHub Issue
 - **THEN** issue 正文不包含：
-  - 用户系统中的文件路径
-  - 项目名称或目录名称
-  - 环境变量
-  - IP 地址
+ - 用户系统中的文件路径
+ - 项目名称或目录名称
+ - 环境变量
+ - IP 地址
 
 ### 需求：反馈始终有效
 
@@ -134,14 +134,14 @@
 - **AND** 建议检查网络连接
 - **AND** 以非零退出码退出
 
-### 需求：面向代理的反馈技能
+### 需求：面向 agent 的反馈 skill
 
-系统应提供一个 `/feedback` 技能，指导代理收集和提交用户反馈。
+系统应提供一个 `/feedback` skill，指导 agent 收集和提交用户反馈。
 
-#### 场景：代理发起的反馈
+#### 场景：agent 发起的反馈
 
-- **WHEN** 用户在代理对话中调用 `/feedback`
-- **THEN** 代理从对话中收集上下文
+- **WHEN** 用户在 agent 对话中调用 `/feedback`
+- **THEN** agent 从对话中收集上下文
 - **AND** 起草包含丰富内容的反馈 issue
 - **AND** 匿名化敏感信息
 - **AND** 向用户展示草稿以供批准
@@ -149,26 +149,26 @@
 
 #### 场景：上下文丰富
 
-- **WHEN** 代理起草反馈
-- **THEN** 代理包含相关上下文，例如：
-  - 正在执行的任务
-  - 哪些方面效果好或差
-  - 具体的痛点或赞扬
+- **WHEN** agent 起草反馈
+- **THEN** agent 包含相关上下文，例如：
+ - 正在执行的任务
+ - 哪些方面效果好或差
+ - 具体的痛点或赞扬
 
 #### 场景：匿名化
 
-- **WHEN** 代理起草反馈
-- **THEN** 代理移除或替换：
-  - 文件路径替换为 `<path>` 或通用描述
-  - API 密钥、令牌、机密替换为 `<redacted>`
-  - 公司/组织名称替换为 `<company>`
-  - 个人名称替换为 `<user>`
-  - 特定 URL 替换为 `<url>`，除非是公开/相关的
+- **WHEN** agent 起草反馈
+- **THEN** agent 移除或替换：
+ - 文件路径替换为 `<path>` 或通用描述
+ - API 密钥、令牌、机密替换为 `<redacted>`
+ - 公司/组织名称替换为 `<company>`
+ - 个人名称替换为 `<user>`
+ - 特定 URL 替换为 `<url>`，除非是公开/相关的
 
 #### 场景：需要用户确认
 
-- **WHEN** 代理已起草反馈
-- **THEN** 代理必须向用户展示完整草稿
+- **WHEN** agent 已起草反馈
+- **THEN** agent 必须向用户展示完整草稿
 - **AND** 在提交前请求明确批准
 - **AND** 允许用户请求修改
 - **AND** 仅在用户确认后提交

@@ -13,7 +13,7 @@
 - [x] 2.3 使用 `ora().fail(...)` 和退出码 1 处理错误（缺失 `openspec` 目录、文件写入错误）
 
 ## 3. 测试
-- [x] 3.1 验证 `openspec/README.md` 完全替换为最新模板
+- [x] 3.1 验证 `openspec/README.md` 完全替换为最新 template
 - [x] 3.2 验证 `CLAUDE.md` 的 OpenSpec 块更新而不更改标记外的用户内容
 - [x] 3.3 验证幂等性（运行两次产生相同的文件，无重复标记）
 - [x] 3.4 验证 `openspec` 目录缺失时的错误，附带友好消息

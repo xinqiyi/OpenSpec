@@ -1,6 +1,6 @@
 # 任务：统一变更状态模型
 
-## 阶段 1：修复制品工作流发现
+## 阶段 1：修复制品 workflow 发现
 
 - [x] 更新 `artifact-workflow.ts` 中的 `validateChangeExists()`，改为检查目录是否存在而非使用 `getActiveChangeIds()`
 - [x] 更新错误消息以列出所有变更目录（不仅限于包含 proposal.md 的目录）

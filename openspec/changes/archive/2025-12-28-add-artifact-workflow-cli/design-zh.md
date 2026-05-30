@@ -1,22 +1,22 @@
 ## 上下文
 
-工件工作流概念验证的第 4 个切片。核心功能（ArtifactGraph、InstructionLoader、change-utils）已完成。此切片添加 CLI 命令以向用户公开工件工作流。
+artifact workflow 概念验证的第 4 个切片。核心功能（ArtifactGraph、InstructionLoader、change-utils）已完成。此切片添加 CLI 命令以向用户公开 artifact workflow。
 
 **关键约束**：这是实验性的。命令必须隔离放置，以便在功能不成功时易于移除。
 
 ## 目标/非目标
 
 - **目标：**
-  - 通过 CLI 公开工件工作流状态和说明
-  - 提供流畅的用户体验，使用顶级动词命令
-  - 支持人类可读和 JSON 两种输出格式
-  - 使代理能够以编程方式查询工作流状态
-  - 保持实现隔离以便于移除
+ - 通过 CLI 公开 artifact workflow 状态和说明
+ - 提供流畅的用户体验，使用顶级动词命令
+ - 支持人类可读和 JSON 两种输出格式
+ - 使 agent 能够以编程方式查询 workflow 状态
+ - 保持实现隔离以便于移除
 
 - **非目标：**
-  - 交互式工件创建向导（未来工作）
-  - Schema 管理命令（推迟）
-  - 自动检测活跃变更（CLI 是确定性的，代理进行推断）
+ - 交互式 artifact 创建向导（未来工作）
+ - Schema 管理命令（推迟）
+ - 自动检测活跃变更（CLI 是确定性的，agent 进行推断）
 
 ## 决策
 
@@ -41,7 +41,7 @@ openspec new change <name>
 
 ### 实验性隔离
 
-所有工件工作流命令都在单个文件中实现：
+所有 artifact workflow 命令都在单个文件中实现：
 
 ```
 src/commands/artifact-workflow.ts
@@ -58,13 +58,13 @@ src/commands/artifact-workflow.ts
 所有变更特定命令都需要 `--change <id>`：
 
 ```bash
-openspec status --change add-auth   # 显式，有效
-openspec status                      # 错误：缺少 --change
+openspec status --change add-auth # 显式，有效
+openspec status # 错误：缺少 --change
 ```
 
 **理由：**
 - CLI 是纯粹的、可测试的，没有隐藏状态
-- 代理从对话中推断变更并显式传递
+- agent 从对话中推断变更并显式传递
 - 没有跟踪"活跃变更"的配置文件
 - 与概念验证设计理念一致
 
@@ -84,15 +84,15 @@ openspec new change add-feature
 ### 输出格式
 
 - **默认**：带视觉指示器的人类可读文本
-  - 状态：`[x]` 完成，`[ ]` 就绪，`[-]` 阻塞
-  - 颜色：绿色（完成）、黄色（就绪）、红色（阻塞）
-- **JSON**（`--json`）：机器可读，适用于脚本和代理
+ - 状态：`[x]` 完成，`[ ]` 就绪，`[-]` 阻塞
+ - 颜色：绿色（完成）、黄色（就绪）、红色（阻塞）
+- **JSON**（`--json`）：机器可读，适用于脚本和 agent
 
 ### 错误处理
 
 - 缺失 `--change`：列出可用变更的错误
 - 未知变更：带建议的错误
-- 未知工件：列出有效工件的错误
+- 未知 artifact：列出有效 artifact 的错误
 - 缺失 schema：带 schema 解析详细信息的错误
 
 ## 风险/权衡
@@ -108,5 +108,5 @@ openspec new change add-feature
 - 所有命令在 `src/commands/artifact-workflow.ts` 中
 - 从 `src/core/artifact-graph/` 导入所有操作
 - 使用 `item-discovery.ts` 中的 `getActiveChangeIds()` 列出变更
-- 遵循现有的 CLI 模式（ora 旋转器、commander.js 选项）
+- 遵循现有的 CLI schema（ora 旋转器、commander.js 选项）
 - 帮助文本将命令标记为"实验性"

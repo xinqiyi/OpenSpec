@@ -9,7 +9,7 @@
 ## 核心实现
 - [x] 在 `/src/core/view.ts` 中创建 ViewCommand 类
 - [x] 实现 getChangesData 方法以获取变更信息
-- [x] 实现 getSpecsData 方法以获取规范信息
+- [x] 实现 getSpecsData 方法以获取 spec 信息
 - [x] 实现 displaySummary 方法以显示摘要指标
 - [x] 使用 Unicode 字符添加进度条可视化
 - [x] 使用 chalk 实现颜色编码
@@ -22,9 +22,9 @@
 
 ## 数据处理
 - [x] 复用 TaskProgress 工具用于变更进度
-- [x] 集成 MarkdownParser 用于规范需求计数
+- [x] 集成 MarkdownParser 用于 spec 需求计数
 - [x] 处理文件系统访问的异步操作
-- [x] 按需求数量对规范排序
+- [x] 按需求数量对 spec 排序
 
 ## 测试和验证
 - [x] 使用新命令成功构建项目
@@ -36,7 +36,7 @@
 
 ## 文档
 - [x] 在 CLI 帮助中添加命令描述
-- [x] 创建变更提案文档
+- [x] 创建变更 proposal 文档
 - [x] 使用 view 命令示例更新 README（如果需要）
 - [x] 将 view 命令添加到用户文档（如存在）
 

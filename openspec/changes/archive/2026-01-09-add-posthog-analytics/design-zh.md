@@ -6,7 +6,7 @@ OpenSpec 需要使用分析数据来了解采用情况并为产品决策提供�
 
 **目标：**
 - 跟踪每日/每周/每月活跃使用情况
-- 了解命令使用模式
+- 了解命令使用 schema
 - 保持实施最小化并尊重隐私
 - 以最小摩擦实现退出选择
 
@@ -18,20 +18,20 @@ OpenSpec 需要使用分析数据来了解采用情况并为产品决策提供�
 
 ## 决策
 
-### 退出模式
+### 退出 schema
 
 **决策：** 遥测默认启用，通过环境变量退出。
 
 ```bash
-OPENSPEC_TELEMETRY=0    # 禁用遥测
-DO_NOT_TRACK=1          # 行业标准，同样被遵守
+OPENSPEC_TELEMETRY=0 # 禁用遥测
+DO_NOT_TRACK=1 # 行业标准，同样被遵守
 ```
 
 检测到 `CI=true` 时自动禁用。
 
 **理由：**
 - 选择加入通常只有约 3% 的参与率——不足以获得有意义的数据
-- 了解使用模式需要统计显著的样本量
+- 了解使用 schema 需要统计显著的样本量
 - 环境变量退出简单且即时
 - 遵守 `DO_NOT_TRACK` 符合行业惯例
 
@@ -46,11 +46,11 @@ DO_NOT_TRACK=1          # 行业标准，同样被遵守
 
 ```typescript
 {
-  event: 'command_executed',
-  properties: {
-    command: 'init',      // 仅命令名称
-    version: '1.2.3'      // OpenSpec 版本
-  }
+ event: 'command_executed',
+ properties: {
+ command: 'init', // 仅命令名称
+ version: '1.2.3' // OpenSpec 版本
+ }
 }
 ```
 
@@ -64,7 +64,7 @@ DO_NOT_TRACK=1          # 行业标准，同样被遵守
 - 命令参数
 - 文件路径或内容
 - 错误消息或堆栈跟踪
-- 项目名称或规范内容
+- 项目名称或 spec 内容
 - IP 地址（显式设置 `$ip: null`）
 
 ### 匿名 ID
@@ -74,9 +74,9 @@ DO_NOT_TRACK=1          # 行业标准，同样被遵守
 ```typescript
 // ~/.config/openspec/config.json
 {
-  "telemetry": {
-    "anonymousId": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
-  }
+ "telemetry": {
+ "anonymousId": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+ }
 }
 ```
 
@@ -96,8 +96,8 @@ DO_NOT_TRACK=1          # 行业标准，同样被遵守
 
 ```typescript
 const posthog = new PostHog(API_KEY, {
-  flushAt: 1,        // 立即发送，不批量处理
-  flushInterval: 0   // 无定时刷新
+ flushAt: 1, // 立即发送，不批量处理
+ flushInterval: 0 // 无定时刷新
 });
 
 // 在 CLI 退出前
@@ -108,7 +108,7 @@ await posthog.shutdown();
 - CLI 进程生命周期短；批处理会丢失事件
 - `flushAt: 1` 确保每个事件立即发送
 - `shutdown()` 保证在进程退出前刷新
-- 退出时增加约 100-300 毫秒——对典型 CLI 工作流影响可忽略
+- 退出时增加约 100-300 毫秒——对典型 CLI workflow 影响可忽略
 
 **错误处理：**
 - 网络失败静默忽略（遥测不应破坏 CLI）
@@ -120,13 +120,13 @@ await posthog.shutdown();
 
 ```typescript
 program
-  .hook('preAction', (thisCommand) => {
-    maybeShowTelemetryNotice();
-    trackCommand(thisCommand.name(), VERSION);
-  })
-  .hook('postAction', async () => {
-    await shutdown();
-  });
+ .hook('preAction', (thisCommand) => {
+ maybeShowTelemetryNotice();
+ trackCommand(thisCommand.name(), VERSION);
+ })
+ .hook('postAction', async () => {
+ await shutdown();
+ });
 ```
 
 **理由：**
@@ -154,10 +154,10 @@ program
 **首次运行后的配置：**
 ```json
 {
-  "telemetry": {
-    "anonymousId": "...",
-    "noticeSeen": true
-  }
+ "telemetry": {
+ "anonymousId": "...",
+ "noticeSeen": true
+ }
 }
 ```
 
@@ -167,9 +167,9 @@ program
 |------|----------|
 | 用户偏好选择加入 | 清晰披露，简单的退出方式，透明说明收集内容 |
 | GDPR 顾虑 | 无个人数据，无 IP，用户可以删除配置 |
-| 使 CLI 退出变慢约 200 毫秒 | 对大多数工作流影响可忽略；如有需要可优化 |
+| 使 CLI 退出变慢约 200 毫秒 | 对大多数 workflow 影响可忽略；如有需要可优化 |
 | PostHog 宕机影响 CLI | 即发即弃并设置超时；失败静默处理 |
 
 ## 未决问题
 
-无——设计有意保持最小化。未来的增强功能（专用命令、工作流跟踪）可以根据用户反馈添加。
+无——设计有意保持最小化。未来的增强功能（专用命令、workflow 跟踪）可以根据用户反馈添加。

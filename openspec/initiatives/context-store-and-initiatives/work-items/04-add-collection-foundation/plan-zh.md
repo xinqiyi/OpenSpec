@@ -14,8 +14,8 @@
 上下文存储同步真理。
 集合塑造真理。
 倡议协调工作。
-工作区打开本地视图。
-变更实现仓库拥有的切片。*
+workspace 打开本地视图。
+变更实现 repository 拥有的切片。*
 ```
 
 ## 目标
@@ -66,34 +66,34 @@ mounted.toStorePath("launch-billing-flow/initiative.yaml");
 
 ```ts
 interface CollectionDefinition<THandle = unknown> {
-  id: string;
-  mount: string;
-  metadata?: CollectionMetadata;
-  hooks?: CollectionHooks;
-  createHandle?: (context: MountedCollectionContext) => THandle;
+ id: string;
+ mount: string;
+ metadata?: CollectionMetadata;
+ hooks?: CollectionHooks;
+ createHandle?: (context: MountedCollectionContext) => THandle;
 }
 
 interface MountedCollectionContext {
-  storeRoot: string;
-  collectionId: string;
-  mount: string;
-  mountRoot: string;
-  resolvePath(relativePath?: string): string;
-  toStorePath(relativePath?: string): string;
+ storeRoot: string;
+ collectionId: string;
+ mount: string;
+ mountRoot: string;
+ resolvePath(relativePath?: string): string;
+ toStorePath(relativePath?: string): string;
 }
 
 interface MountedCollection<THandle = unknown> {
-  collectionId: string;
-  mount: string;
-  mountRoot: string;
-  context: MountedCollectionContext;
-  handle: THandle | undefined;
+ collectionId: string;
+ mount: string;
+ mountRoot: string;
+ context: MountedCollectionContext;
+ handle: THandle | undefined;
 }
 ```
 
 在定义上使用 `id`，但在挂载的处理和上下文中使用 `collectionId`，这样领域对象 ID（如倡议 ID）不会与集合类型 ID 冲突。
 
-## 设置和挂载模式
+## 设置和挂载 schema
 
 使用两个独立的层：
 
@@ -104,42 +104,42 @@ interface MountedCollection<THandle = unknown> {
 
 ```ts
 const store = await registerContextStore({
-  id: "acme-context",
-  backend: gitLocalBackend({
-    localPath: "/Users/me/repos/acme-context",
-    remote: "git@github.com:acme/context.git",
-    branch: "main",
-  }),
+ id: "acme-context",
+ backend: gitLocalBackend({
+ localPath: "/Users/me/repos/acme-context",
+ remote: "git@github.com:acme/context.git",
+ branch: "main",
+ }),
 });
 ```
 
-注册外观可以在内部调用较低级别的辅助函数，如后端配置规范化、元数据写入和本地注册表写入。公共示例不应调用原始的 `writeContextStoreMetadataState(...)`、`writeContextStoreRegistryState(...)` 或暴露持久化的 snake_case 后端状态如 `local_path`。
+注册外观可以在内部调用较低级别的辅助函数，如后端配置 spec 化、元数据写入和本地注册表写入。公共示例不应调用原始的 `writeContextStoreMetadataState(...)`、`writeContextStoreRegistryState(...)` 或暴露持久化的 snake_case 后端状态如 `local_path`。
 
 项目 4 的挂载应保持独立于注册，并且只接受它需要的权限：
 
 ```ts
 const collections = createCollectionRegistry([
-  { id: "initiatives", mount: "initiatives" },
+ { id: "initiatives", mount: "initiatives" },
 ]);
 
 const mounted = mountCollections({
-  storeRoot: store.storeRoot,
-  collections,
+ storeRoot: store.storeRoot,
+ collections,
 });
 
 mounted.require("initiatives").resolvePath(
-  "launch-billing-flow/initiative.yaml"
+ "launch-billing-flow/initiative.yaml"
 );
 ```
 
-优先使用 `mountCollections({ storeRoot, collections })` 作为规范的第一个 API。传递整个存储句柄可以等到真正需要时再进行。
+优先使用 `mountCollections({ storeRoot, collections })` 作为 spec 的第一个 API。传递整个存储句柄可以等到真正需要时再进行。
 
 ## 路径方向
 
 - 挂载名称是单段 kebab-case 文件夹名称，如 `initiatives`、`decisions` 或 `api-catalog`。
 - 集合相对路径是挂载内的逻辑可移植路径。
 - 路径解析器仅是词法化的。它证明逻辑路径属于集合挂载下；它不声称是文件系统安全沙箱。
-- 未来的写能力辅助函数在接触磁盘之前必须重新审视符号链接和规范父路径处理。
+- 未来的写能力辅助函数在接触磁盘之前必须重新审视符号链接和 spec 父路径处理。
 
 拒绝：
 
@@ -162,10 +162,10 @@ mounted.require("initiatives").resolvePath(
 - `createStore(...).setup()` 生命周期 API。
 - 构建器风格设置 DSL。
 - 通用上下文存储层中的倡议特定设置预设。
-- 模板覆盖搜索路径。
+- template 覆盖搜索路径。
 - 丰富验证执行。
-- 代理指导生成。
-- 工作区集成。
+- agent 指导生成。
+- workspace 集成。
 - Git 同步、提交、拉取、推送、监视或冲突行为。
 
 ## 已实现的切片
@@ -174,4 +174,4 @@ mounted.require("initiatives").resolvePath(
 - 通过 `src/core/collections/index.ts` 和 `src/core/index.ts` 导出了该模块。
 - 在 `test/core/collections/runtime.test.ts` 下添加了专注的测试。
 - 证明了通用 `{ id: "initiatives", mount: "initiatives" }` 定义可以在没有倡议特定存储逻辑的情况下挂载和解析路径。
-- 将验证/模板钩子保留为惰性扩展字段；丰富的钩子执行仍然推迟。
+- 将验证/template 钩子保留为惰性扩展字段；丰富的钩子执行仍然推迟。

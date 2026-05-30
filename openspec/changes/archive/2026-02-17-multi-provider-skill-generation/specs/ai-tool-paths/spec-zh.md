@@ -1,8 +1,8 @@
-# ai-tool-paths 规范
+# ai-tool-paths spec
 
 ## 目的
 
-定义 AI 编码工具技能目录的路径配置，使技能生成能够按照 Agent Skills 规范针对不同的工具。
+定义 AI 编码工具 skill 目录的路径配置，使 skill 生成能够按照 Agent Skills spec 针对不同的工具。
 
 ## 需求
 
@@ -10,42 +10,42 @@
 
 ### 需求：AIToolOption 的 skillsDir 字段
 
-`AIToolOption` 接口应包含可选的 `skillsDir` 字段，用于技能生成路径配置。
+`AIToolOption` 接口应包含可选的 `skillsDir` 字段，用于 skill 生成路径配置。
 
 #### 场景：接口包含 skillsDir 字段
 
-- **当** 在 `AI_TOOLS` 中定义支持技能生成的工具条目时
-- **那么** 应包含指定项目本地基础目录（例如 `.claude`）的 `skillsDir` 字段
+- **WHEN** 在 `AI_TOOLS` 中定义支持 skill 生成的工具条目时
+- **THEN** 应包含指定项目本地基础目录（例如 `.claude`）的 `skillsDir` 字段
 
-#### 场景：技能路径遵循 Agent Skills 规范
+#### 场景：skill 路径遵循 Agent Skills spec
 
-- **当** 为 `skillsDir: '.claude'` 的工具生成技能时
-- **那么** 技能应写入 `<projectRoot>/<skillsDir>/skills/`
-- **并且** 根据 Agent Skills 规范附加 `/skills` 后缀
+- **WHEN** 为 `skillsDir: '.claude'` 的工具生成 skill 时
+- **THEN** skill 应写入 `<projectRoot>/<skillsDir>/skills/`
+- **AND** 根据 Agent Skills spec 附加 `/skills` 后缀
 
 ### 需求：支持工具的路径配置
 
-`AI_TOOLS` 数组应为支持 Agent Skills 规范的工具包含 `skillsDir`。
+`AI_TOOLS` 数组应为支持 Agent Skills spec 的工具包含 `skillsDir`。
 
 #### 场景：定义了 Claude Code 路径
 
-- **当** 查找 `claude` 工具时
-- **那么** `skillsDir` 应为 `.claude`
+- **WHEN** 查找 `claude` 工具时
+- **THEN** `skillsDir` 应为 `.claude`
 
 #### 场景：定义了 Cursor 路径
 
-- **当** 查找 `cursor` 工具时
-- **那么** `skillsDir` 应为 `.cursor`
+- **WHEN** 查找 `cursor` 工具时
+- **THEN** `skillsDir` 应为 `.cursor`
 
 #### 场景：定义了 Windsurf 路径
 
-- **当** 查找 `windsurf` 工具时
-- **那么** `skillsDir` 应为 `.windsurf`
+- **WHEN** 查找 `windsurf` 工具时
+- **THEN** `skillsDir` 应为 `.windsurf`
 
 #### 场景：没有 skillsDir 的工具
 
-- **当** 工具没有定义 `skillsDir`
-- **那么** 技能生成应报错，提示该工具不受支持
+- **WHEN** 工具没有定义 `skillsDir`
+- **THEN** skill 生成应报错，提示该工具不受支持
 
 ### 需求：跨平台路径处理
 
@@ -53,11 +53,11 @@
 
 #### 场景：Windows 上的路径构建
 
-- **当** 在 Windows 上构建技能路径时
-- **那么** 系统应对所有路径构建使用 `path.join()`
-- **并且** 不应硬编码正斜杠
+- **WHEN** 在 Windows 上构建 skill 路径时
+- **THEN** 系统应对所有路径构建使用 `path.join()`
+- **AND** 不应硬编码正斜杠
 
 #### 场景：Unix 上的路径构建
 
-- **当** 在 macOS 或 Linux 上构建技能路径时
-- **那么** 系统应为保持一致性使用 `path.join()`
+- **WHEN** 在 macOS 或 Linux 上构建 skill 路径时
+- **THEN** 系统应为保持一致性使用 `path.join()`

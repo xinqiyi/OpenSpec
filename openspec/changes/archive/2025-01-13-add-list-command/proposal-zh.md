@@ -14,7 +14,7 @@
 
 ## 影响
 
-- 受影响的规范：将新增 `cli-list` 能力
+- 受影响的 spec：将新增 `cli-list` 能力
 - 受影响的代码：
-  - `src/cli/index.ts` - 添加 list 命令
-  - `src/core/list.ts` - 包含目录扫描和任务解析的新文件（约 60 行）
+ - `src/cli/index.ts` - 添加 list 命令
+ - `src/core/list.ts` - 包含目录扫描和任务解析的新文件（约 60 行）

@@ -4,8 +4,8 @@ NixOS 或使用 Nix 包管理器的 OpenSpec 用户如果不通过 npm，无法�
 
 ## 变更内容
 
-- 在仓库根目录添加 `flake.nix`，支持多平台（x86_64-linux、aarch64-linux、x86_64-darwin、aarch64-darwin）
-- 包使用 pnpm 进行依赖管理（匹配现有的开发工作流）
+- 在 repository 根目录添加 `flake.nix`，支持多平台（x86_64-linux、aarch64-linux、x86_64-darwin、aarch64-darwin）
+- 包使用 pnpm 进行依赖管理（匹配现有的开发 workflow）
 - 支持通过 `nix run` 直接执行和通过 `nix profile install` 安装
 - 为使用 Nix 的贡献者提供 dev shell
 
@@ -19,7 +19,7 @@ NixOS 或使用 Nix 包管理器的 OpenSpec 用户如果不通过 npm，无法�
 
 ## 影响
 
-- **新文件**：仓库根目录中的 `flake.nix`
+- **新文件**：repository 根目录中的 `flake.nix`
 - **文档**：应为 Nix 用户添加安装说明
 - **CI/CD**：可以向 CI 管道添加 flake 检查（可选）
 - **维护**：依赖变更时需要更新 pnpmDeps 哈希

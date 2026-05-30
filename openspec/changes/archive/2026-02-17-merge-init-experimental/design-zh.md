@@ -3,21 +3,21 @@
 目前 `openspec init` 和 `openspec experimental` 是两个独立的命令，具有不同的用途：
 
 - **init**：创建 `openspec/` 目录，生成 `AGENTS.md`/`project.md`，配置工具配置文件（`CLAUDE.md` 等），生成旧的斜杠命令（`/openspec:proposal` 等）
-- **experimental**：生成技能（每个工具 9 个），生成 opsx 斜杠命令（`/opsx:new` 等），创建 `config.yaml`
+- **experimental**：生成 skill（每个工具 9 个），生成 opsx 斜杠命令（`/opsx:new` 等），创建 `config.yaml`
 
-基于技能的工作流（experimental）是我们未来的方向，因此我们通过将其合并到 `init` 中使其成为默认行为。
+基于 skill 的 workflow（experimental）是我们未来的方向，因此我们通过将其合并到 `init` 中使其成为默认行为。
 
 ## 目标 / 非目标
 
 **目标：**
-- 单一的 `openspec init` 命令，设置完整的基于技能的工作流
+- 单一的 `openspec init` 命令，设置完整的基于 skill 的 workflow
 - 为具有遗留制品的现有用户提供清晰的迁移路径
 - 移除所有与配置文件和旧斜杠命令相关的代码
 - 保留 experimental 的精美 UX（动画欢迎界面、可搜索多选）
 
 **非目标：**
-- 同时支持两种工作流
-- 提供使用旧工作流的选项
+- 同时支持两种 workflow
+- 提供使用旧 workflow 的选项
 - 对 `/openspec:*` 命令的向后兼容（破坏性变更）
 
 ## 决策
@@ -26,7 +26,7 @@
 
 **选择**: 重写 `init` 使其执行 `experimental` 的功能，然后删除 `experimental`。
 
-**理由**: `init` 是规范的设置命令。用户期望 `init` 设置项目。`experimental` 始终是临时的。
+**理由**: `init` 是 spec 的设置命令。用户期望 `init` 设置项目。`experimental` 始终是临时的。
 
 **考虑过的替代方案**：
 - 保留 `experimental` 作为主要命令 → 作为默认行为名称令人困惑
@@ -62,14 +62,14 @@
 
 **理由**：
 - `project.md` 可能包含有价值的用户编写的项目文档
-- 新工作流使用 `config.yaml.context` 实现相同目的（自动注入到制品中）
+- 新 workflow 使用 `config.yaml.context` 实现相同目的（自动注入到制品中）
 - 自动删除会丢失用户内容；自动迁移很复杂（需要 LLM 压缩）
 - 用户可以手动迁移或使用 `/opsx:explore` 获取 AI 帮助
 
 **迁移路径**：
 1. 在遗留清理期间，检测 `openspec/project.md` 但不删除
 2. 在输出中显示："openspec/project.md 仍然存在 - 将内容迁移到 config.yaml 的 context: 字段，然后删除"
-3. 用户手动迁移或在探索模式下询问 Claude："帮我将 project.md 迁移到 config.yaml"
+3. 用户手动迁移或在探索 schema 下询问 Claude："帮我将 project.md 迁移到 config.yaml"
 4. 用户在准备好时删除 project.md
 
 **为什么不自动迁移？**
@@ -86,7 +86,7 @@
 
 ### 决策 5：重用现有基础设施
 
-**选择**: 重用 experimental 中的技能模板、命令适配器、欢迎界面和多选。
+**选择**: 重用 experimental 中的 skill template、命令适配器、欢迎界面和多选。
 
 **理由**: 已经构建并可工作。只需从 init 而非 experimental 中调用它们。
 
@@ -105,32 +105,32 @@
 
 ```
 openspec/
-  ├── config.yaml           # 模式设置（来自 experimental）
-  ├── specs/                # 空，用于用户的规范
-  └── changes/              # 空，用于用户的变更
-      └── archive/
+ ├── config.yaml # schema 设置（来自 experimental）
+ ├── specs/ # 空，用于用户的 spec
+ └── changes/ # 空，用于用户的变更
+ └── archive/
 
-.<tool>/skills/             # 每个选定工具 9 个技能
-  ├── openspec-explore/SKILL.md
-  ├── openspec-new-change/SKILL.md
-  ├── openspec-continue-change/SKILL.md
-  ├── openspec-apply-change/SKILL.md
-  ├── openspec-ff-change/SKILL.md
-  ├── openspec-verify-change/SKILL.md
-  ├── openspec-sync-specs/SKILL.md
-  ├── openspec-archive-change/SKILL.md
-  └── openspec-bulk-archive-change/SKILL.md
+.<tool>/skills/ # 每个选定工具 9 个 skill
+ ├── openspec-explore/SKILL.md
+ ├── openspec-new-change/SKILL.md
+ ├── openspec-continue-change/SKILL.md
+ ├── openspec-apply-change/SKILL.md
+ ├── openspec-ff-change/SKILL.md
+ ├── openspec-verify-change/SKILL.md
+ ├── openspec-sync-specs/SKILL.md
+ ├── openspec-archive-change/SKILL.md
+ └── openspec-bulk-archive-change/SKILL.md
 
-.<tool>/commands/opsx/      # 每个选定工具 9 个斜杠命令
-  ├── explore.md
-  ├── new.md
-  ├── continue.md
-  ├── apply.md
-  ├── ff.md
-  ├── verify.md
-  ├── sync.md
-  ├── archive.md
-  └── bulk-archive.md
+.<tool>/commands/opsx/ # 每个选定工具 9 个斜杠命令
+ ├── explore.md
+ ├── new.md
+ ├── continue.md
+ ├── apply.md
+ ├── ff.md
+ ├── verify.md
+ ├── sync.md
+ ├── archive.md
+ └── bulk-archive.md
 ```
 
 ### init 不再创建的内容
@@ -169,7 +169,7 @@ openspec/
 
 - 动画欢迎界面（`src/ui/welcome-screen.ts`）- 保留，从 init 调用
 - 可搜索多选（`src/prompts/searchable-multi-select.ts`）- 保留，从 init 调用
-- 技能模板（`src/core/templates/skill-templates.ts`）- 保留
+- skill template（`src/core/templates/skill-templates.ts`）- 保留
 - 命令生成（`src/core/command-generation/`）- 保留
 - 工具状态检测（来自 `experimental/setup.ts`）- 移至 init
 
@@ -177,17 +177,17 @@ openspec/
 
 1. **`openspec update` 会怎样？** - 已解决
 
-   **当前行为**：通过 `ToolRegistry` 更新 `openspec/AGENTS.md`、配置文件（`CLAUDE.md` 等），以及通过 `SlashCommandRegistry` 更新旧的斜杠命令（`/openspec:*`）。
+ **当前行为**：通过 `ToolRegistry` 更新 `openspec/AGENTS.md`、配置文件（`CLAUDE.md` 等），以及通过 `SlashCommandRegistry` 更新旧的斜杠命令（`/openspec:*`）。
 
-   **新行为**：重写为刷新技能和 opsx 命令：
-   - 检测哪些工具已安装技能（检查 `.claude/skills/openspec-*/` 等）
-   - 使用 `skill-templates.ts` 刷新每个已安装工具的所有 9 个技能文件
-   - 使用 `command-generation/` 适配器刷新每个已安装工具的所有 9 个 opsx 命令文件
-   - 移除对 `ToolRegistry`、`SlashCommandRegistry`、`agentsTemplate` 的导入
-   - 更新输出消息以反映技能/命令而非配置文件
+ **新行为**：重写为刷新 skill 和 opsx 命令：
+ - 检测哪些工具已安装 skill（检查 `.claude/skills/openspec-*/` 等）
+ - 使用 `skill-templates.ts` 刷新每个已安装工具的所有 9 个 skill 文件
+ - 使用 `command-generation/` 适配器刷新每个已安装工具的所有 9 个 opsx 命令文件
+ - 移除对 `ToolRegistry`、`SlashCommandRegistry`、`agentsTemplate` 的导入
+ - 更新输出消息以反映 skill/命令而非配置文件
 
-   **关键原则**：与当前 update 相同 - 仅刷新现有工具，不添加新工具。
+ **关键原则**：与当前 update 相同 - 仅刷新现有工具，不添加新工具。
 
 2. **是否应保留 `openspec schemas` 和其他 experimental 子命令？** - 已解决
 
-   **决策**：是的，保留它们。从所有子命令（status、instructions、schemas 等）中移除"[Experimental]"标签。参见任务 4.3。
+ **决策**：是的，保留它们。从所有子命令（status、instructions、schemas 等）中移除"[Experimental]"标签。参见任务 4.3。

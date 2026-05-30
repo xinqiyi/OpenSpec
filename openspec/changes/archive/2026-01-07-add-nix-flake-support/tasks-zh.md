@@ -1,13 +1,13 @@
 ## 1. 创建 Flake 结构
 
-- [x] 1.1 在仓库根目录创建 flake.nix
+- [x] 1.1 在 repository 根目录创建 flake.nix
 - [x] 1.2 定义 inputs（仅 nixpkgs，无 flake-utils）
 - [x] 1.3 设置 supportedSystems 列表（4 个平台）
 - [x] 1.4 创建 forAllSystems 辅助函数
 
 ## 2. 配置包构建
 
-- [x] 2.1 使用 finalAttrs 模式设置 stdenv.mkDerivation
+- [x] 2.1 使用 finalAttrs schema 设置 stdenv.mkDerivation
 - [x] 2.2 使用 fetchPnpmDeps 配置 pnpmDeps
 - [x] 2.3 设置 pnpm = pnpm_9 和 fetcherVersion = 3
 - [x] 2.4 添加占位哈希（全零）
@@ -62,4 +62,4 @@
 ## 10. 文档
 
 - [x] 10.1 在 README 中添加 Nix 安装部分
-- [x] 10.2 在 README 中包括常见 Nix 工作流的示例命令
+- [x] 10.2 在 README 中包括常见 Nix workflow 的示例命令

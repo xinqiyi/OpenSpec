@@ -2,7 +2,7 @@
 
 ## 问题
 
-目前，在 OPSX 工作流中**没有办法重新生成产物**：
+目前，在 OPSX workflow 中**没有办法重新生成产物**：
 
 - `/opsx:apply` 仅读取磁盘上的现有内容
 - `/opsx:continue` 仅创建下一个产物 - 不会触及现有的产物
@@ -21,33 +21,33 @@
 在 `/opsx:apply` 中添加产物陈旧性检测：
 
 1. **跟踪修改时间**：生成产物时，记录其依赖项的修改时间
-2. **检测陈旧性**：当 `/opsx:apply` 运行时，检查上游产物（design.md、规范）自 tasks.md 生成以来是否已被修改
+2. **检测陈旧性**：当 `/opsx:apply` 运行时，检查上游产物（design.md、spec）自 tasks.md 生成以来是否已被修改
 3. **提示用户**：如果发现陈旧，询问："设计在任务生成后已被修改。是否想用 `/opsx:continue` 重新生成任务？"
 
 ## 用户体验
 
 ### 愿景：无缝中途修正
 
-这是我们希望实现的工作流（目前有文档但没有支持）：
+这是我们希望实现的 workflow（目前有文档但没有支持）：
 
 ```
 你：/opsx:apply
 
 AI：正在处理任务...
-    ✓ 任务 1.1：创建了缓存层
-    ✓ 任务 1.2：添加了缓存失效
+ ✓ 任务 1.1：创建了缓存层
+ ✓ 任务 1.2：添加了缓存失效
 
-    正在处理 1.3：实现 TTL...
-    我注意到设计假设使用 Redis，但你的项目使用
-    内存缓存。我应该更新设计吗？
+ 正在处理 1.3：实现 TTL...
+ 我注意到设计假设使用 Redis，但你的项目使用
+ 内存缓存。我应该更新设计吗？
 
 你：是的，更新为使用现有缓存模块。
 
 AI：已将 design.md 更新为使用 src/cache/ 中的 CacheManager
-    已将 tasks.md 更新为修订后的实施步骤
-    继续实施...
-    ✓ 任务 1.3：使用 CacheManager 实现了 TTL
-    ...
+ 已将 tasks.md 更新为修订后的实施步骤
+ 继续实施...
+ ✓ 任务 1.3：使用 CacheManager 实现了 TTL
+ ...
 ```
 
 **无需重新启动。** 只需更新产物并继续。
@@ -59,8 +59,8 @@ AI：已将 design.md 更新为使用 src/cache/ 中的 CacheManager
 ```
 $ /opsx:apply
 
-⚠️  检测到上游产物的变更：
-    - design.md 在 5 分钟前被修改（在 tasks.md 生成之后）
+⚠️ 检测到上游产物的变更：
+ - design.md 在 5 分钟前被修改（在 tasks.md 生成之后）
 
 选项：
 1. 重新生成任务（推荐）
@@ -92,13 +92,13 @@ $ /opsx:apply
 在变更目录中存储 `.openspec-meta.json`：
 ```json
 {
-  "tasks.md": {
-    "generated_at": "2025-01-24T10:00:00Z",
-    "dependencies": {
-      "design.md": "2025-01-24T09:55:00Z",
-      "specs/feature/spec.md": "2025-01-24T09:50:00Z"
-    }
-  }
+ "tasks.md": {
+ "generated_at": "2025-01-24T10:00:00Z",
+ "dependencies": {
+ "design.md": "2025-01-24T09:55:00Z",
+ "specs/feature/spec.md": "2025-01-24T09:50:00Z"
+ }
+ }
 }
 ```
 
@@ -108,7 +108,7 @@ $ /opsx:apply
 ---
 generated_at: 2025-01-24T10:00:00Z
 depends_on:
-  - design.md@2025-01-24T09:55:00Z
+ - design.md@2025-01-24T09:55:00Z
 ---
 # 任务
 ...

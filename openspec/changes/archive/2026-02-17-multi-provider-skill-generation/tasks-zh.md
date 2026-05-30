@@ -7,7 +7,7 @@
 - [x] 2.1 为 Claude Code 工具条目添加 `skillsDir: '.claude'`
 - [x] 2.2 为 Cursor 工具条目添加 `skillsDir: '.cursor'`
 - [x] 2.3 为 Windsurf 工具条目添加 `skillsDir: '.windsurf'`
-- [x] 2.4 为其他支持 Agent Skills 规范的已知工具添加 skillsDir（codex、opencode、roocode、kilocode、gemini、factory、github-copilot）
+- [x] 2.4 为其他支持 Agent Skills spec 的已知工具添加 skillsDir（codex、opencode、roocode、kilocode、gemini、factory、github-copilot）
 
 ## 3. 创建命令生成类型
 
@@ -40,7 +40,7 @@
 - [x] 7.2 添加验证：`--tool` 标志是必需的（如果缺少则报错，显示有效工具列表）
 - [x] 7.3 添加验证：工具存在于 AI_TOOLS 中
 - [x] 7.4 添加验证：工具已配置 skillsDir
-- [x] 7.5 用 `tool.skillsDir` 替换硬编码的 `.claude` 技能路径
+- [x] 7.5 用 `tool.skillsDir` 替换硬编码的 `.claude` skill 路径
 - [x] 7.6 用 `CommandAdapterRegistry.get()` + `generateCommands()` 替换硬编码的命令生成
 - [x] 7.7 优雅处理缺少适配器的情况（跳过命令并显示消息）
 - [x] 7.8 更新输出消息以显示目标工具名称和路径

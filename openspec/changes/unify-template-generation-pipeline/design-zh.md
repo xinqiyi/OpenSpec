@@ -1,10 +1,10 @@
 ## 上下文
 
-OpenSpec 目前拥有强大的构建模块（工作流模板、命令适配器、生成辅助函数），但编排关注点分散在各处：
+OpenSpec 目前拥有强大的构建模块（workflow template、命令适配器、生成辅助函数），但编排关注点分散在各处：
 
-- 工作流定义和投影列表分开维护
+- workflow 定义和投影列表分开维护
 - 工具支持在多个地方表示，存在部分重叠
-- 转换可以在模板渲染时和各个适配器内部发生
+- 转换可以在 template 渲染时和各个适配器内部发生
 - `init`/`update`/legacy-upgrade 各自运行类似但略有差异的写入流水线
 
 设计目标是在保留当前行为的同时，使扩展点明确和确定。
@@ -12,41 +12,41 @@ OpenSpec 目前拥有强大的构建模块（工作流模板、命令适配器�
 ## 目标 / 非目标
 
 **目标：**
-- 为工作流内容和元数据定义一个规范的单一来源
-- 使工具/代理特定行为明确且可集中发现
+- 为 workflow 内容和元数据定义一个 spec 的单一来源
+- 使工具/agent 特定行为明确且可集中发现
 - 将命令适配器保持为工具语法差异的格式化边界
-- 将工件生成/写入编排整合到一个可重用的引擎中
+- 将 artifact 生成/写入编排整合到一个可重用的引擎中
 - 通过可强制执行的验证和校验测试提高正确性
 
 **非目标：**
-- 重新设计命令语义或工作流指令内容
-- 在本提案中更改面向用户的 CLI 命令名称/标志
-- 合并超出工件生成重用的无关遗留清理行为
+- 重新设计命令语义或 workflow 指令内容
+- 在本 proposal 中更改面向用户的 CLI 命令名称/标志
+- 合并超出 artifact 生成重用的无关遗留清理行为
 
 ## 决策
 
-### 1. 规范的 `WorkflowManifest`
+### 1. spec 的 `WorkflowManifest`
 
-**决策**：在清单条目中一次性表示每个工作流，包含规范的技能和命令定义以及元数据默认值。
+**决策**：在清单条目中一次性表示每个 workflow，包含 spec 的 skill 和命令定义以及元数据默认值。
 
 建议形状：
 
 ```ts
 interface WorkflowManifestEntry {
-  workflowId: string; // 例如 'explore', 'ff', 'onboard'
-  skillDirName: string; // 例如 'openspec-explore'
-  skill: SkillTemplate;
-  command?: CommandTemplate;
-  commandId?: string;
-  tags: string[];
-  compatibility: string;
+ workflowId: string; // 例如 'explore', 'ff', 'onboard'
+ skillDirName: string; // 例如 'openspec-explore'
+ skill: SkillTemplate;
+ command?: CommandTemplate;
+ commandId?: string;
+ tags: string[];
+ compatibility: string;
 }
 ```
 
 **理由**：
 - 消除多个手动维护数组之间的漂移
-- 使工作流完整性可在一处测试
-- 保持工作流模块分离的同时集中注册
+- 使 workflow 完整性可在一处测试
+- 保持 workflow 模块分离的同时集中注册
 
 ### 2. 用于能力连接的 `ToolProfileRegistry`
 
@@ -56,16 +56,16 @@ interface WorkflowManifestEntry {
 
 ```ts
 interface ToolProfile {
-  toolId: string;
-  skillsDir?: string;
-  commandAdapterId?: string;
-  transforms: string[];
+ toolId: string;
+ skillsDir?: string;
+ commandAdapterId?: string;
+ transforms: string[];
 }
 ```
 
 **理由**：
 - 防止 `AI_TOOLS`、适配器注册表和检测逻辑之间的能力漂移
-- 允许有意的"仅技能"工具，无需隐式特殊处理
+- 允许有意的"仅 skill"工具，无需隐式特殊处理
 - 提供一个地方回答"这个工具支持什么？"
 
 ### 3. 一级转换流水线
@@ -76,17 +76,17 @@ interface ToolProfile {
 
 ```ts
 interface ArtifactTransform {
-  id: string;
-  scope: 'skill' | 'command' | 'both';
-  phase: 'preAdapter' | 'postAdapter';
-  priority: number;
-  applies(ctx: GenerationContext): boolean;
-  transform(content: string, ctx: GenerationContext): string;
+ id: string;
+ scope: 'skill' | 'command' | 'both';
+ phase: 'preAdapter' | 'postAdapter';
+ priority: number;
+ applies(ctx: GenerationContext): boolean;
+ transform(content: string, ctx: GenerationContext): string;
 }
 ```
 
 执行顺序：
-1. 从清单渲染规范内容
+1. 从清单渲染 spec 内容
 2. 应用匹配的 `preAdapter` 转换
 3. 对于命令，运行适配器格式化
 4. 应用匹配的 `postAdapter` 转换
@@ -94,7 +94,7 @@ interface ArtifactTransform {
 
 **理由**：
 - 保持适配器专注于工具格式化，而非分散的行为重写
-- 使代理特定的修改变得明确和可测试
+- 使 agent 特定的修改变得明确和可测试
 - 替换 `init`/`update` 中的临时转换调用
 
 ### 4. 共享的 `ArtifactSyncEngine`
@@ -116,10 +116,10 @@ interface ArtifactTransform {
 
 **决策**：在测试中添加严格检查（以及开发构建中的可选运行时断言），包括：
 
-- 所有清单条目都存在必需的技能元数据字段（`license`、`compatibility`、`metadata`）
-- 投影一致性（从清单派生的技能、命令、检测名称）
+- 所有清单条目都存在必需的 skill 元数据字段（`license`、`compatibility`、`metadata`）
+- 投影一致性（从清单派生的 skill、命令、检测名称）
 - 工具配置文件一致性（适配器存在性、预期能力）
-- 关键工作流/工具的黄金/校验输出
+- 关键 workflow/工具的黄金/校验输出
 
 **理由**：
 - 将先前的审查问题转化为强制不变量

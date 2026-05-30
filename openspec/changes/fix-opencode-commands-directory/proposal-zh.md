@@ -21,6 +21,6 @@ _无。_
 ## 影响
 
 - `src/core/command-generation/adapters/opencode.ts` — 适配器路径
-- `src/core/legacy-cleanup.ts` — 遗留清理模式 + 添加旧单数路径
+- `src/core/legacy-cleanup.ts` — 遗留清理 schema + 添加旧单数路径
 - `docs/supported-tools.md` — 文档表格
 - `test/core/command-generation/adapters.test.ts` — 测试断言

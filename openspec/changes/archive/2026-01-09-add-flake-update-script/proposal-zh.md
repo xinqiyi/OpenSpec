@@ -19,5 +19,5 @@
 ## 影响
 
 - **新文件**：`scripts/update-flake.sh`、`scripts/README.md`
-- **维护者工作流**：版本升级现在包括运行 `./scripts/update-flake.sh`
+- **维护者 workflow**：版本升级现在包括运行 `./scripts/update-flake.sh`
 - **依赖**：脚本需要 Node.js（已是依赖）和 Nix（适用于使用 Nix 的维护者）

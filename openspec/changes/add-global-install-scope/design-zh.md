@@ -2,7 +2,7 @@
 
 OpenSpec 目前假定大多数生成的构件为项目本地安装，Codex 命令提示是主要的全局例外。这种混合模型可行，但它是隐式的且不可由用户配置。
 
-请求的变更是支持用户可选择的工具技能/命令安装范围（`global` 或 `project`），新配置默认使用 `global`，同时在显式迁移之前保留旧的项目本地行为。
+请求的变更是支持用户可选择的工具 skill/命令安装范围（`global` 或 `project`），新配置默认使用 `global`，同时在显式迁移之前保留旧的项目本地行为。
 
 ## 目标 / 非目标
 
@@ -18,7 +18,7 @@ OpenSpec 目前假定大多数生成的构件为项目本地安装，Codex 命�
 
 - 实现全局设置的项目本地配置文件支持
 - 为上游位置约定未知的工具定义全局安装路径
-- 在此变更中更改工作流/配置文件语义（`core`、`custom`、`delivery`）
+- 在此变更中更改 workflow/配置文件语义（`core`、`custom`、`delivery`）
 
 ## 决策
 
@@ -30,8 +30,8 @@ OpenSpec 目前假定大多数生成的构件为项目本地安装，Codex 命�
 type InstallScope = 'global' | 'project';
 
 interface GlobalConfig {
-  // 现有字段...
-  installScope?: InstallScope;
+ // 现有字段...
+ installScope?: InstallScope;
 }
 ```
 
@@ -46,8 +46,8 @@ interface GlobalConfig {
 
 ```ts
 interface ToolInstallScopeSupport {
-  skills?: InstallScope[];
-  commands?: InstallScope[];
+ skills?: InstallScope[];
+ commands?: InstallScope[];
 }
 ```
 
@@ -64,7 +64,7 @@ interface ToolInstallScopeSupport {
 
 引入共享的解析器工具，用于计算以下的有效目标路径：
 
-- 技能根目录
+- skill 根目录
 - 命令输出文件
 
 解析器输入：
@@ -82,7 +82,7 @@ interface ToolInstallScopeSupport {
 
 平台行为：
 
-- 解析器输出具有 OS 感知能力，并为当前平台规范化。
+- 解析器输出具有 OS 感知能力，并为当前平台 spec 化。
 - Windows 全局目标必须使用 Windows 路径约定（例如，当 `CODEX_HOME` 未设置时，Codex 的 `%USERPROFILE%\.codex\prompts` 回退），而不是 POSIX 默认值。
 
 ### 4. 能感知上下文的命令适配器路径
@@ -101,7 +101,7 @@ getFilePath(commandId: string, context: InstallContext): string
 
 - 默认使用配置的安装范围；如果在旧配置中缺失，使用迁移安全的有效默认值（`project`）。
 - 支持显式覆盖标志（`--scope global|project`）。
-- 在交互模式下，在写入文件之前显示所选范围和任何每个工具的回退决策。
+- 在交互 schema 下，在写入文件之前显示所选范围和任何每个工具的回退决策。
 
 `update`：
 
@@ -119,7 +119,7 @@ getFilePath(commandId: string, context: InstallContext): string
 当范围更改时：
 
 - 写入发生在新的有效目标中。
-- 清理/移除仅限于相关工具/工作流 ID 的 OpenSpec 托管文件。
+- 清理/移除仅限于相关工具/workflow ID 的 OpenSpec 托管文件。
 - 输出明确说明哪些范围位置已更新，哪些已清理。
 
 ### 7. 范围漂移状态跟踪
@@ -136,7 +136,7 @@ getFilePath(commandId: string, context: InstallContext): string
 
 ### 8. 与命令界面能力更改的协调
 
-如果 `add-tool-command-surface-capabilities` 落地，规划逻辑必须一起评估范围解析和交付/能力行为（范围 x 交付 x 命令界面）。
+如果 `add-tool-command-surface-capabilities` 落地，planning 逻辑必须一起评估范围解析和交付/能力行为（范围 x 交付 x 命令界面）。
 
 ## 风险 / 权衡
 

@@ -5,13 +5,13 @@
 ```typescript
 // src/core/artifact-graph/builtin-schemas.ts
 export const SPEC_DRIVEN_SCHEMA: SchemaYaml = {
-  name: 'spec-driven',
-  version: 1,
-  artifacts: [...]
+ name: 'spec-driven',
+ version: 1,
+ artifacts: [...]
 };
 ```
 
-这种方式不支持模板与 schema 放在同一位置。指令加载器（切片 3）需要模板，最简洁的方案是使用自包含的 schema 目录。
+这种方式不支持 template 与 schema 放在同一位置。指令加载器（切片 3）需要 template，最简洁的方案是使用自包含的 schema 目录。
 
 ## 目标 / 非目标
 
@@ -19,10 +19,10 @@ export const SPEC_DRIVEN_SCHEMA: SchemaYaml = {
 - Schema 作为自包含目录（schema.yaml + templates/）
 - 用户通过 XDG 数据目录覆盖
 - 简单的两级解析（用户 → 包）
-- 模板与所属 schema 放在一起
+- template 与所属 schema 放在一起
 
 **非目标：**
-- 共享模板回退（有意避免复杂性）
+- 共享 template 回退（有意避免复杂性）
 - 运行时 schema 编译
 - Schema 继承
 
@@ -35,53 +35,53 @@ export const SPEC_DRIVEN_SCHEMA: SchemaYaml = {
 ```
 <package>/schemas/
 ├── spec-driven/
-│   ├── schema.yaml
-│   └── templates/
-│       ├── proposal.md
-│       ├── design.md
-│       ├── spec.md
-│       └── tasks.md
+│ ├── schema.yaml
+│ └── templates/
+│ ├── proposal.md
+│ ├── design.md
+│ ├── spec.md
+│ └── tasks.md
 └── tdd/
-    ├── schema.yaml
-    └── templates/
-        ├── spec.md
-        ├── test.md
-        ├── implementation.md
-        └── docs.md
+ ├── schema.yaml
+ └── templates/
+ ├── spec.md
+ ├── test.md
+ ├── implementation.md
+ └── docs.md
 ```
 
-**原因：** 像 Helm chart 一样自包含。无跨 schema 依赖。每个 schema 拥有自己的模板。
+**原因：** 像 Helm chart 一样自包含。无跨 schema 依赖。每个 schema 拥有自己的 template。
 
 ### 2. 解析顺序（2 级）
 
 ```
-1. ${XDG_DATA_HOME}/openspec/schemas/<name>/schema.yaml   # 用户覆盖
-2. <package>/schemas/<name>/schema.yaml                    # 内置
+1. ${XDG_DATA_HOME}/openspec/schemas/<name>/schema.yaml # 用户覆盖
+2. <package>/schemas/<name>/schema.yaml # 内置
 3. 错误（未找到）
 ```
 
 **原因：** 简单的思维模型。用户可以覆盖整个 schema 目录或仅覆盖部分内容。
 
-### 3. schema.yaml 中的模板路径
+### 3. schema.yaml 中的 template 路径
 
 `template` 字段是相对于 schema 的 `templates/` 目录的：
 
 ```yaml
 # schemas/spec-driven/schema.yaml
 artifacts:
-  - id: proposal
-    template: "proposal.md"  # → schemas/spec-driven/templates/proposal.md
+ - id: proposal
+ template: "proposal.md" # → schemas/spec-driven/templates/proposal.md
 ```
 
-**原因：** 路径相对于 schema，而非全局模板目录。
+**原因：** 路径相对于 schema，而非全局 template 目录。
 
 ### 4. 通过 import.meta.url 解析包目录
 
 ```typescript
 function getPackageSchemasDir(): string {
-  const currentFile = fileURLToPath(import.meta.url);
-  // 从 src/core/artifact-graph/ 导航到包根目录
-  return path.join(path.dirname(currentFile), '..', '..', '..', 'schemas');
+ const currentFile = fileURLToPath(import.meta.url);
+ // 从 src/core/artifact-graph/ 导航到包根目录
+ return path.join(path.dirname(currentFile), '..', '..', '..', 'schemas');
 }
 ```
 
@@ -94,12 +94,12 @@ YAML 格式保持不变——仅存储位置发生变化：
 ```yaml
 name: spec-driven
 version: 1
-description: 规范驱动开发
+description: spec 驱动开发
 artifacts:
-  - id: proposal
-    generates: "proposal.md"
-    template: "proposal.md"
-    requires: []
+ - id: proposal
+ generates: "proposal.md"
+ template: "proposal.md"
+ requires: []
 ```
 
 **原因：** schema 格式无破坏性变更。仅从 TS 迁移到 YAML 文件。

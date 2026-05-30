@@ -16,11 +16,11 @@
 - [x] 2.3 从 `src/prompts/searchable-multi-select.ts` 导入并使用可搜索多选
 - [x] 2.4 在 init 流程开始时集成遗留检测
 - [x] 2.5 添加遗留清理确认的 Y/N 提示
-- [x] 2.6 使用现有的 `skill-templates.ts` 生成技能
+- [x] 2.6 使用现有的 `skill-templates.ts` 生成 skill
 - [x] 2.7 使用现有的 `command-generation/` 适配器生成斜杠命令
-- [x] 2.8 创建带默认模式的 `openspec/config.yaml`
-- [x] 2.9 更新成功输出以匹配新工作流（技能、/opsx:* 命令）
-- [x] 2.10 添加 `--force` 标志，在非交互模式下跳过遗留清理提示
+- [x] 2.8 创建带默认 schema 的 `openspec/config.yaml`
+- [x] 2.9 更新成功输出以匹配新 workflow（skill、/opsx:* 命令）
+- [x] 2.10 添加 `--force` 标志，在非交互 schema 下跳过遗留清理提示
 
 ## 3. 移除遗留代码
 
@@ -45,23 +45,23 @@
 
 ## 5. 更新相关命令
 
-- [x] 5.1 更新 `openspec update` 命令以刷新技能/命令而非配置文件
+- [x] 5.1 更新 `openspec update` 命令以刷新 skill/命令而非配置文件
 - [x] 5.2 从 update 中移除配置文件刷新逻辑
-- [x] 5.3 向 update 添加技能刷新逻辑
+- [x] 5.3 向 update 添加 skill 刷新逻辑
 
 ## 6. 测试与验证
 
 - [x] 6.1 为新 init 流程添加集成测试（全新安装）
 - [x] 6.2 为遗留检测和清理添加集成测试
-- [x] 6.3 为扩展模式（重新运行 init）添加集成测试
-- [x] 6.4 使用 `--tools` 标志测试非交互模式
+- [x] 6.3 为扩展 schema（重新运行 init）添加集成测试
+- [x] 6.4 使用 `--tools` 标志测试非交互 schema
 - [x] 6.5 测试 CI 环境的 `--force` 标志
 - [x] 6.6 验证跨平台路径处理（全程使用 path.join）
 - [x] 6.7 运行完整测试套件并修复任何损坏的测试
 
 ## 7. 文档与清理
 
-- [x] 7.1 使用新的 init 行为更新 README（基于技能的工作流是自文档化的）
+- [x] 7.1 使用新的 init 行为更新 README（基于 skill 的 workflow 是自文档化的）
 - [x] 7.2 为发布说明记录破坏性变更（在任务文件中）
 - [x] 7.3 移除对已删除模块的任何孤立导入/引用（已验证不存在）
 - [x] 7.4 运行 linter 并修复任何问题（已通过）

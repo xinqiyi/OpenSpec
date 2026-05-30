@@ -4,7 +4,7 @@
 
 ## 2. 遗留清理
 
-- [x] 2.1 更新 `src/core/legacy-cleanup.ts`：将 `LEGACY_SLASH_COMMAND_PATHS` 中的 `'opencode'` 条目更新为检测 `.opencode/command/` 下的 `opsx-*.md` 和 `openspec-*.md` 两种模式以实现向后兼容
+- [x] 2.1 更新 `src/core/legacy-cleanup.ts`：将 `LEGACY_SLASH_COMMAND_PATHS` 中的 `'opencode'` 条目更新为检测 `.opencode/command/` 下的 `opsx-*.md` 和 `openspec-*.md` 两种 schema 以实现向后兼容
 
 ## 3. 文档
 

@@ -1,128 +1,128 @@
-# OPSX Archive Skill 规范
+# OPSX Archive Skill spec
 
 ## 目的
 
-定义 `/opsx:archive` 技能的预期行为，包括就绪检查、规范同步提示、归档执行和面向用户的输出。
+定义 `/opsx:archive` skill 的预期行为，包括就绪检查、spec 同步提示、archive 执行和面向用户的输出。
 
 ## 需求
 
-### 需求：OPSX Archive 技能
+### 需求：OPSX Archive skill
 
-系统应提供 `/opsx:archive` 技能，用于在实验性工作流中归档已完成的变更。
+系统应提供 `/opsx:archive` skill，用于在实验性 workflow 中 archive 已完成的变更。
 
-#### 场景：归档所有工件已完成的变更
+#### 场景：archive 所有 artifact 已完成的变更
 
-- **当** agent 使用变更名称执行 `/opsx:archive`
-- **并且** 模式中的所有工件都已完成
-- **并且** 所有任务都已完成
-- **则** agent 将变更移至 `openspec/changes/archive/YYYY-MM-DD-<name>/`
-- **并且** 显示成功消息及归档位置
+- **WHEN** agent 使用变更名称执行 `/opsx:archive`
+- **AND** schema 中的所有 artifact 都已完成
+- **AND** 所有任务都已完成
+- **THEN** agent 将变更移至 `openspec/changes/archive/YYYY-MM-DD-<name>/`
+- **AND** 显示成功消息及 archive 位置
 
 #### 场景：变更选择提示
 
-- **当** agent 执行 `/opsx:archive` 但未指定变更
-- **则** agent 提示用户从可用变更中选择
-- **并且** 仅显示活跃变更（排除 archive/）
+- **WHEN** agent 执行 `/opsx:archive` 但未指定变更
+- **THEN** agent 提示用户从可用变更中选择
+- **AND** 仅显示活跃变更（排除 archive/）
 
-### 需求：工件完成检查
+### 需求：artifact 完成检查
 
-该技能应在归档前使用工件图检查工件完成状态。
+该 skill 应在 archive 前使用 artifact 图检查 artifact 完成状态。
 
-#### 场景：不完整工件警告
+#### 场景：不完整 artifact 警告
 
-- **当** agent 检查工件状态
-- **并且** 一个或多个工件状态不是 `done`
-- **则** 显示列出不完整工件的警告
-- **并且** 提示用户确认是否继续
-- **并且** 如果用户确认则继续
+- **WHEN** agent 检查 artifact 状态
+- **AND** 一个或多个 artifact 状态不是 `done`
+- **THEN** 显示列出不完整 artifact 的警告
+- **AND** 提示用户确认是否继续
+- **AND** 如果用户确认则继续
 
-#### 场景：所有工件已完成
+#### 场景：所有 artifact 已完成
 
-- **当** agent 检查工件状态
-- **并且** 所有工件状态均为 `done`
-- **则** 继续执行，不发出警告
+- **WHEN** agent 检查 artifact 状态
+- **AND** 所有 artifact 状态均为 `done`
+- **THEN** 继续执行，不发出警告
 
 ### 需求：任务完成检查
 
-该技能应在归档前从 tasks.md 检查任务完成状态。
+该 skill 应在 archive 前从 tasks.md 检查任务完成状态。
 
 #### 场景：发现未完成任务
 
-- **当** agent 读取 tasks.md
-- **并且** 发现未完成任务（标记为 `- [ ]`）
-- **则** 显示包含未完成任务数量的警告
-- **并且** 提示用户确认是否继续
-- **并且** 如果用户确认则继续
+- **WHEN** agent 读取 tasks.md
+- **AND** 发现未完成任务（标记为 `- [ ]`）
+- **THEN** 显示包含未完成任务数量的警告
+- **AND** 提示用户确认是否继续
+- **AND** 如果用户确认则继续
 
 #### 场景：所有任务已完成
 
-- **当** agent 读取 tasks.md
-- **并且** 所有任务均已完成（标记为 `- [x]`）
-- **则** 继续执行，不发出任务相关警告
+- **WHEN** agent 读取 tasks.md
+- **AND** 所有任务均已完成（标记为 `- [x]`）
+- **THEN** 继续执行，不发出任务相关警告
 
 #### 场景：无任务文件
 
-- **当** tasks.md 不存在
-- **则** 继续执行，不发出任务相关警告
+- **WHEN** tasks.md 不存在
+- **THEN** 继续执行，不发出任务相关警告
 
-### 需求：规范同步提示
+### 需求：spec 同步提示
 
-该技能应在归档前提示同步增量规范（如果存在规范）。
+该 skill 应在 archive 前提示同步 delta spec（如果存在 spec）。
 
-#### 场景：存在增量规范
+#### 场景：存在 delta spec
 
-- **当** agent 检查增量规范
-- **并且** 变更中存在 `specs/` 目录且包含规范文件
-- **则** 提示用户："此变更包含增量规范。是否要在归档前将其同步到主规范？"
-- **并且** 如果用户确认，执行 `/opsx:sync` 逻辑
-- **并且** 无论同步选择如何，继续执行归档
+- **WHEN** agent 检查 delta spec
+- **AND** 变更中存在 `specs/` 目录且包含 spec 文件
+- **THEN** 提示用户："此变更包含 delta spec。是否要在 archive 前将其同步到主 spec？"
+- **AND** 如果用户确认，执行 `/opsx:sync` 逻辑
+- **AND** 无论同步选择如何，继续执行 archive
 
-#### 场景：无增量规范
+#### 场景：无 delta spec
 
-- **当** agent 检查增量规范
-- **并且** 不存在 `specs/` 目录或没有规范文件
-- **则** 继续执行，不提示同步
+- **WHEN** agent 检查 delta spec
+- **AND** 不存在 `specs/` 目录或没有 spec 文件
+- **THEN** 继续执行，不提示同步
 
-### 需求：归档流程
+### 需求：archive 流程
 
-该技能应将变更移至带有日期前缀的归档文件夹。
+该 skill 应将变更移至带有日期前缀的 archive 文件夹。
 
-#### 场景：成功归档
+#### 场景：成功 archive
 
-- **当** 归档一个变更
-- **则** 如果 `archive/` 目录不存在则创建
-- **并且** 使用当前日期生成目标名称 `YYYY-MM-DD-<change-name>`
-- **并且** 将整个变更目录移至归档位置
-- **并且** 在归档的变更中保留 `.openspec.yaml` 文件
+- **WHEN** archive 一个变更
+- **THEN** 如果 `archive/` 目录不存在则创建
+- **AND** 使用当前日期生成目标名称 `YYYY-MM-DD-<change-name>`
+- **AND** 将整个变更目录移至 archive 位置
+- **AND** 在 archive 的变更中保留 `.openspec.yaml` 文件
 
-#### 场景：归档已存在
+#### 场景：archive 已存在
 
-- **当** 目标归档目录已存在
-- **则** 失败并显示错误消息
-- **并且** 建议重命名现有归档或使用不同日期
+- **WHEN** 目标 archive 目录已存在
+- **THEN** 失败并显示错误消息
+- **AND** 建议重命名现有 archive 或使用不同日期
 
-### 需求：技能输出
+### 需求：skill 输出
 
-该技能应提供关于归档操作的清晰反馈。
+该 skill 应提供关于 archive 操作的清晰反馈。
 
-#### 场景：归档完成（已同步）
+#### 场景：archive 完成（已同步）
 
-- **当** 同步规范后完成归档
-- **则** 显示摘要：
-  - 已同步的规范（来自 `/opsx:sync` 输出）
-  - 变更已归档至位置
-  - 所使用的模式
+- **WHEN** 同步 spec 后完成 archive
+- **THEN** 显示摘要：
+ - 已同步的 spec（来自 `/opsx:sync` 输出）
+ - 变更已 archive 至位置
+ - 所使用的 schema
 
-#### 场景：归档完成（未同步）
+#### 场景：archive 完成（未同步）
 
-- **当** 未同步规范即完成归档
-- **则** 显示摘要：
-  - 说明规范未同步（如适用）
-  - 变更已归档至位置
-  - 所使用的模式
+- **WHEN** 未同步 spec 即完成 archive
+- **THEN** 显示摘要：
+ - 说明 spec 未同步（如适用）
+ - 变更已 archive 至位置
+ - 所使用的 schema
 
-#### 场景：归档完成（带警告）
+#### 场景：archive 完成（带警告）
 
-- **当** 归档完成但存在不完整的工件或任务
-- **则** 包含关于哪些内容不完整的说明
-- **并且** 建议检查归档是否是有意的
+- **WHEN** archive 完成但存在不完整的 artifact 或任务
+- **THEN** 包含关于哪些内容不完整的说明
+- **AND** 建议检查 archive 是否是有意的

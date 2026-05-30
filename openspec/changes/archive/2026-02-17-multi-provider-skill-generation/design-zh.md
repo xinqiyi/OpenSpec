@@ -1,18 +1,18 @@
 ## 上下文
 
-`artifact-experimental-setup` 命令为 AI 编码助手生成技能文件和 opsx 斜杠命令。目前它硬编码了到 `.claude/skills` 和 `.claude/commands/opsx` 的路径。
+`artifact-experimental-setup` 命令为 AI 编码助手生成 skill 文件和 opsx 斜杠命令。目前它硬编码了到 `.claude/skills` 和 `.claude/commands/opsx` 的路径。
 
-`config.ts` 中现有的 `AI_TOOLS` 数组列出了 22 个 AI 工具，但缺少路径信息。另外还有一个现有的 `SlashCommandConfigurator` 系统用于旧的工作流命令，但它与旧的 3 个命令（proposal、apply、archive）紧密耦合，无法轻松扩展以支持 9 个 opsx 命令。
+`config.ts` 中现有的 `AI_TOOLS` 数组列出了 22 个 AI 工具，但缺少路径信息。另外还有一个现有的 `SlashCommandConfigurator` 系统用于旧的 workflow 命令，但它与旧的 3 个命令（proposal、apply、archive）紧密耦合，无法轻松扩展以支持 9 个 opsx 命令。
 
 每个 AI 工具都有：
-- 不同的技能目录约定（`.claude/skills/`、`.cursor/skills/` 等）
+- 不同的 skill 目录约定（`.claude/skills/`、`.cursor/skills/` 等）
 - 不同的命令文件路径（`.claude/commands/opsx/`、`.cursor/commands/` 等）
 - 不同的 frontmatter 格式（YAML 键，结构因工具而异）
 
 ## 目标 / 非目标
 
 **目标：**
-- 支持任何遵循 Agent Skills 规范的 AI 工具的技能生成
+- 支持任何遵循 Agent Skills spec 的 AI 工具的 skill 生成
 - 支持通过适配器进行工具特定格式的命令生成
 - 需要显式工具选择（无默认值）
 - 创建通用的、可扩展的命令生成系统
@@ -30,40 +30,40 @@
 
 ```typescript
 interface AIToolOption {
-  name: string;
-  value: string;
-  available: boolean;
-  successLabel?: string;
-  skillsDir?: string;  // 例如 '.claude' - /skills 后缀遵循 Agent Skills 规范
+ name: string;
+ value: string;
+ available: boolean;
+ successLabel?: string;
+ skillsDir?: string; // 例如 '.claude' - /skills 后缀遵循 Agent Skills spec
 }
 ```
 
 **理由**：
-- 技能遵循 Agent Skills 规范：`<toolDir>/skills/` - 后缀是标准化的
+- skill 遵循 Agent Skills spec：`<toolDir>/skills/` - 后缀是标准化的
 - 命令需要每种工具的格式化，由适配器处理（而不是简单的路径）
 - 支持全局路径——Codex 适配器通过 os.homedir() 返回绝对路径
 
-### 2. 命令生成的策略/适配器模式
+### 2. 命令生成的策略/适配器 schema
 
 **决策**：创建带有工具特定适配器的通用命令生成系统。
 
 ```text
 ┌─────────────────────────────────────────────────────────────────┐
-│                      CommandContent                              │
-│  （工具无关：id、name、description、category、tags、body）         │
+│ CommandContent │
+│ （工具无关：id、name、description、category、tags、body） │
 └─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
+ │
+ ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                   generateCommand(content, adapter)              │
+│ generateCommand(content, adapter) │
 └─────────────────────────────────────────────────────────────────┘
-                              │
-              ┌───────────────┼───────────────┐
-              ▼               ▼               ▼
-        ┌──────────┐   ┌──────────┐   ┌──────────┐
-        │  Claude  │   │  Cursor  │   │ Windsurf │
-        │ 适配器    │   │ 适配器    │   │ 适配器    │
-        └──────────┘   └──────────┘   └──────────┘
+ │
+ ┌───────────────┼───────────────┐
+ ▼ ▼ ▼
+ ┌──────────┐ ┌──────────┐ ┌──────────┐
+ │ Claude │ │ Cursor │ │ Windsurf │
+ │ 适配器 │ │ 适配器 │ │ 适配器 │
+ └──────────┘ └──────────┘ └──────────┘
 ```
 
 **接口：**
@@ -71,19 +71,19 @@ interface AIToolOption {
 ```typescript
 // 工具无关的命令数据
 interface CommandContent {
-  id: string;           // 例如 'explore', 'new', 'apply'
-  name: string;         // 例如 'OpenSpec Explore'
-  description: string;  // 例如 '进入探索模式...'
-  category: string;     // 例如 'OpenSpec'
-  tags: string[];       // 例如 ['openspec', 'explore']
-  body: string;         // 命令指令
+ id: string; // 例如 'explore', 'new', 'apply'
+ name: string; // 例如 'OpenSpec Explore'
+ description: string; // 例如 '进入探索 schema...'
+ category: string; // 例如 'OpenSpec'
+ tags: string[]; // 例如 ['openspec', 'explore']
+ body: string; // 命令指令
 }
 
 // 每种工具的格式化策略
 interface ToolCommandAdapter {
-  toolId: string;
-  getFilePath(commandId: string): string;
-  formatFile(content: CommandContent): string;
+ toolId: string;
+ getFilePath(commandId: string): string;
+ formatFile(content: CommandContent): string;
 }
 ```
 
@@ -96,21 +96,21 @@ interface ToolCommandAdapter {
 **考虑的替代方案**：扩展现有的 SlashCommandConfigurator
 - 已拒绝：与旧 3 个命令紧密耦合，需要重大重构
 
-### 3. 适配器注册表模式
+### 3. 适配器注册表 schema
 
 **决策**：创建类似于现有 `SlashCommandRegistry` 的 `CommandAdapterRegistry`。
 
 ```typescript
 class CommandAdapterRegistry {
-  private static adapters: Map<string, ToolCommandAdapter> = new Map();
+ private static adapters: Map<string, ToolCommandAdapter> = new Map();
 
-  static get(toolId: string): ToolCommandAdapter | undefined;
-  static getAll(): ToolCommandAdapter[];
+ static get(toolId: string): ToolCommandAdapter | undefined;
+ static getAll(): ToolCommandAdapter[];
 }
 ```
 
 **理由**：
-- 与现有代码库模式一致
+- 与现有代码库 schema 一致
 - 通过工具 ID 轻松查找
 - 集中注册
 

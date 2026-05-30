@@ -1,7 +1,7 @@
 ## 1. 实现
 - [x] 1.1 在 `src/core/configurators/slash/cline.ts` 中创建 ClineSlashCommandConfigurator 类
 - [x] 1.2 在 `src/core/configurators/cline.ts` 中创建 ClineConfigurator 类
-- [x] 1.3 创建 `cline-template.ts` 用于模板导出
+- [x] 1.3 创建 `cline-template.ts` 用于 template 导出
 - [x] 1.4 定义 Cline 规则的文件路径（`.clinerules/`）
 - [x] 1.5 创建 Cline 特定的前置元数据（Markdown 标题格式）
 - [x] 1.6 在 `slash/registry.ts` 中注册 Cline

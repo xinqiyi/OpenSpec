@@ -10,14 +10,14 @@
 - [x] 1.7 实现 list 子命令
 - [x] 1.8 使用现有 ChangeValidator 实现 validate 子命令
 - [x] 1.9 添加 --requirements-only 过滤选项
-- [x] 1.10 添加 --strict 模式支持（利用现有验证基础设施）
+- [x] 1.10 添加 --strict schema 支持（利用现有验证基础设施）
 - [x] 1.11 为验证报告添加 --json 标志
 
 ## 2. 变更特定的解析器扩展
 - [x] 2.1 创建 src/core/parsers/change-parser.ts（扩展基础 markdown 解析器）
-- [x] 2.2 解析提案结构（Why、What Changes 部分）
+- [x] 2.2 解析 proposal 结构（Why、What Changes 部分）
 - [x] 2.3 提取 ADDED/MODIFIED/REMOVED/RENAMED 部分
-- [x] 2.4 解析每个部分内的增量操作
+- [x] 2.4 解析每个部分内的 delta 操作
 - [x] 2.5 为变更解析器添加测试
 
 ## 3. 遗留兼容性
@@ -30,5 +30,5 @@
 - [ ] 4.2 为所有子命令添加集成测试
 - [x] 4.3 测试变更的 JSON 输出
 - [x] 4.4 测试遗留兼容性
-- [x] 4.5 测试严格模式下的验证
+- [x] 4.5 测试严格 schema 下的验证
 - [x] 4.6 更新 CLI 帮助文档（将 'change' 命令添加到主帮助，记录子命令：show、list、validate）

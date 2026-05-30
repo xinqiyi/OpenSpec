@@ -1,49 +1,49 @@
 ## 为什么
 
-一旦仓库可见且代理具有工作区上下文，用户应该能够在实施开始前规划跨仓库的变更，而无需创建仓库本地工件。
+一旦 repository 可见且 agent 具有 workspace 上下文，用户应该能够在实施开始前 planning 跨 repository 的变更，而无需创建 repository 本地 artifact。
 
 用户的目标是：
 
 ```text
-探索跨仓库的产品目标。
+探索跨 repository 的产品目标。
 决定范围。
-创建一个识别受影响区域的工作区级提案。
+创建一个识别受影响区域的 workspace 级 proposal。
 ```
 
-规划应是承诺点。仅仓库可见性应保持轻量级。
+planning 应是承诺点。仅 repository 可见性应保持轻量级。
 
 ## 什么变更
 
-添加工作区级变更规划：
+添加 workspace 级变更 planning：
 
-- 从工作区根目录安装和刷新 OpenSpec 代理技能，使代理能够从规划主目录操作
-- 使用活动的全局工作流配置文件决定在工作区中安装哪些工作流技能
-- 保持 `--tools` 专注于哪些代理接收这些工作区本地技能
-- 为工作区变更添加工作区特定的规划模式
-- 从协调根目录创建工作区变更
+- 从 workspace 根目录安装和刷新 OpenSpec agent skill，使 agent 能够从 planning 主目录操作
+- 使用活动的全局 workflow 配置文件决定在 workspace 中安装哪些 workflow skill
+- 保持 `--tools` 专注于哪些 agent 接收这些 workspace 本地 skill
+- 为 workspace 变更添加 workspace 特定的 planning schema
+- 从协调根目录创建 workspace 变更
 - 一次性捕获产品目标
-- 在适用时通过已注册的工作区链接名称识别受影响的区域
-- 让代理在承诺受影响的区域或交付切片之前进行探索
-- 保持工作区作为规划的真实源
-- 更新工作流技能说明，使用 CLI 报告的工件路径而不是硬编码的仓库本地路径
+- 在适用时通过已注册的 workspace 链接名称识别受影响的区域
+- 让 agent 在承诺受影响的区域或交付切片之前进行探索
+- 保持 workspace 作为 planning 的真实源
+- 更新 workflow skill 说明，使用 CLI 报告的 artifact 路径而不是硬编码的 repository 本地路径
 
-此切片应避免将创建仓库本地工件作为规划的副作用。不应仅仅因为存在工作区变更就创建仓库本地工件。
+此切片应避免将创建 repository 本地 artifact 作为 planning 的副作用。不应仅仅因为存在 workspace 变更就创建 repository 本地 artifact。
 
-工作区设置和更新可能会向工作区根目录写入代理技能文件，例如 `.codex/skills/` 或 `.claude/skills/`，因为这些文件使工作区规划主目录对代理可用。该设置工作不得将 OpenSpec 工件或代理技能文件写入链接的仓库或文件夹。
+workspace 设置和更新可能会向 workspace 根目录写入 agent skill 文件，例如 `.codex/skills/` 或 `.claude/skills/`，因为这些文件使 workspace planning 主目录对 agent 可用。该设置工作不得将 OpenSpec artifact 或 agent skill 文件写入链接的 repository 或文件夹。
 
-交互式设置应询问哪些代理应在此工作区中获得 OpenSpec 技能，并在首选打开程序支持技能时预选它。工作区更新应让用户稍后刷新或更改这些已安装的代理技能，包括从工作区内部运行时。
+交互式设置应询问哪些 agent 应在此 workspace 中获得 OpenSpec skill，并在首选打开程序支持 skill 时预选它。workspace 更新应让用户稍后刷新或更改这些已安装的 agent skill，包括从 workspace 内部运行时。
 
-工作区设置和更新应将全局配置文件视为工作流选择源。对于此切片，工作区设置和更新是仅限技能的，即使全局交付为 `commands` 或 `both`；工作区的命令生成被推迟。
+workspace 设置和更新应将全局配置文件视为 workflow 选择源。对于此切片，workspace 设置和更新是仅限 skill 的，即使全局交付为 `commands` 或 `both`；workspace 的命令生成被推迟。
 
-`openspec config profile` 应保持全局性，但当它在 OpenSpec 工作区内部运行并更改全局配置文件或交付设置时，它应提供通过运行 `openspec workspace update` 将新的工作流选择应用到当前工作区的选项。
+`openspec config profile` 应保持全局性，但当它在 OpenSpec workspace 内部运行并更改全局配置文件或交付设置时，它应提供通过运行 `openspec workspace update` 将新的 workflow 选择应用到当前 workspace 的选项。
 
-工作区本地技能选择应为机器本地状态：设置记录哪些代理接收了技能，更新默认刷新该存储的选择，显式的 `--tools` 更改存储的选择。OpenSpec 应检测工作区本地技能何时与当前全局配置文件有差异，并给出清晰的更新指导。
+workspace 本地 skill 选择应为机器本地状态：设置记录哪些 agent 接收了 skill，更新默认刷新该存储的选择，显式的 `--tools` 更改存储的选择。OpenSpec 应检测 workspace 本地 skill 何时与当前全局配置文件有差异，并给出清晰的更新指导。
 
-选中的配置文件工作流中尚未完全实现工作区范围变更的仍应是安全的。生成的技能和 CLI 指导必须保护不受支持的工作区操作，而不是回退到仓库本地行为或隐式编辑链接的仓库。
+选中的配置文件 workflow 中尚未完全实现 workspace 范围变更的仍应是安全的。生成的 skill 和 CLI 指导必须保护不受支持的 workspace 操作，而不是回退到 repository 本地行为或隐式编辑链接的 repository。
 
-工作区帮助、文档和补全应使区别清晰可辨：`openspec update` 保持为仓库/项目同步，而 `openspec workspace update` 同步工作区本地代理技能。
+workspace 帮助、文档和补全应使区别清晰可辨：`openspec update` 保持为 repository/项目同步，而 `openspec workspace update` 同步 workspace 本地 agent skill。
 
-规划依赖：
+planning 依赖：
 
 - 依赖于 `workspace-open-agent-context`。
 
@@ -51,28 +51,28 @@
 
 ### 新能力
 
-- `workspace-change-planning`：创建和管理用于跨仓库目标的工作区级提案。
+- `workspace-change-planning`：创建和管理用于跨 repository 目标的 workspace 级 proposal。
 
 ### 修改的能力
 
-- `workspace-links`：为工作区本地代理技能安装添加工作区设置/更新行为。
-- `cli-config`：使 `openspec config profile` 感知工作区根目录，并能够将全局配置文件更改应用到当前工作区。
-- `change-creation`：添加工作区感知的变更创建语义和受影响区域识别。
-- `cli-artifact-workflow`：丰富工作流状态和说明，使代理能够发现规划上下文和工件路径，而无需硬编码的仓库本地假设。
-- `artifact-graph`：为工作区范围的变更添加内置的工作区规划模式。
-- `schema-resolution`：确保工作区范围的变更创建和工作流命令能够解析工作区规划模式。
-- `openspec-conventions`：定义工作区级规划与仓库本地实施工作之间的关系。
+- `workspace-links`：为 workspace 本地 agent skill 安装添加 workspace 设置/更新行为。
+- `cli-config`：使 `openspec config profile` 感知 workspace 根目录，并能够将全局配置文件更改应用到当前 workspace。
+- `change-creation`：添加 workspace 感知的变更创建语义和受影响区域识别。
+- `cli-artifact-workflow`：丰富 workflow 状态和说明，使 agent 能够发现 planning 上下文和 artifact 路径，而无需硬编码的 repository 本地假设。
+- `artifact-graph`：为 workspace 范围的变更添加内置的 workspace planning schema。
+- `schema-resolution`：确保 workspace 范围的变更创建和 workflow 命令能够解析 workspace planning schema。
+- `openspec-conventions`：定义 workspace 级 planning 与 repository 本地实施工作之间的关系。
 
 ## 影响
 
-- 工作区变更创建。
-- 工作区特定的规划模式和模板。
+- workspace 变更创建。
+- workspace 特定的 planning schema 和 template。
 - 受影响的区域元数据和验证。
-- 在工作区根目录安装或刷新代理技能的工作区设置和更新行为。
-- 全局配置文件集成，用于工作区本地技能工作流选择。
-- 工作区感知的 `openspec config profile` 应用提示行为。
-- 工作区本地代理技能选择状态和差异检测。
-- 在此切片中未实现工作区行为的配置文件工作流的受保护工作流指导。
-- 工作区技能更新行为的文档、帮助和补全。
-- 用于提议跨仓库变更的代理说明，无需硬编码的变更路径。
-- 测试验证在变更创建前已注册的仓库可见，以及创建变更不意味着创建仓库本地工件。
+- 在 workspace 根目录安装或刷新 agent skill 的 workspace 设置和更新行为。
+- 全局配置文件集成，用于 workspace 本地 skill workflow 选择。
+- workspace 感知的 `openspec config profile` 应用提示行为。
+- workspace 本地 agent skill 选择状态和差异检测。
+- 在此切片中未实现 workspace 行为的配置文件 workflow 的受保护 workflow 指导。
+- workspace skill 更新行为的文档、帮助和补全。
+- 用于提议跨 repository 变更的 agent 说明，无需硬编码的变更路径。
+- 测试验证在变更创建前已注册的 repository 可见，以及创建变更不意味着创建 repository 本地 artifact。

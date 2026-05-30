@@ -6,7 +6,7 @@ diff 命令应在显示差异之前验证变更结构。
 
 #### 场景：在 diff 之前验证
 
-- **当** 执行 `openspec diff change-name`
-- **则** 验证变更结构
-- **并且** 如果存在则显示验证警告
-- **并且** 继续显示 diff
+- **WHEN** 执行 `openspec diff change-name`
+- **THEN** 验证变更结构
+- **AND** 如果存在则显示验证警告
+- **AND** 继续显示 diff

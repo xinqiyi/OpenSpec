@@ -30,8 +30,8 @@
 export function validateChangeName(name: string): { valid: boolean; error?: string }
 
 export async function createChange(
-  projectRoot: string,
-  name: string
+ projectRoot: string,
+ name: string
 ): Promise<void>
 ```
 
@@ -39,13 +39,13 @@ export async function createChange(
 - 简单，无抽象开销
 - 易于测试
 - 易于在需要的地方导入
-- 匹配 `src/utils/` 中现有的工具模式
+- 匹配 `src/utils/` 中现有的工具 schema
 
 **考虑的替代方案**：
 - ChangeManager 类：被拒绝 - 对 2 个函数来说过度设计
 - 添加到现有命令：被拒绝 - 将 CLI 与可重用逻辑混合
 
-### 决策 2：Kebab-Case 验证模式
+### 决策 2：Kebab-Case 验证 schema
 
 **选择**：使用 `^[a-z][a-z0-9]*(-[a-z0-9]+)*$` 验证名称
 
@@ -55,7 +55,7 @@ export async function createChange(
 **原因**：
 - 文件系统安全（无特殊字符）
 - URL 安全（用于未来的 Web UI）
-- 与仓库中现有的变更命名一致
+- 与 repository 中现有的变更命名一致
 
 ## 文件变更
 

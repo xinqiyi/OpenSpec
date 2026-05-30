@@ -1,40 +1,40 @@
-# 项目本地模式
+# 项目本地 schema
 
 ## 摘要
 
-在模式查找链中增加项目本地模式解析（`./openspec/schemas/`）作为最高优先级。这使得团队能够将自定义工作流模式与其代码仓库一起进行版本控制。
+在 schema 查找链中增加项目本地 schema 解析（`./openspec/schemas/`）作为最高优先级。这使得团队能够将自定义 workflow schema 与其代码 repository 一起进行版本控制。
 
 ## 动机
 
-目前，模式解析分为两级：
+目前，schema 解析分为两级：
 1. 用户覆盖：`~/.local/share/openspec/schemas/<name>/`
 2. 包内置：`<npm-package>/schemas/<name>/`
 
 这给团队带来了不便：
-- 自定义模式必须通过 XDG 路径在每台机器上设置
-- 无法通过版本控制共享模式
-- 团队工作流缺乏单一的权威来源
+- 自定义 schema 必须通过 XDG 路径在每台机器上设置
+- 无法通过版本控制共享 schema
+- 团队 workflow 缺乏单一的权威来源
 
 ## 设计决策
 
 ### 三级解析顺序
 
 ```
-1. ./openspec/schemas/<name>/                    # 项目本地（新增）
-2. ~/.local/share/openspec/schemas/<name>/       # 用户全局（XDG）
-3. <npm-package>/schemas/<name>/                 # 包内置
+1. ./openspec/schemas/<name>/ # 项目本地（新增）
+2. ~/.local/share/openspec/schemas/<name>/ # 用户全局（XDG）
+3. <npm-package>/schemas/<name>/ # 包内置
 ```
 
 项目本地具有最高优先级，实现：
-- 版本控制的自定义工作流
+- 版本控制的自定义 workflow
 - 通过 git 自动团队共享
 - 无需每台机器单独设置
 
 ### 分支模型（非继承）
 
-自定义模式是完整的定义，而非扩展。不支持 `extends` 关键字。
+自定义 schema 是完整的定义，而非扩展。不支持 `extends` 关键字。
 
-**理由：** 简单性。继承增加了复杂性（冲突解决、部分覆盖、调试"这是从哪里来的？"）。需要自定义工作流的用户可以完整定义。这保持了简单的思维模型：
+**理由：** 简单性。继承增加了复杂性（冲突解决、部分覆盖、调试"这是从哪里来的？"）。需要自定义 workflow 的用户可以完整定义。这保持了简单的思维模型：
 - 使用预设 → 配置路径（参见项目配置变更）
 - 需要不同结构 → 分支路径（自行定义）
 
@@ -42,19 +42,19 @@
 
 ```
 openspec/
-├── schemas/                      # 项目本地模式
-│   └── my-workflow/
-│       ├── schema.yaml           # 完整模式定义
-│       └── templates/
-│           ├── artifact1.md
-│           ├── artifact2.md
-│           └── ...
+├── schemas/ # 项目本地 schema
+│ └── my-workflow/
+│ ├── schema.yaml # 完整 schema 定义
+│ └── templates/
+│ ├── artifact1.md
+│ ├── artifact2.md
+│ └── ...
 └── changes/
 ```
 
-### 模式命名
+### schema 命名
 
-项目本地模式通过其目录名称引用：
+项目本地 schema 通过其目录名称引用：
 - `openspec/schemas/my-workflow/` → 引用为 `my-workflow`
 - 适用于 `--schema my-workflow` 标志
 - 适用于 config.yaml 中的 `schema: my-workflow`（参见项目配置变更）
@@ -65,56 +65,56 @@ openspec/
 
 - 向解析器添加 `getProjectSchemasDir()` 函数
 - 更新 `getSchemaDir()` 以优先检查项目本地
-- 更新 `listSchemas()` 以包含项目模式
+- 更新 `listSchemas()` 以包含项目 schema
 - 更新 `listSchemasWithInfo()` 以包含 `source: 'project'`
-- 更新 `schemasCommand` 输出以显示项目模式
+- 更新 `schemasCommand` 输出以显示项目 schema
 
 ### 范围外
 
-- 模式管理 CLI（`openspec schema copy/which/diff/reset`）- 未来增强
-- 模式继承/extends - 明确不支持
-- 模板级覆盖（部分分支）- 明确不支持
+- schema 管理 CLI（`openspec schema copy/which/diff/reset`）- 未来增强
+- schema 继承/extends - 明确不支持
+- template 级覆盖（部分分支）- 明确不支持
 
 ## 用户体验
 
-### 创建自定义模式
+### 创建自定义 schema
 
 ```bash
-# 创建模式目录
+# 创建 schema 目录
 mkdir -p openspec/schemas/my-workflow/templates
 
-# 定义模式
+# 定义 schema
 cat > openspec/schemas/my-workflow/schema.yaml << 'EOF'
 name: my-workflow
 version: 1
-description: 我们团队的规划工作流
+description: 我们团队的 planning workflow
 
 artifacts:
-  - id: research
-    generates: research.md
-    template: research.md
-    description: 背景研究
-    requires: []
+ - id: research
+ generates: research.md
+ template: research.md
+ description: 背景研究
+ requires: []
 
-  - id: proposal
-    generates: proposal.md
-    template: proposal.md
-    description: 变更提案
-    requires: [research]
+ - id: proposal
+ generates: proposal.md
+ template: proposal.md
+ description: 变更 proposal
+ requires: [research]
 
-  - id: tasks
-    generates: tasks.md
-    template: tasks.md
-    description: 实施任务
-    requires: [proposal]
+ - id: tasks
+ generates: tasks.md
+ template: tasks.md
+ description: 实施任务
+ requires: [proposal]
 EOF
 
-# 创建模板
+# 创建 template
 echo "# 研究\n\n..." > openspec/schemas/my-workflow/templates/research.md
 # ... 等等
 ```
 
-### 使用自定义模式
+### 使用自定义 schema
 
 ```bash
 # 通过 CLI 标志
@@ -128,14 +128,14 @@ openspec status --change add-feature --schema my-workflow
 ### 团队共享
 
 ```bash
-# 提交到仓库
+# 提交到 repository
 git add openspec/schemas/
-git commit -m "添加自定义工作流模式"
+git commit -m "添加自定义 workflow schema"
 git push
 
 # 团队成员自动获取
 git pull
-openspec status --change add-feature --schema my-workflow  # 直接可用
+openspec status --change add-feature --schema my-workflow # 直接可用
 ```
 
 ## 实施说明
@@ -149,7 +149,7 @@ openspec status --change add-feature --schema my-workflow  # 直接可用
 
 ### 项目根检测
 
-使用现有的 `findProjectRoot()` 模式或当前工作目录。项目本地模式目录始终是相对于项目根的 `./openspec/schemas/`。
+使用现有的 `findProjectRoot()` schema 或当前工作目录。项目本地 schema 目录始终是相对于项目根的 `./openspec/schemas/`。
 
 ### 来源指示
 
@@ -157,11 +157,11 @@ openspec status --change add-feature --schema my-workflow  # 直接可用
 
 ## 测试考虑
 
-- 创建包含本地模式的临时项目，验证解析优先级
-- 验证本地模式覆盖同名的用户覆盖
-- 验证 `listSchemas()` 包含项目模式
+- 创建包含本地 schema 的临时项目，验证解析优先级
+- 验证本地 schema 覆盖同名的用户覆盖
+- 验证 `listSchemas()` 包含项目 schema
 - 验证 `schemasCommand` 显示正确的来源标签
 
 ## 相关变更
 
-- **项目配置**：添加包含 `schema` 字段的 `config.yaml`，可引用项目本地模式
+- **项目配置**：添加包含 `schema` 字段的 `config.yaml`，可引用项目本地 schema

@@ -10,7 +10,7 @@
 - [x] 1.7 实现 list 子命令
 - [x] 1.8 使用现有 SpecValidator 实现 validate 子命令
 - [x] 1.9 添加过滤选项（--requirements、--no-scenarios、-r）
-- [x] 1.10 添加 --strict 模式支持（利用现有验证基础设施）
+- [x] 1.10 添加 --strict schema 支持（利用现有验证基础设施）
 - [x] 1.11 为验证报告添加 --json 标志
 
 ## 2. 集成
@@ -18,5 +18,5 @@
 - [x] 2.2 为所有子命令添加集成测试
 - [x] 2.3 测试 JSON 输出验证
 - [x] 2.4 测试过滤选项
-- [x] 2.5 测试严格模式验证
+- [x] 2.5 测试严格 schema 验证
 - [x] 2.6 更新 CLI 帮助文档（在主帮助中添加 'spec' 命令，记录子命令：show、list、validate）

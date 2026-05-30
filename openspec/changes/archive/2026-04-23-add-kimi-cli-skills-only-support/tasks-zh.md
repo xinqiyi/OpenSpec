@@ -1,6 +1,6 @@
 ## 1. 变更产物
 
-- [x] 1.1 为 Kimi CLI 纯技能支持编写提案、设计和规范 delta
+- [x] 1.1 为 Kimi CLI 纯 skill 支持编写 proposal、设计和 spec delta
 
 ## 2. 工具元数据
 

@@ -26,13 +26,13 @@
 
 ## 5. JSON 转换器
 - [x] 5.1 创建 src/core/converters/json-converter.ts
-- [x] 5.2 实现规范到 JSON 的转换
+- [x] 5.2 实现 spec 到 JSON 的转换
 - [x] 5.3 实现变更到 JSON 的转换
 - [x] 5.4 添加元数据字段（版本、格式、源路径）
 
 ## 6. Archive 命令增强
-- [x] 6.1 使用新的验证器添加归档前验证检查
-- [x] 6.2 添加带必需确认提示和警告消息的 --no-validate 标志："⚠️  WARNING: Skipping validation may archive invalid specs. Continue? (y/N)"
+- [x] 6.1 使用新的验证器添加 archive 前验证检查
+- [x] 6.2 添加带必需确认提示和警告消息的 --no-validate 标志："⚠️ WARNING: Skipping validation may archive invalid specs. Continue? (y/N)"
 - [x] 6.3 在终止前显示验证错误
 - [x] 6.4 将所有 --no-validate 用法记录到控制台，包含时间戳和受影响的文件
 - [x] 6.5 为验证场景添加测试，包括 --no-validate 确认流程
@@ -47,9 +47,9 @@
 - [x] 8.2 解析器的单元测试
 - [x] 8.3 验证规则的单元测试
 - [x] 8.4 验证报告的集成测试
-- [x] 8.5 测试各种无效的规范/变更格式
-- [x] 8.6 测试严格模式行为
-- [x] 8.7 测试归档前验证
+- [x] 8.5 测试各种无效的 spec/变更格式
+- [x] 8.6 测试严格 schema 行为
+- [x] 8.7 测试 archive 前验证
 - [x] 8.8 测试验证报告 JSON 输出
 
 ## 9. 文档

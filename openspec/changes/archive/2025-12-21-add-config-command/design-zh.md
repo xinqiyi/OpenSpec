@@ -1,6 +1,6 @@
 ## 上下文
 
-`global-config` 规范定义了 OpenSpec 如何读写 `config.json`，但用户目前需要手动编辑它。本命令为配置提供了一个 CLI 接口。
+`global-config` spec 定义了 OpenSpec 如何读写 `config.json`，但用户目前需要手动编辑它。本命令为配置提供了一个 CLI 接口。
 
 ## 目标 / 非目标
 
@@ -28,7 +28,7 @@
 
 **示例：**
 ```bash
-openspec config get featureFlags              # 返回对象
+openspec config get featureFlags # 返回对象
 openspec config get featureFlags.experimental # 返回嵌套值
 openspec config set featureFlags.newFlag true
 ```
@@ -40,7 +40,7 @@ openspec config set featureFlags.newFlag true
 **理由：**
 - 对常见情况最直观（`true`、`false`、`123`）
 - 为边界情况提供显式覆盖（存储字面量字符串 "true"）
-- 遵循 npm/yarn 配置模式
+- 遵循 npm/yarn 配置 schema
 
 **强制转换规则：**
 | 输入 | 存储为 |
@@ -61,12 +61,12 @@ openspec config set featureFlags.newFlag true
 
 ### Schema 验证：Zod + 未知字段透传
 
-**决策：** 使用 zod 进行验证，但根据 `global-config` 规范保留未知字段。
+**决策：** 使用 zod 进行验证，但根据 `global-config` spec 保留未知字段。
 
 **理由：**
 - 已知字段的类型安全
 - 向前兼容（旧 CLI 不会破坏新配置）
-- 遵循已有的 `global-config` 规范要求
+- 遵循已有的 `global-config` spec 要求
 
 ### 保留标志：`--scope`
 

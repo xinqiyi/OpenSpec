@@ -1,8 +1,8 @@
 ## 阶段 1：实现名称验证
 
 - [x] 1.1 创建 `src/utils/change-utils.ts`
-- [x] 1.2 实现使用 kebab-case 模式的 `validateChangeName()`
-- [x] 1.3 模式：`^[a-z][a-z0-9]*(-[a-z0-9]+)*$`
+- [x] 1.2 实现使用 kebab-case schema 的 `validateChangeName()`
+- [x] 1.3 schema：`^[a-z][a-z0-9]*(-[a-z0-9]+)*$`
 - [x] 1.4 返回 `{ valid: boolean; error?: string }`
 - [x] 1.5 添加测试：有效名称被接受（`add-auth`、`refactor`、`add-feature-2`）
 - [x] 1.6 添加测试：大写被拒绝

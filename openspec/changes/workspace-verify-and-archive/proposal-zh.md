@@ -1,33 +1,33 @@
 ## 为什么
 
-状态：已被上下文存储和倡议方向推迟。每个仓库的进度可见性仍然重要，但 verify/archive 应围绕倡议状态和链接的仓库本地 OpenSpec 变更重新设计，而不是围绕工作区拥有的最终归档状态。在此链接存在之前，不要将其作为一等公民的工作区生命周期命令实现。
+状态：已被上下文存储和倡议方向推迟。每个 repository 的进度可见性仍然重要，但 verify/archive 应围绕倡议状态和链接的 repository 本地 OpenSpec 变更重新设计，而不是围绕 workspace 拥有的最终 archive 状态。在此链接存在之前，不要将其作为一等公民的 workspace 生命周期命令实现。
 
-剩余部分保留了原始的工作区 verify/archive 方向以供后续参考。在倡议和与倡议链接的仓库本地变更存在后，这项工作仍预计会发挥作用；它不是当前立即关注的重点。
+剩余部分保留了原始的 workspace verify/archive 方向以供后续参考。在倡议和与倡议链接的 repository 本地变更存在后，这项工作仍预计会发挥作用；它不是当前立即关注的重点。
 
-用户需要知道跨仓库的工作区变更是否完成，而无需将所有仓库的进展扁平化为一个模糊的完成状态。
+用户需要知道跨 repository 的 workspace 变更是否完成，而无需将所有 repository 的进展扁平化为一个模糊的完成状态。
 
 期望的生命周期是：
 
 ```text
-验证每个仓库切片。
+验证每个 repository 切片。
 查看哪些切片已完成或仍开放。
-在适当时归档仓库本地结果。
-当跨仓库目标完成时归档工作区变更。
+在适当时 archive repository 本地结果。
+当跨 repository 目标完成时 archive workspace 变更。
 ```
 
-验证和归档应使用户的跨仓库状态更清晰，而不是强迫他们推理内部工件的位置。
+验证和 archive 应使用户的跨 repository 状态更清晰，而不是强迫他们推理内部 artifact 的位置。
 
 ## 变更内容
 
-添加工作区感知的验证和归档行为：
+添加 workspace 感知的验证和 archive 行为：
 
-- 验证工作区级别的变更结构和目标仓库状态
-- 显示每个仓库切片的进度
-- 在需要时支持仓库本地的归档工作
-- 当协调目标完成时支持显式的工作区级别归档
-- 避免将部分仓库完成视为完整工作区完成
+- 验证 workspace 级别的变更结构和目标 repository 状态
+- 显示每个 repository 切片的进度
+- 在需要时支持 repository 本地的 archive 工作
+- 当协调目标完成时支持显式的 workspace 级别 archive
+- 避免将部分 repository 完成视为完整 workspace 完成
 
-规划依赖：
+planning 依赖：
 
 - 依赖于 `workspace-apply-repo-slice`。
 
@@ -35,17 +35,17 @@
 
 ### 新能力
 
-- `workspace-verify-archive`：验证和归档工作区变更，具有每个仓库的进度可见性。
+- `workspace-verify-archive`：验证和 archive workspace 变更，具有每个 repository 的进度可见性。
 
 ### 修改的能力
 
-- `cli-archive`：添加工作区感知的归档语义。
-- `opsx-verify-skill`：添加工作区验证指导。
-- `opsx-archive-skill`：添加工作区归档指导。
+- `cli-archive`：添加 workspace 感知的 archive 语义。
+- `opsx-verify-skill`：添加 workspace 验证指导。
+- `opsx-archive-skill`：添加 workspace archive 指导。
 
 ## 影响
 
-- 工作区状态、验证和归档行为。
-- 每个仓库切片完成报告。
-- 工作区级别的硬完成标记或等效的归档状态。
-- 测试部分完成、最终工作区归档以及与独立仓库本地归档流程的兼容性。
+- workspace 状态、验证和 archive 行为。
+- 每个 repository 切片完成报告。
+- workspace 级别的硬完成标记或等效的 archive 状态。
+- 测试部分完成、最终 workspace archive 以及与独立 repository 本地 archive 流程的兼容性。

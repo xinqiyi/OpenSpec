@@ -2,7 +2,7 @@
 
 - [ ] 0.1 在实现之前，将此变更变基到最新的 `main` 分支
 - [ ] 0.2 如果 `simplify-skill-installation` 先合并，保留其 profile/delivery 模型，并将此变更作为能力感知的精炼应用
-- [ ] 0.3 如果此变更先合并，确保后续变基不会重新引入一刀切的"commands = 移除所有技能"规则
+- [ ] 0.3 如果此变更先合并，确保后续变基不会重新引入一刀切的"commands = 移除所有 skill"规则
 - [ ] 0.4 如果 `add-global-install-scope` 已合并，验证 scope x delivery x command-surface 的组合行为保持确定性
 
 ## 1. 工具命令表面能力模型
@@ -13,24 +13,24 @@
 - [ ] 1.4 添加共享能力解析器（优先显式元数据覆盖，其次根据适配器存在推断回退）
 - [ ] 1.5 为能力解析添加针对性的单元测试（显式覆盖、推断适配器、推断无）
 
-## 2. Init：能力感知的交付规划
+## 2. Init：能力感知的交付 planning
 
-- [ ] 2.1 重构 init 生成逻辑，计算每个工具的有效操作（生成/移除技能和命令），而非仅使用全局布尔值
-- [ ] 2.2 在 `delivery=commands` 模式下，为 `skills-invocable` 工具保留/生成技能，不移除那些受管理的技能目录
-- [ ] 2.3 在 `delivery=commands` 模式下，当任何选中的工具解析为 `none` 时，在写入前快速失败
-- [ ] 2.4 更新 init 输出，清晰报告 `skills-invocable` 工具的有效行为（技能用作命令表面）
+- [ ] 2.1 重构 init 生成逻辑，计算每个工具的有效操作（生成/移除 skill 和命令），而非仅使用全局布尔值
+- [ ] 2.2 在 `delivery=commands` schema 下，为 `skills-invocable` 工具保留/生成 skill，不移除那些受管理的 skill 目录
+- [ ] 2.3 在 `delivery=commands` schema 下，当任何选中的工具解析为 `none` 时，在写入前快速失败
+- [ ] 2.4 更新 init 输出，清晰报告 `skills-invocable` 工具的有效行为（skill 用作命令表面）
 - [ ] 2.5 确保 init 不再对有意使用 `skills-invocable` 的工具报告"无适配器"
-- [ ] 2.6 添加/调整 init 测试，覆盖 `delivery=commands` + `trae`（技能保留/生成，无适配器错误）、混合工具（`claude,trae`），以及不支持的命令表面（`none`）的确定性失败路径
+- [ ] 2.6 添加/调整 init 测试，覆盖 `delivery=commands` + `trae`（skill 保留/生成，无适配器错误）、混合工具（`claude,trae`），以及不支持的命令表面（`none`）的确定性失败路径
 
 ## 3. Update：能力感知的同步和漂移检测
 
 - [ ] 3.1 重构 update 同步逻辑，按工具能力应用交付行为（而非每次运行全局应用）
-- [ ] 3.2 在 `delivery=commands` 模式下，为 `skills-invocable` 工具保留/生成受管理的技能
-- [ ] 3.3 在 `delivery=commands` 模式下，当已配置的工具包含 `none` 命令表面时，在部分更新前失败
+- [ ] 3.2 在 `delivery=commands` schema 下，为 `skills-invocable` 工具保留/生成受管理的 skill
+- [ ] 3.3 在 `delivery=commands` schema 下，当已配置的工具包含 `none` 命令表面时，在部分更新前失败
 - [ ] 3.4 更新 profile/delivery 漂移检测，避免在 commands 交付下对 `skills-invocable` 工具产生永久漂移
-- [ ] 3.5 确保已配置工具检测在 commands 交付下，当存在受管理技能时仍包含 `skills-invocable` 工具
+- [ ] 3.5 确保已配置工具检测在 commands 交付下，当存在受管理 skill 时仍包含 `skills-invocable` 工具
 - [ ] 3.6 更新摘要输出，使 skills-invocable 行为报告为预期行为（而非隐式跳过/错误）
-- [ ] 3.7 添加/调整 update 测试，覆盖 `delivery=commands` + 已配置的 Trae（技能保留/生成）、幂等的第二次 update（无错误漂移循环）、混合已配置工具（`claude` + `trae`），以及不支持的命令表面（`none`）的确定性预检失败
+- [ ] 3.7 添加/调整 update 测试，覆盖 `delivery=commands` + 已配置的 Trae（skill 保留/生成）、幂等的第二次 update（无错误漂移循环）、混合已配置工具（`claude` + `trae`），以及不支持的命令表面（`none`）的确定性预检失败
 
 ## 4. 用户体验和错误消息
 

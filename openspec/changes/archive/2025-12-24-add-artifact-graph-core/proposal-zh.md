@@ -6,13 +6,13 @@
 
 - 添加 `ArtifactGraph` 类，将制品建模为具有依赖关系的有向无环图（DAG）
 - 添加 `ArtifactState` 类型，跟踪完成状态（已完成、进行中、失败）
-- 添加基于文件系统的状态检测，使用文件存在性和 glob 模式
-- 添加模式 YAML 解析器，用于加载制品定义
+- 添加基于文件系统的状态检测，使用文件存在性和 glob schema
+- 添加 schema YAML 解析器，用于加载制品定义
 - 实现拓扑排序（Kahn 算法）用于构建顺序计算
 - 添加 `getNextArtifacts()` 以查找准备创建的制品
 
 ## 影响
 
-- 受影响的规范：新的 `artifact-graph` 能力
+- 受影响的 spec：新的 `artifact-graph` 能力
 - 受影响的代码：`src/core/artifact-graph/`（新目录）
 - 不改变现有功能——这是一个并行模块

@@ -1,26 +1,26 @@
 ## 为什么
-当前流程要求维护者合并 Changesets PR、手动创建标签并起草 GitHub 发布。在现有工作流中，npm 发布在 GitHub 发布后运行。人工参与的步骤（版本控制、打标签、发布说明）拖慢了我们的速度，并导致 npm、标签和变更日志之间出现偏差风险。
+当前流程要求维护者合并 Changesets PR、手动创建标签并起草 GitHub 发布。在现有 workflow 中，npm 发布在 GitHub 发布后运行。人工参与的步骤（版本控制、打标签、发布说明）拖慢了我们的速度，并导致 npm、标签和变更日志之间出现偏差风险。
 
 ## 变更内容
-- 在推送到 `main` 时使用单一的 `changesets/action`，要么打开/更新版本 PR，要么在发布 PR 合并时使用仓库密钥自动运行发布命令。
+- 在推送到 `main` 时使用单一的 `changesets/action`，要么打开/更新版本 PR，要么在发布 PR 合并时使用 repository 密钥自动运行发布命令。
 - 添加构建并运行 `changeset publish` 的 `release` 脚本，使操作端到端地处理版本升级、变更日志提交、npm 发布和 GitHub 发布。
 - 启用 `createGithubReleases: true`，以便在发布后立即根据 changeset 数据创建 GitHub 发布。
 - 记录自动化流程、必需的密钥、安全措施和恢复步骤（回滚、热修复）。
 
 ## 两阶段推出（两个 PR）
 1) 阶段 1 — 干运行（不发布）
-   - 更新现有的 `release-prepare.yml`，连接 `changesets/action`，使用 `createGithubReleases: true` 和空操作 `publish` 命令（例如 `echo 'dry run'`）。
-   - 保持 `.github/workflows/release-publish.yml` 不变。这避免了在验证版本 PR 行为和权限正确性时更改发布路径。
-   - 添加仓库保护（`if: github.repository == 'Fission-AI/OpenSpec'`）和并发组以确保安全。
+ - 更新现有的 `release-prepare.yml`，连接 `changesets/action`，使用 `createGithubReleases: true` 和空操作 `publish` 命令（例如 `echo 'dry run'`）。
+ - 保持 `.github/workflows/release-publish.yml` 不变。这避免了在验证版本 PR 行为和权限正确性时更改发布路径。
+ - 添加 repository 保护（`if: github.repository == 'Fission-AI/OpenSpec'`）和并发组以确保安全。
 
 2) 阶段 2 — 启用发布并整合
-   - 在 `package.json` 中添加 `"release": "pnpm run build && pnpm exec changeset publish"`。
-   - 修改 `release-prepare.yml`，使用 `with: publish: pnpm run release` 和 `env: NPM_TOKEN: \${{ secrets.NPM_TOKEN }}` 以及默认的 `GITHUB_TOKEN`。
-   - 移除 `.github/workflows/release-publish.yml` 以避免重复发布。现在当版本 PR 合并时进行发布。
+ - 在 `package.json` 中添加 `"release": "pnpm run build && pnpm exec changeset publish"`。
+ - 修改 `release-prepare.yml`，使用 `with: publish: pnpm run release` 和 `env: NPM_TOKEN: \${{ secrets.NPM_TOKEN }}` 以及默认的 `GITHUB_TOKEN`。
+ - 移除 `.github/workflows/release-publish.yml` 以避免重复发布。现在当版本 PR 合并时进行发布。
 
 ## 安全措施
-- 并发：工作流上使用 `concurrency: { group: release-\${{ github.ref }}, cancel-in-progress: false }` 来序列化发布。
-- 仓库/分支保护：仅在上游 `main` 上运行发布逻辑（`if: github.repository == 'Fission-AI/OpenSpec' && github.ref == 'refs/heads/main'`）。
+- 并发：workflow 上使用 `concurrency: { group: release-\${{ github.ref }}, cancel-in-progress: false }` 来序列化发布。
+- repository/分支保护：仅在上游 `main` 上运行发布逻辑（`if: github.repository == 'Fission-AI/OpenSpec' && github.ref == 'refs/heads/main'`）。
 - 权限：确保 `contents: write` 和 `pull-requests: write` 用于打开/更新版本 PR；`packages: read` 可选。
 
 ## 回滚和热修复
