@@ -1,0 +1,23 @@
+# 添加以代理为先的倡议发现任务
+
+- [x] 创建项目 7 工作项跟踪说明。
+- [x] 决定 `initiative show <id>` 是一个定位/发现命令。
+- [x] 决定默认查找搜索所有已注册的上下文存储。
+- [x] 决定 `--store` 和 `--store-path` 保留为缩小范围的选择器。
+- [x] 决定重复的倡议 ID 是歧义错误。
+- [x] 决定不可读的存储使默认全存储查找不完整。
+- [x] 决定 v1 投影省略 `initiative.status`、`owners` 和任意 `metadata`。
+- [x] 决定 v1 投影保留 `initiative.version` 和 `created`。
+- [x] 决定 v1 省略 `files`，仅返回倡议根和元数据路径。
+- [x] 决定歧义和不完全查找候选者位于诊断详细信息下，而非顶级 `matches`。
+- [x] 决定成功和错误状态的确切人类输出方向。
+- [x] 决定 `initiative show` 省略 `context_store.source`。
+- [x] 决定 `initiative show` 省略顶级 `resolution` 字段。
+- [x] 决定静态补全元数据随项目 7 一起发布。
+- [x] 决定 `readInitiative` 对不存在返回 `null`，对无效抛出异常。
+- [x] 决定在默认全存储模式下，不完全查找优先于成功或歧义。
+- [x] 决定无效的确切倡议文件夹是错误，而非未找到。
+- [x] 实现一个专注的按倡议读取操作。
+- [x] 实现 `initiative show`。
+- [x] 注册 `initiative show` 的静态补全元数据。
+- [x] 添加专注的测试和验证证据。

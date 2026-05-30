@@ -1,0 +1,26 @@
+# 添加最小上下文存储 UX 任务
+
+- [x] 创建第 6 项工作项跟踪笔记。
+- [x] 捕获代理优先的设置和发现方向。
+- [x] 决定 `context-store` 是第一个 CLI 命名空间。
+- [x] 决定当 `--path` 省略时设置默认使用 `./<id>`。
+- [x] 决定当前目录设置需要显式的 `--path .`。
+- [x] 记录检入的存储元数据保持最小化。
+- [x] 决定检入的存储元数据确切为 `.openspec-store/store.yaml`，仅包含可移植标识。
+- [x] 记录机器本地注册表状态保持在存储之外。
+- [x] 记录 `initiative list` 应默认遍历所有已注册存储。
+- [x] 决定设置的交互式和非交互式行为。
+- [x] 决定注册行为。
+- [x] 决定 context-store list 仅是注册表索引。
+- [x] 决定 doctor 拥有健康检查。
+- [x] 决定 initiative list 的部分成功行为。
+- [x] 决定部分成功和完全失败的 JSON 和退出码行为。
+- [x] 决定 ID 推断使用文件夹/仓库名称原样，配合正常验证。
+- [x] 决定设置拒绝没有上下文存储元数据的非空文件夹。
+- [x] 决定注册表路径/ID 冲突目前失败。
+- [x] 决定 list、doctor 和 initiative list 的空状态。
+- [x] 初步推迟补全元数据；后与已发布的命令表面一起添加静态元数据。
+- [x] 最终确定 setup、register、list、doctor 和全存储 initiative list 的确切 JSON 负载字段。
+- [x] 实现 `context-store setup/register/list/doctor`。
+- [x] 更新 `initiative list` 的全存储行为和输出。
+- [x] 添加有针对性的测试和验证证据。
